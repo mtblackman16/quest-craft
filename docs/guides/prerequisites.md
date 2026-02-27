@@ -28,7 +28,7 @@ This lets your laptop connect to the Raspberry Pi (the game computer).
 
 **What it is:** A voice-to-text tool. Kids just TALK and it types for them. This is how they'll communicate with the AI.
 
-1. Go to https://www.wispr.com/flow
+1. Go to https://wisprflow.ai/
 2. Download and install
 3. Follow the setup wizard
 4. **Practice:** Open any text box, hold the Wispr Flow key, speak, and let go. Your words should appear as text!
