@@ -32,3 +32,6 @@ Desktop.ini
 
 # Logs
 *.log
+
+# Local-only secrets (never pushed)
+docs/onboarding/local-credentials.md
