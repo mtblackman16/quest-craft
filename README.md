@@ -1,24 +1,24 @@
 # Quest Craft
 
-A video game designed by kids, built with AI — on a Raspberry Pi 5.
+A video game designed and built by kids — on a Raspberry Pi 5.
 
 ## About
 
 This game is being created by a team of young game designers (ages 9-11) for the **LASD Illuminate Inquiry Exhibition** on **March 15, 2026**.
 
-The team uses an **AI-first approach**: they design the game through voice conversations with Claude (AI), while Claude handles the engineering. The kids are the creative directors. Claude is the engineer.
+The kids are the creative directors — they design every aspect of the game, from characters and story to gameplay mechanics and art direction. They use AI tools to help with engineering, while they drive all creative decisions through voice-first collaboration.
 
 **Built with:**
 - Python 3.13 + Pygame 2.6
 - Raspberry Pi 5 + Nintendo Switch controllers
-- Claude Code (AI engineering partner)
+- AI-assisted development
 - Wispr Flow (voice-to-text)
 
 ## Team
 
 - Ethan (9) — Co-creator & Game Designer
 - Eins (11) — Co-creator & Game Designer
-- Andrew (11) — Co-creator & Game Designer
+- Andrew (11) — Artist & Visual Designer
 - Nathan (9) — Co-creator & Game Designer
 
 ## Getting Started
@@ -57,4 +57,4 @@ python3 main.py
 
 ## License
 
-This is a school project. Made with love and AI.
+This is a school project. Made with love by Ethan, Eins, Andrew & Nathan.

@@ -12,7 +12,7 @@ And here's the cool part: **you don't need to know how to code.** You have an AI
 |------|-----|------|
 | Ethan | 9 | Co-creator & Game Designer |
 | Eins | 11 | Co-creator & Game Designer |
-| Andrew | 11 | Co-creator & Game Designer |
+| Andrew | 11 | Artist & Visual Designer |
 | Nathan | 9 | Co-creator & Game Designer |
 
 **Team Advisor:** Mark (Ethan's dad)

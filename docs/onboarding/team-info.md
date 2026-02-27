@@ -2,19 +2,20 @@
 
 ## Login Credentials
 
-Everyone has their own account on the Raspberry Pi.
+Everyone has their own account on the Raspberry Pi. Mark will provide passwords and the Pi address on Day 1.
 
-| Name | Username | Password | Pi Address |
-|------|----------|----------|------------|
-| Ethan | `ethan` | `GamePi2026!` | `192.168.1.230` |
-| Eins | `eins` | `GamePi2026!` | `192.168.1.230` |
-| Andrew | `andrew` | `GamePi2026!` | `192.168.1.230` |
-| Nathan | `nathan` | `GamePi2026!` | `192.168.1.230` |
+| Name | Username |
+|------|----------|
+| Ethan | `ethan` |
+| Eins | `eins` |
+| Andrew | `andrew` |
+| Nathan | `nathan` |
 
 **To connect via VS Code Remote SSH:**
 ```
-ssh YOUR_USERNAME@192.168.1.230
+ssh YOUR_USERNAME@PI_ADDRESS
 ```
+> Mark will give you the address and password when you arrive.
 
 > Change your password if you want: type `passwd` in the terminal.
 

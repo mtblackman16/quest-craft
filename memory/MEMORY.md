@@ -10,7 +10,7 @@
 |------|-----|---------------|
 | Ethan | 9 | ethan |
 | Eins | 11 | eins |
-| Andrew | 11 | andrew |
+| Andrew | 11 | andrew (Artist) |
 | Nathan | 9 | nathan |
 | Mark | — | mark (Team Advisor) |
 

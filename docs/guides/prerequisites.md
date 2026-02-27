@@ -55,8 +55,8 @@ Want to make sure everything works? Try connecting to the Pi:
 2. Open VS Code
 3. Press `Ctrl+Shift+P` (opens the command palette)
 4. Type: **Remote-SSH: Connect to Host**
-5. Enter: `USERNAME@192.168.1.230` (replace USERNAME with your name — ask Mark)
-6. When asked for a password, enter it (ask Mark for your password)
+5. Enter: `USERNAME@PI_ADDRESS` (Mark will give you the address and your password on Day 1)
+6. When asked for a password, enter it (Mark will provide this)
 7. If you see files on the left side — you're connected!
 
 **Note:** The Pi needs to be turned on for this to work. If it doesn't connect, that's okay — we'll sort it out on Day 1.

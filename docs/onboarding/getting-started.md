@@ -15,8 +15,8 @@ If you haven't installed these yet, see `docs/guides/prerequisites.md`.
 1. Open VS Code
 2. Press `Ctrl + Shift + P` to open the command palette
 3. Type "Remote-SSH: Connect to Host"
-4. Enter: `YOUR_USERNAME@192.168.1.230` (replace YOUR_USERNAME with your name — see team-info.md)
-5. Enter your password when asked (see team-info.md)
+4. Enter: `YOUR_USERNAME@PI_ADDRESS` (replace YOUR_USERNAME with your name and PI_ADDRESS with the address Mark gives you)
+5. Enter your password when asked (Mark will provide this on Day 1)
 6. Wait for VS Code to set up (first time takes a minute)
 
 ## Step 2: Open Quest Craft
