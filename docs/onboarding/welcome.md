@@ -54,6 +54,43 @@ Even though AI does the coding, **you** do the creative work:
 
 The best games aren't the ones with the most code. They're the ones where someone cared about every detail. That's YOUR job.
 
+## Your Roadmap — Everything In Order
+
+```
+quest-craft/
+│
+│  ── BEFORE DAY 1 (parents + kids) ───────────────
+│
+├── docs/guides/prerequisites.md          ①  Install VS Code, Wispr Flow, test SSH
+│
+│  ── DAY 1 ORIENTATION ──────────────────────────
+│
+├── docs/onboarding/welcome.md            ②  You are here!
+├── docs/onboarding/getting-started.md    ③  Connect to Pi, test Wispr Flow
+├── docs/onboarding/how-games-work.md     ④  Game design concepts (reference)
+├── docs/onboarding/talking-to-claude.md  ⑤  How to talk to Claude (quick version)
+├── docs/guides/voice-prompting-101.md    ⑥  Power phrases + example conversations
+│
+│  ── SESSIONS (one per working day) ─────────────
+│
+├── docs/sessions/session-1-dream.md      ⑦  /dream — Define your game vision
+├── docs/sessions/session-2-design.md     ⑧  /design — Deep dive every aspect
+├── docs/sessions/session-3-blueprint.md  ⑨  /blueprint — Technical plan
+├── docs/sessions/session-4-build.md      ⑩  /build — Claude codes, you direct
+├── docs/sessions/session-5-polish.md     ⑪  /showcase — Polish + exhibition prep
+│
+│  ── EXHIBITION (final session) ─────────────────
+│
+├── docs/guides/exhibition-checklist.md   ⑫  Everything needed for March 15
+│
+│  ── REFERENCE (always available) ───────────────
+│
+├── docs/plans/master-plan.md                 Master checklist across all sessions
+├── docs/prds/                                Game design docs (Claude fills these)
+├── docs/onboarding/team-info.md              Your login credentials
+└── README.md                                 Project overview
+```
+
 ## First Steps
 
 1. Read `getting-started.md` to connect your laptop
