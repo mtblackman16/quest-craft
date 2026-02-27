@@ -3,7 +3,7 @@
 ## What You Need
 - Your laptop (Windows) with VS Code + Remote SSH extension installed
 - Wispr Flow installed (for voice)
-- WiFi connection to `Chumbanet`
+- Tailscale installed and connected (Mark will help with this)
 - The Raspberry Pi turned on (ask Mark if it's not)
 
 If you haven't installed these yet, see `docs/guides/prerequisites.md`.
@@ -15,9 +15,10 @@ If you haven't installed these yet, see `docs/guides/prerequisites.md`.
 1. Open VS Code
 2. Press `Ctrl + Shift + P` to open the command palette
 3. Type "Remote-SSH: Connect to Host"
-4. Enter: `YOUR_USERNAME@PI_ADDRESS` (replace YOUR_USERNAME with your name and PI_ADDRESS with the address Mark gives you)
-5. Enter your password when asked (Mark will provide this on Day 1)
-6. Wait for VS Code to set up (first time takes a minute)
+4. Select **quest-pi** from the list
+5. **IMPORTANT:** When asked to select the platform, choose **Linux** (the Pi runs Linux, not Windows!)
+6. Enter the password when asked: `quest2026`
+7. Wait for VS Code to set up (first time takes about a minute — it's installing on the Pi)
 
 ## Step 2: Open Quest Craft
 
@@ -28,7 +29,7 @@ If you haven't installed these yet, see `docs/guides/prerequisites.md`.
 
 ## Step 3: Open the Terminal
 
-1. Press `` Ctrl + ` `` (the backtick key, above Tab)
+1. Press `Ctrl + `` (the backtick key, above Tab)
 2. You should see a terminal at the bottom of VS Code
 3. You're now running commands ON THE PI, not on your laptop!
 
@@ -55,12 +56,24 @@ Claude will ask you questions about your game idea. Just talk! There are no wron
 
 ---
 
-## Quick Reference
+## Connection Quick Reference
+
+| Field | Value |
+|-------|-------|
+| Host | **quest-pi** |
+| Username | **mark** |
+| Password | **quest2026** |
+| Platform | **Linux** (when VS Code asks!) |
+| Project folder | `/home/mark/quest-craft` |
+
+---
+
+## Command Quick Reference
 
 | What You Want to Do | How to Do It |
 |---------------------|-------------|
-| Connect to Pi | `Ctrl+Shift+P` > "Remote-SSH: Connect to Host" |
-| Open terminal | `` Ctrl + ` `` |
+| Connect to Pi | `Ctrl+Shift+P` > "Remote-SSH: Connect to Host" > quest-pi |
+| Open terminal | `Ctrl + `` |
 | Start Claude | Type `claude` in terminal |
 | Dream up the game | `/dream` |
 | Design a topic | `/design characters` (or world, gameplay, etc.) |
@@ -76,13 +89,15 @@ Claude will ask you questions about your game idea. Just talk! There are no wron
 
 ### "Connection refused" or can't connect
 - Make sure the Pi is turned on (green light on)
-- Make sure you're on the `Chumbanet` WiFi
-- Check your username is spelled right (lowercase)
+- Make sure Tailscale is running (check your system tray for the Tailscale icon)
 - Ask Mark for help
 
 ### "Permission denied"
-- Check your password is correct (see team-info.md)
-- Make sure you're using the right username
+- Check your password is `quest2026` (all lowercase, no spaces)
+- Make sure you selected **quest-pi** as the host
+
+### VS Code asks for platform — what do I pick?
+- Pick **Linux**! The Raspberry Pi runs Linux. Your laptop is Windows, but you're connecting TO the Pi.
 
 ### Claude won't start
 - Make sure you're in the terminal (not the VS Code search bar)
