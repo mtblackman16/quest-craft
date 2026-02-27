@@ -1,46 +1,45 @@
-# PRD Index — Quest Craft
+# Game Design Documents — Quest Craft
 
-## What's a PRD?
+## What Are These?
 
-A **Product Requirements Document** describes what we're building BEFORE we build it. Every feature gets a PRD. No PRD = no coding.
+These are your **Game Design Documents** — detailed descriptions of every part of your game. Claude writes them from your conversations during the Dream and Design sessions. They capture all your decisions so nothing gets lost.
 
-## Status Key
-
-| Status | Meaning |
-|--------|---------|
-| **Draft** | Being written — not ready yet |
-| **Review** | Written, needs team review |
-| **Approved** | Reviewed and ready to build! |
+These documents also become **exhibition materials** — proof of your design process!
 
 ---
 
-## PRD Tracker
+## Document Tracker
 
-| # | PRD | Status | Author | Last Updated |
-|---|-----|--------|--------|-------------|
-| 00 | [Game Concept](00-game-concept.md) | Draft | — | — |
-| 01 | [Characters](01-characters.md) | Draft | — | — |
-| 02 | [Story & World](02-story-world.md) | Draft | — | — |
-| 03 | [Gameplay](03-gameplay.md) | Draft | — | — |
-| 04 | [Levels](04-levels.md) | Draft | — | — |
-| 05 | [Art Style](05-art-style.md) | Draft | — | — |
-| 06 | [Sound](06-sound.md) | Draft | — | — |
-| 07 | [Controls](07-controls.md) | Draft | — | — |
+| # | Document | Topic | Status | Session |
+|---|----------|-------|--------|---------|
+| 00 | [Game Concept](00-game-concept.md) | What game are we making? | Not Started | Dream |
+| 01 | [Characters](01-characters.md) | Player, enemies, NPCs | Not Started | Design |
+| 02 | [Story & World](02-story-world.md) | Setting, mood, world rules | Not Started | Design |
+| 03 | [Gameplay](03-gameplay.md) | Core mechanics, scoring, difficulty | Not Started | Design |
+| 04 | [Levels](04-levels.md) | Level structure, layout, progression | Not Started | Design |
+| 05 | [Art Style](05-art-style.md) | Visual style, colors, sprites, HUD | Not Started | Design |
+| 06 | [Sound](06-sound.md) | Music, sound effects, audio mood | Not Started | Design |
+| 07 | [Controls](07-controls.md) | Controller mapping, movement feel | Not Started | Design |
 
 ---
 
-## How to Write a PRD
+## How These Get Written
 
-1. Run `/design-prd` in Claude Code
-2. Claude will ask you questions one at a time
-3. Answer honestly — there are no wrong answers
-4. Claude saves the PRD when you're done
-5. Run `/review-prd` to check it
+1. You talk to Claude using `/dream` or `/design [topic]`
+2. Claude asks deep questions about your game
+3. You answer (just talk using Wispr Flow!)
+4. Claude writes up your decisions into these documents
+5. You review: "Read back the characters document" — and correct anything that's wrong
 
-## How to Get a PRD Approved
+**You don't fill these out manually.** Claude writes them from your conversations. Your job is to have great ideas and make sure Claude captured them correctly.
 
-1. Status must be `Review`
-2. Run `/review-prd` — Claude checks for gaps
-3. Fix any issues Claude finds
-4. When Claude says `APPROVED`, the status changes
-5. Now you can code that feature!
+---
+
+## How to Revisit a Topic
+
+Changed your mind about something? Just run `/design [topic]` again:
+
+- "Hey Claude, I want to change the enemies. Run /design characters"
+- "We decided the world should be underwater instead. Update the world document."
+
+Claude will update the document with your changes.

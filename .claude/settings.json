@@ -5,8 +5,16 @@
       "Glob",
       "Grep",
       "Write",
-      "Edit"
+      "Edit",
+      "Bash(python3:*)",
+      "Bash(cd:*)",
+      "Bash(git:*)",
+      "Bash(ls:*)"
     ],
-    "deny": []
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(apt:*)",
+      "Bash(rm -rf:*)"
+    ]
   }
 }

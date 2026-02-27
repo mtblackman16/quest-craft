@@ -6,18 +6,45 @@
 
 ## Who We Are
 
-We are a team of young game developers building a real, playable video game on a Raspberry Pi 5.
+We are a team of young game designers building a real, playable video game on a Raspberry Pi 5 — with AI as our engineering partner.
 
 **Team Members:**
-- **Ethan** (9) — Co-creator
-- **Eins** (11) — Co-creator
-- **Andrew** (11) — Co-creator
-- **Nathan** (9) — Co-creator
-- **Mark** — Team advisor (Ethan's dad)
+- **Ethan** (9) — Co-creator & Game Designer
+- **Eins** (11) — Co-creator & Game Designer
+- **Andrew** (11) — Co-creator & Game Designer
+- **Nathan** (9) — Co-creator & Game Designer
+- **Mark** — Team Advisor (Ethan's dad)
 
 **Exhibition:** LASD Illuminate Inquiry Exhibition — **March 15, 2026**
 
-**Our Mission:** Design, build, and ship a game we're proud to show at the exhibition.
+**Our Mission:** Dream it, design it, build it, ship it. Show the world what kids + AI can create together.
+
+---
+
+## How We Work: AI-First Game Development
+
+### The Big Idea
+
+**You create. Claude builds. Together you make something awesome.**
+
+You are the game designers and creative directors. You decide what the game looks like, how it plays, what makes it fun. Claude is your engineer — it turns your ideas into working code. You don't need to learn to code first. You need to learn to DESIGN and DIRECT.
+
+### The Process
+
+```
+DREAM → DESIGN → BLUEPRINT → BUILD → POLISH → SHIP
+```
+
+1. **Dream** — Talk about your game idea until it's crystal clear
+2. **Design** — Go deep on every detail: characters, world, mechanics, levels, art, sound, controls
+3. **Blueprint** — Claude turns your design into a technical plan
+4. **Build** — Claude codes, you playtest and direct changes
+5. **Polish** — Fix bugs, add juice, make it feel great
+6. **Ship** — Exhibition day!
+
+### Voice First
+
+Talk to Claude like a teammate. Use **Wispr Flow** — just hold the key and speak. Don't worry about typing perfectly. Say what you mean in your own words. Claude understands.
 
 ---
 
@@ -25,114 +52,96 @@ We are a team of young game developers building a real, playable video game on a
 
 | Tool | What It Does |
 |------|-------------|
-| Python 3.13 | The programming language we write our game in |
+| Python 3.13 | The programming language the game is written in |
 | Pygame 2.6 | The library that draws graphics, plays sounds, reads controllers |
-| Raspberry Pi 5 | Our game computer — it runs the game at the exhibition |
+| Raspberry Pi 5 | The game computer — runs the game at the exhibition |
 | Nintendo Controllers | Joy-Cons or Pro Controller — how players play the game |
-| VS Code + Remote SSH | Our code editor — runs on your laptop, edits code on the Pi |
-| Claude Code | Our AI coding partner — helps us write code, fix bugs, learn |
-| Wispr Flow | Lets you talk to Claude with your voice instead of typing |
-| Git + GitHub | Saves every version of our code so nothing gets lost |
+| VS Code + Remote SSH | Your workspace — runs on your laptop, connects to the Pi |
+| Claude Code | Your AI engineering partner — builds the game from your direction |
+| Wispr Flow | Voice-to-text — just talk and Claude hears you |
+| Git + GitHub | Saves every version of the game so nothing gets lost |
 
 ---
 
-## The Golden Rule
+## Slash Commands
 
-### PRDs First, Then Code. No Exceptions.
-
-A **PRD** (Product Requirements Document) is a plan that describes what we're building BEFORE we build it.
-
-**The workflow:**
-1. Brainstorm the idea
-2. Write a PRD (use `/design-prd`)
-3. Review the PRD (use `/review-prd`)
-4. Get it approved by the team
-5. THEN start coding (use `/start-coding`)
-
-Why? Because building without a plan means tearing things apart and starting over. A 30-minute PRD saves hours of confusion.
-
----
-
-## Team Roles (Rotate Weekly)
-
-| Role | What You Do |
-|------|------------|
-| **Producer / QA** | Keeps the team on track. Tests the game. Files bugs. |
-| **Gameplay Engineer** | Writes the core game code. Makes things move and interact. |
-| **Art & UX Lead** | Designs how the game looks and feels. Creates sprites and UI. |
-
-Everyone codes. Everyone contributes ideas. Roles just mean who LEADS that area for the week.
-
----
-
-## How to Use Claude
-
-### Slash Commands (type these in Claude Code)
 | Command | What It Does |
 |---------|-------------|
-| `/brainstorm` | Start a creative brainstorming session |
-| `/design-prd` | Create a new PRD with Claude's help |
-| `/review-prd` | Have Claude review a PRD for completeness |
-| `/start-coding` | Start coding (Claude checks PRDs are approved first) |
-| `/learn` | Learn a new concept with simple examples |
-| `/log-today` | Write your daily learning log |
-
-### Tips for Talking to Claude
-- **Be specific:** "Make the player jump higher" is better than "fix the jumping"
-- **Ask why:** "Why does this code work?" helps you learn
-- **Say what you see:** "The player goes through walls" helps Claude find the bug
-- **Use voice:** Wispr Flow lets you just talk — no typing needed
+| `/dream` | Brainstorm your game concept — the big vision |
+| `/design [topic]` | Deep dive into a specific area (characters, world, gameplay, levels, art, sound, controls) |
+| `/blueprint` | Create the technical build plan from your designs |
+| `/build` | Build the next piece of the game — Claude codes, you direct |
+| `/playtest` | Report bugs and feedback after playing |
+| `/showcase` | Write your daily learning reflection for the exhibition |
+| `/learn [concept]` | Learn about a game dev concept by building a tiny example |
 
 ---
 
-## Boundaries
+## The Five Sessions
 
-### Claude CAN help with:
-- Writing game code (Python / Pygame)
-- Creating and editing art assets
-- Writing and reviewing PRDs
-- Explaining how code works
-- Fixing bugs
-- Git commits and branches
+| Session | What Happens | Guide |
+|---------|-------------|-------|
+| 1. Dream | Define what game you're making | `docs/sessions/session-1-dream.md` |
+| 2. Design | Design every detail in depth | `docs/sessions/session-2-design.md` |
+| 3. Blueprint | Technical plan + controller test | `docs/sessions/session-3-blueprint.md` |
+| 4. Build | Claude builds, you playtest and direct | `docs/sessions/session-4-build.md` |
+| 5. Polish | Controllers, bugs, exhibition prep | `docs/sessions/session-5-polish.md` |
 
-### Claude should NOT touch:
-- Pi system settings (sudo, apt, network config)
-- User accounts or passwords
-- Tailscale or security settings
-- Files outside the quest-craft folder
-- Anything Mark hasn't approved
+---
+
+## Principles
+
+1. **Dream Big, Ship Small** — Imagine the perfect game. Then build the version you can finish in 2 weeks. You can always add more later.
+
+2. **Playtest Everything** — After every change, play the game. If it doesn't feel right, say so. Your gut feeling matters.
+
+3. **The Process Matters** — The exhibition isn't just the game. It's showing HOW you built it. Every conversation, sketch, and decision is part of the story.
+
+4. **There Are No Wrong Ideas** — Every idea is worth exploring. Some won't make it into the game, and that's okay. That's how design works.
+
+5. **Fun First, Polish Later** — If the core gameplay is fun with colored rectangles, you have a game. Pretty art on boring gameplay is still boring.
+
+---
+
+## Claude's Role
+
+### Claude SHOULD:
+- Ask deep questions to understand what you want
+- Build game code from your direction
+- Teach game design principles during the process
+- Fix bugs when you report them
+- Write documentation for the exhibition
+- Remember decisions across sessions (using `memory/`)
+- Explain WHY things work the way they do
+
+### Claude should NOT:
+- Make design decisions without asking the team
+- Change things that are working without permission
+- Touch Pi system settings (sudo, apt, network)
+- Touch user accounts, passwords, or Tailscale
+- Touch files outside the quest-craft folder
+- Rush past design to get to coding
+- Write code without the team understanding what it does
 
 ---
 
 ## Git Rules
 
-1. **Never push directly to `main`** — always use a branch
-2. **Branch names:** `feature/what-you-are-adding` (e.g., `feature/player-jump`)
-3. **Commit messages:** Say WHAT changed and WHY (e.g., "Add player jump — holds A button to jump higher")
-4. **Pull before you push:** Always `git pull` before starting work
-5. **Ask Claude for help:** `/commit` will help you write good commit messages
+1. **Pull before you start:** Always `git pull` at the beginning of a session
+2. **Commit often:** Save your work with clear messages after each milestone
+3. **Branch for features:** Use `feature/what-you-are-adding`
+4. **Never force push:** If something goes wrong, ask Claude to help fix it safely
 
 ---
 
 ## Memory
 
 Claude remembers things across sessions using the `memory/` folder:
-- **MEMORY.md** — Key facts, decisions, team preferences
-- **patterns.md** — Code patterns that work well in our game
-- **lessons.md** — Mistakes we made and how we fixed them
+- **MEMORY.md** — Key facts, decisions, what's been built so far
+- **patterns.md** — Game code patterns that work well
+- **lessons.md** — Mistakes and how they were fixed
 
-If you want Claude to remember something, just say: "Remember that we decided to use top-down view."
-
----
-
-## Schedule
-
-| Week | Focus |
-|------|-------|
-| Week 1 (Days 1-4) | Team formation, brainstorming, PRDs for concept/characters/story/gameplay |
-| Week 2 (Days 5-9) | Finish all PRDs, learn Python basics, first game window + controller input |
-| Week 3 (Days 10-14) | Build the game — core mechanics, art, sound, levels |
-| Week 4 (Days 15-17) | Polish, bug fixes, exhibition prep |
+Say "Remember that we decided [X]" and Claude will save it.
 
 ---
 
@@ -140,14 +149,16 @@ If you want Claude to remember something, just say: "Remember that we decided to
 
 ```
 quest-craft/
-├── .claude/          # Claude's configuration (don't edit manually)
+├── .claude/          # Claude's configuration and commands
 ├── docs/
-│   ├── onboarding/   # Getting started guides
-│   ├── prds/         # Product Requirements Documents
-│   ├── plans/        # Master plan and weekly goals
-│   ├── learning/     # Learning logs and build records
+│   ├── sessions/     # Session guides (Dream, Design, Blueprint, Build, Polish)
+│   ├── guides/       # Prerequisites, voice prompting, exhibition checklist
+│   ├── onboarding/   # Getting started, team info
+│   ├── prds/         # Game design documents (Claude fills from conversations)
+│   ├── plans/        # Master plan
+│   ├── learning/     # Learning logs, build records, research
 │   └── reference/    # Tech guides and cheatsheets
-├── game/             # All game code goes here
+├── game/             # All game code
 ├── assets/           # Images, sounds, fonts
 └── memory/           # Claude's memory across sessions
 ```

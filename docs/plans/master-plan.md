@@ -1,125 +1,120 @@
-# Master Plan
+# Master Plan — Quest Craft
 
 **Exhibition Date: March 15, 2026**
-
-This is the full task list from start to finish. Check off each task as you complete it.
-
----
-
-## Week 1: Team Formation & Design (Days 1-4)
-
-### Day 1: Meet the Team
-- [ ] Everyone connects to the Pi via VS Code Remote SSH
-- [ ] Team naming ceremony — pick a project name!
-- [ ] Rename the project folder and repo (Claude helps with this)
-- [ ] First `/brainstorm` session — what game are we making?
-
-### Day 2: Game Concept
-- [ ] Complete PRD: `00-game-concept.md` — what's the game?
-- [ ] Complete PRD: `01-characters.md` — who's in the game?
-- [ ] Sketch characters on paper, take photos
-
-### Day 3: Story & Rules
-- [ ] Complete PRD: `02-story-world.md` — where does it happen?
-- [ ] Complete PRD: `03-gameplay.md` — how does it work?
-- [ ] Lock the inquiry question for the exhibition
-
-### Day 4: Assign Roles
-- [ ] Assign team roles for Week 1 (update team-info.md)
-- [ ] First learning log entry (`/log-today`)
-- [ ] Review Week 1 PRDs (`/review-prd`)
+**Approach: AI-First Game Development**
 
 ---
 
-## Week 2: Design Lock & First Code (Days 5-9)
+## Pre-Session (Mark)
 
-### Day 5: Finish All PRDs
-- [ ] Complete PRD: `04-levels.md`
-- [ ] Complete PRD: `05-art-style.md`
-- [ ] Complete PRD: `06-sound.md`
-- [ ] Complete PRD: `07-controls.md`
-
-### Day 6: PRD Review & Approval
-- [ ] Review ALL PRDs with `/review-prd`
-- [ ] Fix any gaps Claude finds
-- [ ] Get all PRDs to `Approved` status
-
-### Day 7: Learn Python
-- [ ] Coding 101 session — go through `coding-101.md`
-- [ ] Use `/learn` to practice variables, if statements, loops
-- [ ] Run the game template — see a window appear!
-
-### Day 8: First Game Code
-- [ ] "Hello Pygame" — colored window with the game title
-- [ ] Draw a rectangle that represents the player
-- [ ] Make it move with arrow keys
-
-### Day 9: Controller Time
-- [ ] Pair the Nintendo controller via Bluetooth
-- [ ] Read controller input — press buttons, see output in terminal
-- [ ] Make the player rectangle move with the controller
-- [ ] First GitHub commits and branches
-- [ ] Learning log entry
+- [x] Raspberry Pi set up with all tools
+- [x] 5 user accounts created and Claude Code authenticated
+- [x] GitHub repo cloned to Pi with group permissions
+- [x] Tailscale configured for remote admin
+- [ ] Send prerequisites doc to parents (VS Code + Remote SSH + Wispr Flow)
+- [ ] Verify each kid's laptop can SSH to Pi
+- [ ] Print Session 1 guide for each kid
+- [ ] Set up Pi with monitor + keyboard for first session
+- [ ] Brief kids on Wispr Flow basics (5 min demo)
 
 ---
 
-## Week 3: Build the Game (Days 10-14)
+## Session 1: DREAM (~Day 1-2)
 
-### Day 10: Core Mechanic
-- [ ] Build the main gameplay mechanic from the Gameplay PRD
-- [ ] Test it — is it fun? Tweak until it feels right
+**Goal:** Crystal clear game vision that everyone agrees on.
 
-### Day 11: Player & Art
-- [ ] Replace rectangle with actual player sprite
-- [ ] Import hand-drawn art (photograph and convert)
-- [ ] Add player animations if time allows
+- [ ] Welcome — introduce the team, the project, the tools
+- [ ] Connect everyone's laptop to the Pi via VS Code Remote SSH
+- [ ] Test Wispr Flow — everyone practices talking to Claude
+- [ ] `/dream` — Full game concept conversation
+- [ ] Vote on the game name
+- [ ] Creative: Draw the title screen on paper
+- [ ] Creative: Each person writes the "back of the box" pitch
+- [ ] `/showcase` — First learning log
 
-### Day 12: Enemies & Obstacles
-- [ ] Add at least one enemy type
-- [ ] Add collision detection (player hits enemy = damage)
-- [ ] Add obstacles or platforms (depends on game type)
-
-### Day 13: Scoring & Progression
-- [ ] Add score system or collectibles
-- [ ] Add start screen (title, "Press Start")
-- [ ] Add game over screen
-- [ ] Add restart functionality
-
-### Day 14: Sound & Polish
-- [ ] Add sound effects (jump, hit, collect, game over)
-- [ ] Add background music
-- [ ] Build at least 1 complete level (or endless mode)
-- [ ] Bug fixing session
-- [ ] Learning log entry
+**Done when:** Everyone can explain the game in one sentence.
 
 ---
 
-## Week 4: Polish & Exhibition (Days 15-17)
+## Session 2: DESIGN (~Day 3-5)
 
-### Day 15: Final Bug Fixes
-- [ ] Play-test the full game, fix any bugs
-- [ ] Difficulty tuning — is it too hard? Too easy?
-- [ ] Add any missing sounds or art
+**Goal:** Every aspect of the game designed in depth.
 
-### Day 16: Code Freeze
+- [ ] `/design characters` — Characters deep dive + draw each one
+- [ ] `/design world` — World building + mood/atmosphere
+- [ ] `/design gameplay` — Core mechanics, scoring, difficulty
+- [ ] `/design levels` — Level structure + draw maps on graph paper
+- [ ] `/design art` — Art style, colors, sprite sizes, HUD layout
+- [ ] `/design sound` — Music direction + complete sound effect list
+- [ ] `/design controls` — Controller mapping + movement feel
+- [ ] `/showcase` — Learning log
+
+**Done when:** Someone could build the game from the design docs alone.
+
+---
+
+## Session 3: BLUEPRINT (~Day 6-7)
+
+**Goal:** Technical plan validated. Controllers tested.
+
+- [ ] `/blueprint` — Claude presents the full technical plan
+- [ ] Team reviews and approves the build order
+- [ ] Controller test — first hands-on with running code!
+- [ ] Finalize sprite list (what kids draw vs. placeholder shapes)
+- [ ] Start drawing priority sprites
+- [ ] `/showcase` — Learning log
+
+**Done when:** Build order is approved and controllers work.
+
+---
+
+## Session 4: BUILD (~Day 8-12)
+
+**Goal:** Working game with core mechanics and at least 1 complete level.
+
+- [ ] `/build` — Game window + player movement
+- [ ] Playtest: Does movement feel right?
+- [ ] `/build` — Gravity + jumping
+- [ ] Playtest: Does jumping feel good?
+- [ ] `/build` — First enemy + collision
+- [ ] Playtest: Is enemy fun to fight?
+- [ ] `/build` — Health/lives + HUD
+- [ ] `/build` — Scoring + collectibles
+- [ ] `/build` — Level layout + obstacles
+- [ ] Playtest: Full flow through level 1
+- [ ] `/build` — Sound effects + music
+- [ ] `/build` — Menus (title screen, game over, restart)
+- [ ] Import hand-drawn art as sprites
+- [ ] `/build` — Additional levels (if time)
+- [ ] Full playthrough start to finish
+- [ ] Take screenshot at each milestone for exhibition timeline
+- [ ] `/showcase` — Learning log
+
+**Done when:** The game is playable and fun.
+
+---
+
+## Session 5: POLISH & SHOWCASE (~Day 13-15)
+
+**Goal:** Polished game + exhibition booth ready.
+
+- [ ] Controller setup — Bluetooth pairing + verify mapping
+- [ ] Full playthrough with controllers
+- [ ] Bug list — write down everything broken or weird
+- [ ] Bug fix sprint — Claude fixes, team re-tests
+- [ ] Polish pass — title screen, game over, transitions, juice
+- [ ] Difficulty check — is the game too hard? Too easy?
+- [ ] Final art + sound pass
+- [ ] Exhibition materials:
+  - [ ] Print game concept + design highlights
+  - [ ] Display character sketches + level maps
+  - [ ] Print build timeline screenshots
+  - [ ] Write "How to Play" card for visitors
+  - [ ] Write inquiry question + what we learned
+  - [ ] Each person writes their learning reflection
+- [ ] Set up demo station (Pi + monitor + controllers)
+- [ ] Practice the demo
+- [ ] `/showcase` — Final learning reflection
 - [ ] Code freeze — `git tag v1.0`
-- [ ] Update README.md with game description and controls
-- [ ] Final play-test — the game is DONE
 
-### Day 17: Exhibition Prep
-- [ ] Set up exhibition demo station (Pi + monitor + controller)
-- [ ] Create exhibition poster or display materials
-- [ ] Final learning logs
-- [ ] Write "My Learning Story" for the exhibition
-- [ ] Celebrate!
-
----
-
-## Progress Tracker
-
-| Week | Status | Notes |
-|------|--------|-------|
-| Week 1 | Not Started | |
-| Week 2 | Not Started | |
-| Week 3 | Not Started | |
-| Week 4 | Not Started | |
+**Done when:** Everything is ready for March 15.

@@ -1,113 +1,74 @@
-# Talking to Claude — Your AI Coding Partner
+# Talking to Claude — Your AI Game-Building Partner
 
-Claude is an AI that lives in your terminal. You can type to it or talk to it using Wispr Flow. Here's how to get the most out of it.
+Claude is your AI engineering partner. You tell it what you want. It builds it. You test it. You tell it what to change. Simple as that.
 
----
-
-## Starting Claude
-
-1. Open the terminal in VS Code (`` Ctrl + ` ``)
-2. Type `claude` and press Enter
-3. You're now talking to Claude!
-
-## Using Voice (Wispr Flow)
-
-Wispr Flow lets you talk instead of type. Just speak naturally and it types for you.
-
-- Click the Wispr icon or use the shortcut to activate
-- Talk normally — "Hey Claude, how do I make the player move right?"
-- Wispr types your words into the Claude prompt
+The main guide for voice prompting is in `docs/guides/voice-prompting-101.md`. This page covers the basics.
 
 ---
 
-## Slash Commands — Quick Shortcuts
+## Using Your Voice (Wispr Flow)
 
-These are special commands that tell Claude to switch modes:
+**This is the main way you'll talk to Claude.** Just speak naturally:
+
+1. Put your cursor in the Claude terminal
+2. Hold the Wispr Flow key
+3. Say what you want (like talking to a friend)
+4. Let go — your words appear as text
+5. Press Enter — Claude responds
+
+**Example:** Hold key → "I want the enemies to chase the player instead of just walking back and forth" → Let go → Enter
+
+---
+
+## Slash Commands
+
+These start specific modes. Just say or type them:
 
 | Say This | What Happens |
 |----------|-------------|
-| `/brainstorm` | Creative brainstorming session |
-| `/design-prd` | Write a design document for a game feature |
-| `/review-prd` | Review a design document |
-| `/start-coding` | Start coding a feature (checks PRDs first) |
-| `/learn` | Learn a new programming concept |
-| `/log-today` | Write your daily learning log |
+| `/dream` | Brainstorm your game concept |
+| `/design characters` | Deep dive into character design |
+| `/design world` | Deep dive into the game world |
+| `/design gameplay` | Deep dive into how the game plays |
+| `/design levels` | Deep dive into level design |
+| `/design art` | Deep dive into the art style |
+| `/design sound` | Deep dive into sound and music |
+| `/design controls` | Deep dive into controller mapping |
+| `/blueprint` | Create the technical build plan |
+| `/build` | Build the next piece of the game |
+| `/playtest` | Report what's broken or weird |
+| `/showcase` | Write your daily learning reflection |
+| `/learn [topic]` | Learn about a game dev concept |
 
 ---
 
-## How to Ask Good Questions
+## Power Phrases That Work Great
 
-### Be Specific
+### Giving Direction
+- "Make the [thing] [more/less] [adjective]"
+- "When [this happens], I want [that] to happen"
+- "That's close but not quite — it needs to be more [adjective]"
+- "I love that! Don't change it."
 
-| Instead of... | Try... |
-|--------------|--------|
-| "It's broken" | "The player goes through walls instead of stopping" |
-| "Fix it" | "The score doesn't go up when I collect a coin" |
-| "Help" | "How do I make the enemy follow the player?" |
-| "Make it better" | "Make the player move faster when they hold the B button" |
+### Getting Help
+- "Something is wrong — when I [do this], [bad thing] happens"
+- "I don't understand. Explain that in simpler words."
+- "Show me an example."
+- "What should we work on next?"
 
-### Describe What You See
-
-Claude can't see your screen, so describe what's happening:
-- "When I press A, nothing happens"
-- "The enemy appears in the wrong spot — it's at the top-left instead of the right side"
-- "The game crashes when I collect the third coin"
-
-### Ask "Why" to Learn
-
-- "Why do we need `clock.tick(60)`?"
-- "Why does the player fall through the floor?"
-- "What does this line do?" (then paste the line)
-
----
-
-## Example Conversations
-
-### Asking for Help with a Bug
-> **You:** "The player can jump infinitely. They should only jump when they're on the ground."
->
-> Claude will help you add a ground check.
-
-### Learning Something New
-> **You:** `/learn`
->
-> Claude: "What do you want to learn about?"
->
-> **You:** "How do collisions work?"
->
-> Claude will explain collision detection with examples from your game.
-
-### Designing a Feature
-> **You:** `/design-prd`
->
-> Claude: "What part of the game do you want to design?"
->
-> **You:** "The enemy system — I want goblins that chase the player"
->
-> Claude will walk you through designing it step by step.
-
-### Getting Unstuck
-> **You:** "I don't know what to do next"
->
-> Claude will check the PRDs and master plan, then suggest the next task.
+### Learning
+- "Why did you do it that way?"
+- "How does [concept] work?"
+- "That's cool! Can you explain what just happened?"
 
 ---
 
 ## Tips
 
-1. **Don't be shy** — Claude likes questions. Ask as many as you want.
-2. **It's OK to not understand** — Just say "I don't get it, explain it simpler"
-3. **You can change your mind** — "Actually, I want the enemy to be blue, not red"
-4. **Claude remembers your project** — It knows what PRDs exist, what code you've written
-5. **If Claude gets confused** — Start a new conversation and explain what you need fresh
-6. **Save important decisions** — Tell Claude "Remember that we decided to use pixel art"
-
----
-
-## Things Claude Can't Do
-
-- Claude can't see your screen (describe what you see)
-- Claude can't play the game (you need to test it)
-- Claude can't draw pictures (but it can write code that draws things)
-- Claude can't fix the Pi hardware (ask Mark)
-- Claude won't write the whole game for you (it helps YOU write it)
+1. **Speak naturally** — Don't try to sound technical. Just describe what you want.
+2. **One thing at a time** — Don't ask for 5 things at once.
+3. **Be specific** — "Make the jump higher" beats "fix the jumping"
+4. **Describe what you see** — Claude can't see your screen
+5. **It's OK to change your mind** — "Actually, let's go back to..."
+6. **Ask questions!** — "Why does that work?" helps you learn
+7. **Claude remembers** — It knows your game design and what's been built

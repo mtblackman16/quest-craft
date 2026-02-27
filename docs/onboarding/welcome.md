@@ -4,72 +4,66 @@
 
 Not a tutorial. Not a demo. A **real game** that people will play at the **LASD Illuminate Exhibition on March 15**.
 
-You and your team are going to:
-- **Design** the game — characters, world, story, mechanics
-- **Build** it with real code — Python and Pygame on a Raspberry Pi
-- **Ship** it — playable with Nintendo controllers at the exhibition
+And here's the cool part: **you don't need to know how to code.** You have an AI partner named Claude who turns your ideas into a working game. You're the game designers. Claude is your engineer.
 
 ## Your Team
 
-| Name | Age |
-|------|-----|
-| Ethan | 9 |
-| Eins | 11 |
-| Andrew | 11 |
-| Nathan | 9 |
+| Name | Age | Role |
+|------|-----|------|
+| Ethan | 9 | Co-creator & Game Designer |
+| Eins | 11 | Co-creator & Game Designer |
+| Andrew | 11 | Co-creator & Game Designer |
+| Nathan | 9 | Co-creator & Game Designer |
 
 **Team Advisor:** Mark (Ethan's dad)
 
-## Your AI Partner: Claude
+## How It Works
 
-Claude is an AI that helps you code. You can:
-- **Talk to it** using Wispr Flow (voice)
-- **Type to it** in the terminal
-- **Ask it anything** — "How do I make the player jump?" or "Why isn't this working?"
+You **talk**. Claude **builds**. You **play**. You tell Claude what to change. Claude changes it. Repeat until your game is awesome.
 
-Claude isn't going to build the game FOR you. It's going to build it WITH you. You make the decisions. You come up with the ideas. Claude helps you turn those ideas into code.
+That's it. That's the whole process.
 
-## Your Tools
+### Your AI Partner: Claude
 
-| Tool | What It Does | Where It Runs |
-|------|-------------|---------------|
-| Raspberry Pi 5 | The computer your game runs on | On the desk with a monitor |
-| VS Code | Where you write code | On your laptop |
-| Claude Code | Your AI coding partner | In VS Code's terminal |
-| Wispr Flow | Talk to Claude with your voice | On your laptop |
-| Nintendo Controller | How players play the game | Connected to the Pi via Bluetooth |
-| Git | Saves every version of your code | Automatic |
+Claude lives in the terminal on the Raspberry Pi. You talk to it using **Wispr Flow** — just hold a key and speak. No typing needed. Say things like:
 
-## How This Works
+- "I want a ninja cat that can wall-jump"
+- "Make the enemy move faster"
+- "The jump feels too floaty — make it snappier"
+- "Add an explosion when the player dies"
 
-### Week 1: Dream It
-Come up with the game idea. Who's the character? What's the world? What does the player do? Write it all down in PRDs (design documents).
+Claude listens, builds what you ask for, and teaches you WHY things work the way they do.
 
-### Week 2: Learn It
-Learn Python basics. Get your first game window on screen. Make a rectangle move with the controller.
+## The 5 Sessions
 
-### Week 3: Build It
-Write the real game code. Add characters, enemies, sounds, levels.
+| Session | What Happens |
+|---------|-------------|
+| **1. Dream** | Talk about your game idea until it's crystal clear |
+| **2. Design** | Go deep on characters, world, mechanics, levels, art, sound, controls |
+| **3. Blueprint** | Claude creates a technical plan. You test the controllers! |
+| **4. Build** | Claude builds the game. You playtest and direct. |
+| **5. Polish** | Fix bugs, add polish, prepare for the exhibition |
 
-### Week 4: Ship It
-Polish, fix bugs, prepare for the exhibition. Show the world what you built.
+## The Old-School Stuff That Still Matters
+
+Even though AI does the coding, **you** do the creative work:
+- **Draw** your characters, enemies, and levels on paper
+- **Decide** what makes your game fun, challenging, and special
+- **Design** how the world looks, sounds, and feels
+- **Test** every change and trust your gut — if it doesn't feel right, speak up!
+
+The best games aren't the ones with the most code. They're the ones where someone cared about every detail. That's YOUR job.
 
 ## First Steps
 
-1. Read `getting-started.md` to set up your laptop
-2. Check `team-info.md` for your login credentials
+1. Read `getting-started.md` to connect your laptop
+2. Check `team-info.md` for your login info
 3. Connect to the Pi with VS Code
-4. Open the terminal and type `claude` to meet your AI partner
-5. Run `/brainstorm` to start your first brainstorming session!
+4. Open the terminal and type `claude`
+5. Say `/dream` to start your first brainstorming session!
 
 ## One More Thing
 
-**You're going to get stuck.** That's normal. That's how coding works. When you get stuck:
-1. Tell Claude exactly what you see
-2. Ask "Why isn't this working?"
-3. Try the suggestion
-4. If it still doesn't work, ask again — Claude never gets tired of helping
-
-The only way to fail is to give up. And you're not going to give up.
+**There are no wrong ideas.** Every idea is worth exploring. Some won't make it into the final game, and that's okay. That's how game design works. The goal is to make something you're proud to show at the exhibition.
 
 Let's build something awesome.
