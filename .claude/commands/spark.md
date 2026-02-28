@@ -1,6 +1,6 @@
 # /spark — Bring the Dream to Life
 
-You are creating the FIRST playable moment of the kids' game. They just finished their Dream session and have a complete game concept in `docs/prds/00-game-concept.md`. Now you make it REAL — a title screen and a playable character demo that runs on the Pi's HDMI display with Nintendo Switch controller support.
+You are creating the FIRST playable moment of the kids' game. They just finished their Dream session and have a complete game concept in `docs/prds/00-game-concept.md`. Now you make it REAL — a title screen and a playable character demo that runs on the Pi's HDMI display. Keyboard controls (arrow keys + space bar) are the primary input.
 
 ## Before You Start
 1. Read `docs/prds/00-game-concept.md` — this is your source of truth
@@ -23,26 +23,24 @@ A single, self-contained Pygame file (~250-300 lines) that creates:
 - Game title rendered large and animated (pulse, glow, or letter-by-letter reveal)
 - Background color that matches their world's mood
 - Particle effects or atmospheric animation (floating dots, falling leaves, stars, rain — whatever fits the mood)
-- "Press A to Play" prompt that pulses
-- Smooth transition when A is pressed
+- "Press SPACE to Play" prompt that pulses
+- Smooth transition when SPACE is pressed
 
 #### 2. Playable Scene
 - Their character as a colored shape with personality (a rectangle with eyes, a circle with a trail, etc. — NOT complex sprites, but more than a bare rectangle)
-- Movement via left stick (smooth, responsive)
-- Jump via A button (if platformer/side-scroller — with gravity and ground)
+- Movement via arrow keys (smooth, responsive)
+- Jump via SPACE bar (if platformer/side-scroller — with gravity and ground)
 - Genre-appropriate movement (top-down 4-way for adventure, side-scroll with gravity for platformer, etc.)
 - A simple ground/floor or world boundary
 - Background that reflects their world (color gradient, simple shapes suggesting their setting)
 - 3-5 floating collectibles or interactive elements that respond to the character (particles when touched, etc.)
 
-#### 3. Controller Support
-- Nintendo Switch Pro Controller via pygame.joystick
-- Fallback to keyboard (arrow keys + space) for testing without controller
-- Left stick for movement
-- A button (button 0 on Switch Pro Controller) for jump/action
-- B button (button 1) to return to title screen
-- Handle controller hot-plug — don't crash if no controller
-
+#### 3. Controls (Keyboard Primary)
+- Arrow keys for movement (left, right, up, down)
+- SPACE bar for jump/action
+- ESC to return to title screen from gameplay
+- Optional: If a game controller is detected via pygame.joystick, also support left stick + button 0 for jump
+- Handle controller hot-plug — never crash if no controller is connected
 #### 4. Visual Polish (the "wow" factor)
 - Smooth 60 FPS
 - The character leaves a subtle trail or has a shadow
@@ -66,7 +64,7 @@ As you write the code, explain what you are doing in excited, kid-friendly langu
 - "Okay, I'm creating the game window — 800 by 600 pixels, perfect for the Pi's display..."
 - "Now I'm painting your world's sky... [COLOR] to match that [MOOD] feeling you described..."
 - "Here comes [CHARACTER NAME]! I'm giving them [VISUAL DETAIL]..."
-- "Adding controller support — the moment you pick up that Switch controller, you're playing YOUR game..."
+- "Adding keyboard controls — arrow keys to move, space bar to jump — the moment you touch those keys, you're playing YOUR game..."
 
 ### The reveal:
 When the code is written, say:
@@ -75,7 +73,7 @@ When the code is written, say:
 
     python3 game/spark.py
 
-Grab that controller. [CHARACTER NAME] is waiting for you."
+Arrow keys to move, space bar to jump. [CHARACTER NAME] is waiting for you."
 
 ### After they play:
 Let them enjoy it for a few minutes. Then say:
@@ -85,7 +83,7 @@ Let them enjoy it for a few minutes. Then say:
 
 ### Platformer (like Mario)
 - Side view, gravity enabled
-- Character on a ground plane, can jump with A
+- Character on a ground plane, can jump with SPACE
 - 2-3 floating platforms above ground
 - Collectibles hovering at different heights
 
@@ -97,7 +95,7 @@ Let them enjoy it for a few minutes. Then say:
 
 ### Side-Scroller Shooter (like Mega Man)
 - Side view, gravity enabled
-- A button fires a projectile (simple circle) to the right
+- SPACE bar fires a projectile (simple circle) to the right
 - Collectibles that burst when hit
 
 ### Something Else
