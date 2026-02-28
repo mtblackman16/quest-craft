@@ -51,7 +51,7 @@ Everything else runs on the Raspberry Pi — Python, the game engine, the AI (Cl
 
 Want to make sure everything works? Try connecting to the Pi:
 
-1. Make sure your laptop is on the **Chumbanet** WiFi network
+1. Make sure **Tailscale** is running on your laptop (it connects you to the Pi securely, even over guest WiFi)
 2. Open VS Code
 3. Press `Ctrl+Shift+P` (opens the command palette)
 4. Type: **Remote-SSH: Connect to Host**
