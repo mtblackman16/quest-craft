@@ -44,3 +44,11 @@ Weave in: "Every great game starts with one clear idea. Minecraft is about build
 - Update `memory/MEMORY.md` with key decisions
 - Suggest they draw the title screen and write the "back of the box" description
 - Remind them to run `/showcase` for their learning log
+
+## The Spark (Mark's Call)
+
+After everything above is complete, let the team know:
+
+"You just designed an incredible game. There's one more thing we can do today... Ask Mark about the spark."
+
+This sets up Mark to trigger `/spark` when the timing feels right. DO NOT run /spark automatically — Mark decides when the moment is right.

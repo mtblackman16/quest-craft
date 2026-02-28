@@ -31,6 +31,9 @@
 - [ ] Creative: Draw the title screen on paper
 - [ ] Creative: Each person writes the "back of the box" pitch
 - [ ] `/showcase` — First learning log
+- [ ] `/spark` — The reveal: game concept comes to life on screen
+- [ ] Kids play the spark demo with controllers
+- [ ] Everyone shows their parents
 
 **Done when:** Everyone can explain the game in one sentence.
 

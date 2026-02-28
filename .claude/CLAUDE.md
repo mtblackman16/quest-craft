@@ -74,6 +74,7 @@ Talk to Claude like a teammate. Use **Wispr Flow** — just hold the key and spe
 | `/playtest` | Report bugs and feedback after playing |
 | `/showcase` | Write your daily learning reflection for the exhibition |
 | `/learn [concept]` | Learn about a game dev concept by building a tiny example |
+| `/spark` | Bring the Dream to life — generate a playable title screen + character demo from the concept |
 
 ---
 

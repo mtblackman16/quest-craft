@@ -96,6 +96,28 @@ These become part of your exhibition showcase!
 
 ---
 
+
+---
+
+## The Spark (Last 15 Minutes)
+
+After \, when the timing feels right, Mark runs \.
+
+This is the BIG MOMENT. Claude reads the game concept you just created and brings it to life:
+- Your game title appears on the Pi screen — animated with particles
+- Press A on the controller
+- YOUR character appears and YOU control it
+- Move around, jump, collect things — it is your game, running for real
+
+**This is just the spark — the seed.** The full game gets designed in Session 2 and built in Session 4. But right now? You are playing a game that did not exist 2 hours ago. Show your parents!
+
+### You are Done When...
+- [ ] You have played the spark demo with a controller
+- [ ] Everyone got a turn moving the character
+- [ ] Parents have seen it
+- [ ] You are pumped for Session 2
+
+
 ## Talking Tips
 
 Not sure what to say? Try these:
