@@ -94,6 +94,7 @@
 | Claude not responding | Check internet on Pi, restart: `claude` |
 | Kid’s Tailscale won’t connect | Re-enter auth key from credentials sheet |
 | Spark crashes | Check terminal for error, re-run `python3 game/spark.py` |
+| Claude auth error / "please login" | Verify API key: `echo $ANTHROPIC_API_KEY` — if empty, run `source ~/.bashrc` |
 
 ---
 
