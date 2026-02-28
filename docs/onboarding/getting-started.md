@@ -15,7 +15,7 @@ If you haven't installed these yet, see `docs/guides/prerequisites.md`.
 1. Open VS Code
 2. Press `Ctrl + Shift + P` to open the command palette
 3. Type "Remote-SSH: Connect to Host"
-4. Select **quest-pi** from the list
+4. Type `mark@100.118.252.70` and press Enter
 5. **IMPORTANT:** When asked to select the platform, choose **Linux** (the Pi runs Linux, not Windows!)
 6. Enter the password when asked: `quest2026`
 7. Wait for VS Code to set up (first time takes about a minute — it's installing on the Pi)
@@ -60,7 +60,7 @@ Claude will ask you questions about your game idea. Just talk! There are no wron
 
 | Field | Value |
 |-------|-------|
-| Host | **quest-pi** |
+| Host | **mark@100.118.252.70** |
 | Username | **mark** |
 | Password | **quest2026** |
 | Platform | **Linux** (when VS Code asks!) |
@@ -72,7 +72,7 @@ Claude will ask you questions about your game idea. Just talk! There are no wron
 
 | What You Want to Do | How to Do It |
 |---------------------|-------------|
-| Connect to Pi | `Ctrl+Shift+P` > "Remote-SSH: Connect to Host" > quest-pi |
+| Connect to Pi | `Ctrl+Shift+P` > "Remote-SSH: Connect to Host" > type `mark@100.118.252.70` |
 | Open terminal | `Ctrl + `` |
 | Start Claude | Type `claude` in terminal |
 | Dream up the game | `/dream` |
@@ -94,7 +94,7 @@ Claude will ask you questions about your game idea. Just talk! There are no wron
 
 ### "Permission denied"
 - Check your password is `quest2026` (all lowercase, no spaces)
-- Make sure you selected **quest-pi** as the host
+- Make sure you typed **mark@100.118.252.70** as the host
 
 ### VS Code asks for platform — what do I pick?
 - Pick **Linux**! The Raspberry Pi runs Linux. Your laptop is Windows, but you're connecting TO the Pi.

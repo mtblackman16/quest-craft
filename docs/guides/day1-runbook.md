@@ -10,7 +10,7 @@
 |------|-------|
 | Pi IP | `100.118.252.70` (Tailscale) |
 | Pi user / pass | `mark` / `quest2026` |
-| VS Code host | `quest-pi` → select **Linux** |
+| VS Code host | `mark@100.118.252.70` → select **Linux** |
 | Claude command | `cd ~/quest-craft && claude` |
 | Tailscale auth key | See [local-credentials.md](../onboarding/local-credentials.md) |
 
@@ -19,10 +19,10 @@
 ## Pre-Session Checklist (30 min before)
 
 - [ ] Pi powered on, HDMI display connected
-- [ ] Verify Pi on Tailscale: `ssh quest-pi`
+- [ ] Verify Pi on Tailscale: `ssh mark@100.118.252.70`
 - [ ] Switch Pro Controller paired via Bluetooth
 - [ ] Pygame test: `python3 -c "import pygame; pygame.init(); print('OK')"`
-- [ ] Each kid’s laptop: Tailscale connected, VS Code opens quest-pi
+- [ ] Each kid’s laptop: Tailscale connected, VS Code opens Pi
 - [ ] Print [local-credentials.md](../onboarding/local-credentials.md)
 
 ---
@@ -34,7 +34,7 @@
 1. Kids sit down, open laptops
 2. Connect to **guest WiFi** (see printed credentials sheet)
 3. Open **Tailscale** → should auto-connect (auth key pre-installed)
-4. Open **VS Code** → Remote-SSH → `quest-pi` → password: `quest2026` → select **Linux**
+4. Open **VS Code** → Remote-SSH → type `mark@100.118.252.70` → password: `quest2026` → select **Linux**
 5. Open terminal in VS Code → `cd ~/quest-craft && claude`
 6. Reference: [Getting Started](../onboarding/getting-started.md)
 
@@ -89,7 +89,7 @@
 | Problem | Fix |
 |---------|-----|
 | VS Code can’t connect | Check Tailscale is running on kid’s laptop, try password `quest2026` |
-| "Connection refused" | Pi may need reboot: `ssh quest-pi "sudo reboot"`, wait 30s |
+| "Connection refused" | Pi may need reboot: `ssh mark@100.118.252.70 "sudo reboot"`, wait 30s |
 | Controller not working | Re-pair Bluetooth on Pi, restart `spark.py` |
 | Claude not responding | Check internet on Pi, restart: `claude` |
 | Kid’s Tailscale won’t connect | Re-enter auth key from credentials sheet |
