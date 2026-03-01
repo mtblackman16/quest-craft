@@ -1,116 +1,508 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Craft — Session 1: Dream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Press+Start+2P&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: #2d2d2d; line-height: 1.5; max-width: 680px; margin: 0 auto; padding: 30px 20px; font-size: 14px; }
-  .header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #7c3aed; }
-  .header h1 { font-size: 22px; color: #7c3aed; margin-bottom: 2px; }
-  .header .subtitle { font-size: 15px; color: #555; }
-  .header .date { font-size: 12px; color: #888; margin-top: 4px; }
-  .tagline { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; padding: 14px 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-size: 15px; line-height: 1.4; }
-  .tagline strong { font-size: 16px; }
-  h2 { font-size: 15px; color: #7c3aed; margin: 18px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e5e5e5; }
-  .game-box { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
-  .game-box .title { font-size: 20px; font-weight: 700; color: #7c3aed; }
-  .game-box .desc { font-style: italic; color: #555; margin-top: 6px; font-size: 13px; line-height: 1.5; }
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-  .skill { background: #f8f8f8; border-radius: 6px; padding: 10px 12px; }
-  .skill .name { font-weight: 600; font-size: 13px; color: #333; }
-  .skill .detail { font-size: 12px; color: #666; margin-top: 2px; }
-  .highlight-list { list-style: none; padding: 0; }
-  .highlight-list li { padding: 5px 0 5px 20px; position: relative; font-size: 13px; }
-  .highlight-list li::before { content: "→"; position: absolute; left: 0; color: #7c3aed; font-weight: bold; }
-  .video-box { background: #f0f0f0; border-radius: 8px; padding: 16px; text-align: center; margin: 16px 0; }
-  .video-box a { color: #7c3aed; font-weight: 600; font-size: 14px; }
-  .video-box .caption { font-size: 12px; color: #888; margin-top: 4px; }
-  .illuminate { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
-  .illuminate strong { color: #92400e; }
-  .footer { text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid #e5e5e5; font-size: 11px; color: #aaa; }
-  .quote { font-style: italic; color: #555; text-align: center; margin: 12px 0; font-size: 13px; }
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Color Tokens ── */
+  :root {
+    --deep-stone: #1a1a2e;
+    --warm-stone: #2d2d44;
+    --torchlight: #e8a838;
+    --torch-glow: #f5e6c8;
+    --jello-green: #7ddf64;
+    --ember: #c44b2b;
+    --dim-text: #a89e8a;
+    --border-glow: rgba(232, 168, 56, 0.25);
+    --parchment: #f0e4cc;
+  }
+
+  /* ── Page Background with Vignette + Stone Noise ── */
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--torch-glow);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-size: 15px;
+    min-height: 100vh;
+    background-color: var(--deep-stone);
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 50% 0%, #2d2d44 0%, #1a1a2e 70%);
+  }
+
+  /* ── Torch Flicker Animation ── */
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.92; }
+  }
+
+  /* ── 1. Title Block ── */
+  .title-block {
+    text-align: center;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }
+
+  .title-block .program-name {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dim-text);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .title-block .session-number {
+    font-family: 'Cinzel Decorative', Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--torchlight);
+    line-height: 1.1;
+    animation: flicker 4s ease-in-out infinite;
+    margin-bottom: 8px;
+  }
+
+  .title-block .session-subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .title-block .meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--dim-text);
+    line-height: 1.4;
+  }
+
+  /* ── Fading Gradient Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(232, 168, 56, 0.5) 20%,
+      rgba(232, 168, 56, 0.5) 80%,
+      transparent 100%
+    );
+    margin: 0;
+  }
+
+  /* ── 2. The Hook ── */
+  .hook {
+    background: rgba(45, 45, 68, 0.6);
+    border: 1.5px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 22px 20px;
+    margin: 28px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hook::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(232, 168, 56, 0.08);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .hook .headline {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--torchlight);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .hook .supporting {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.5;
+  }
+
+  /* ── 3. Game Showcase ── */
+  .game-showcase {
+    text-align: center;
+    padding: 28px 0 24px;
+  }
+
+  .game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 28px;
+    color: var(--jello-green);
+    text-shadow:
+      0 0 8px rgba(125, 223, 100, 0.5),
+      0 0 24px rgba(125, 223, 100, 0.2),
+      0 0 48px rgba(125, 223, 100, 0.08);
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+
+  .game-blurb {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 20px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .game-blurb::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -18px;
+    left: -2px;
+    line-height: 1;
+  }
+
+  /* ── Section Headings (h2) with Ornamental Lines ── */
+  h2 {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--torchlight);
+    text-align: center;
+    margin: 40px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before,
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  h2::before {
+    background: linear-gradient(to right, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  h2::after {
+    background: linear-gradient(to left, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  /* ── 4. Diamond Bullet List ── */
+  .quest-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .quest-list li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--torch-glow);
+  }
+
+  .quest-list li::before {
+    content: '\25C6';
+    position: absolute;
+    left: 0;
+    color: var(--torchlight);
+    font-size: 10px;
+    top: 11px;
+  }
+
+  .quest-list li + li {
+    margin-top: 4px;
+  }
+
+  /* ── 5. Skill Cards (Stacked) ── */
+  .skill-card {
+    background: rgba(45, 45, 68, 0.4);
+    border-left: 3px solid var(--torchlight);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .skill-card .name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--torchlight);
+    line-height: 1.3;
+  }
+
+  .skill-card .detail {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #c4b8a0;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── 6. Game Design Concepts — uses .quest-list ── */
+  .quest-list li strong {
+    color: var(--torch-glow);
+  }
+
+  /* ── 7. Illuminate Connection ── */
+  .illuminate {
+    background: var(--parchment);
+    border: 1px solid #d4c4a0;
+    border-radius: 4px;
+    padding: 16px 18px;
+    color: #3a3020;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 24px;
+  }
+
+  .illuminate strong {
+    color: #6b4c1e;
+  }
+
+  .illuminate em {
+    font-style: italic;
+  }
+
+  /* ── 8. Video Link CTA ── */
+  .video-cta {
+    display: block;
+    text-align: center;
+    background: rgba(232, 168, 56, 0.12);
+    border: 1.5px solid rgba(232, 168, 56, 0.35);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 28px 0;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .video-cta:hover {
+    background: rgba(232, 168, 56, 0.2);
+  }
+
+  .video-cta .label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--torchlight);
+  }
+
+  .video-cta .caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: var(--dim-text);
+    margin-top: 6px;
+  }
+
+  /* ── 9. Closing Quote ── */
+  .closing-quote {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 8px 32px;
+    margin: 28px 0;
+  }
+
+  .closing-quote::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -12px;
+    left: 2px;
+    line-height: 1;
+  }
+
+  .closing-quote::after {
+    content: '\201D';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    bottom: -28px;
+    right: 2px;
+    line-height: 1;
+  }
+
+  /* ── 10. Footer / Seal ── */
+  .ornament-divider {
+    text-align: center;
+    margin: 36px 0 20px;
+    color: var(--torchlight);
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: var(--dim-text);
+    line-height: 1.4;
+    padding-bottom: 20px;
+  }
+
+  .footer .credits {
+    margin-bottom: 6px;
+  }
+
+  .footer .next-session {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #b8aa96;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Quest Craft — Session 1 Recap</h1>
-  <div class="subtitle">Dream Session: Designing a Video Game with AI</div>
-  <div class="date">February 28, 2026 &nbsp;|&nbsp; Ethan, Eins &amp; Nathan</div>
+<!-- ═══════════════════════════════════════════════════════
+     1. TITLE BLOCK
+     ═══════════════════════════════════════════════════════ -->
+<header class="title-block">
+  <div class="program-name">Quest Craft</div>
+  <div class="session-number">Session 1</div>
+  <div class="session-subtitle">Dream &mdash; Designing a Video Game with AI</div>
+  <div class="meta">February 28, 2026 &nbsp;|&nbsp; Ethan, Eins &amp; Nathan</div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     2. THE HOOK
+     ═══════════════════════════════════════════════════════ -->
+<div class="hook">
+  <div class="headline">Today, three kids designed an entire video game from scratch.</div>
+  <div class="supporting">No code. No templates. Just their ideas, their voices, and an AI engineering partner.</div>
 </div>
 
-<div class="tagline">
-  <strong>Today, three kids designed an entire video game from scratch.</strong><br>
-  No code. No templates. Just their ideas, their voices, and an AI engineering partner.
-</div>
+<!-- ═══════════════════════════════════════════════════════
+     3. THE GAME SHOWCASE
+     ═══════════════════════════════════════════════════════ -->
+<section class="game-showcase">
+  <div class="game-title">SPLIT</div>
+  <div class="game-blurb">You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle &mdash; upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.</div>
+</section>
 
-<div class="game-box">
-  <div class="title">SPLIT</div>
-  <div class="desc">"You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters."</div>
-</div>
+<div class="divider"></div>
 
+<!-- ═══════════════════════════════════════════════════════
+     4. WHAT THEY BUILT TODAY
+     ═══════════════════════════════════════════════════════ -->
 <h2>What They Built Today</h2>
-<ul class="highlight-list">
+<ul class="quest-list">
   <li>Designed a complete game concept: characters, world, enemies, combat, items, crafting, and art direction</li>
-  <li>Invented original game mechanics — a jello cube that shoots pieces of itself, splits apart to dodge attacks, and stores items visibly inside its transparent body</li>
-  <li>Named the game, wrote the "back of the box" marketing copy, and prioritized features for a 2-week build</li>
+  <li>Invented original game mechanics &mdash; a jello cube that shoots pieces of itself, splits apart to dodge attacks, and stores items visibly inside its transparent body</li>
+  <li>Named the game, wrote the &ldquo;back of the box&rdquo; marketing copy, and prioritized features for a 2-week build</li>
   <li>Created an artist brief for their teammate Andrew with a clear creative assignment</li>
-  <li>Saved everything to version control — three checkpoints committed and pushed to GitHub</li>
+  <li>Saved everything to version control &mdash; three checkpoints committed and pushed to GitHub</li>
 </ul>
 
-<h2>Real-World Skills Practiced</h2>
-<div class="skills-grid">
-  <div class="skill">
-    <div class="name">VS Code + Remote SSH</div>
-    <div class="detail">Connected laptops to a Raspberry Pi 5 server — the same remote development workflow used by professional engineering teams</div>
-  </div>
-  <div class="skill">
-    <div class="name">Git &amp; GitHub</div>
-    <div class="detail">Learned commits as "save points," wrote descriptive messages, pushed to a shared repo — version control fundamentals</div>
-  </div>
-  <div class="skill">
-    <div class="name">AI Prompting (Claude Code)</div>
-    <div class="detail">Directed an AI to understand, organize, and document their ideas — the #1 skill in modern software development</div>
-  </div>
-  <div class="skill">
-    <div class="name">Voice-to-Text (Wispr Flow)</div>
-    <div class="detail">Spoke naturally to communicate complex game ideas — learning that clear communication IS the skill, not typing</div>
-  </div>
-  <div class="skill">
-    <div class="name">Markdown &amp; Documentation</div>
-    <div class="detail">Saw how structured documents (PRDs, briefs) capture decisions — the same format used at every tech company</div>
-  </div>
-  <div class="skill">
-    <div class="name">Game Design Fundamentals</div>
-    <div class="detail">Core loops, dynamic tension, scope prioritization, cohesive design, contextual tutorials — real design principles</div>
-  </div>
+<!-- ═══════════════════════════════════════════════════════
+     5. SKILLS UNLOCKED
+     ═══════════════════════════════════════════════════════ -->
+<h2>Skills Unlocked</h2>
+<div class="skill-card">
+  <div class="name">VS Code + Remote SSH</div>
+  <div class="detail">Connected laptops to a Raspberry Pi 5 server &mdash; the same remote development workflow used by professional engineering teams</div>
+</div>
+<div class="skill-card">
+  <div class="name">Git &amp; GitHub</div>
+  <div class="detail">Learned commits as &ldquo;save points,&rdquo; wrote descriptive messages, pushed to a shared repo &mdash; version control fundamentals</div>
+</div>
+<div class="skill-card">
+  <div class="name">AI Prompting (Claude Code)</div>
+  <div class="detail">Directed an AI to understand, organize, and document their ideas &mdash; the #1 skill in modern software development</div>
+</div>
+<div class="skill-card">
+  <div class="name">Voice-to-Text (Wispr Flow)</div>
+  <div class="detail">Spoke naturally to communicate complex game ideas &mdash; learning that clear communication IS the skill, not typing</div>
+</div>
+<div class="skill-card">
+  <div class="name">Markdown &amp; Documentation</div>
+  <div class="detail">Saw how structured documents (PRDs, briefs) capture decisions &mdash; the same format used at every tech company</div>
+</div>
+<div class="skill-card">
+  <div class="name">Game Design Fundamentals</div>
+  <div class="detail">Core loops, dynamic tension, scope prioritization, cohesive design, contextual tutorials &mdash; real design principles</div>
 </div>
 
-<h2>Game Design Concepts They Applied</h2>
-<ul class="highlight-list">
-  <li><strong>Cohesive design</strong> — every mechanic ties back to being made of jello (shooting costs body mass, crafting uses jello ingredients, inventory floats inside you)</li>
-  <li><strong>Dynamic tension</strong> — the game breathes between peaceful exploration and intense combat, controlled by light and music</li>
-  <li><strong>Scope management</strong> — dreamed big (full castle, all bosses, hard mode) then identified the 3 must-haves for a 2-week build</li>
-  <li><strong>Risk/reward tradeoffs</strong> — growing bigger gives more health but blocks passages; splitting gives access but risks losing pieces</li>
+<!-- ═══════════════════════════════════════════════════════
+     6. GAME DESIGN CONCEPTS
+     ═══════════════════════════════════════════════════════ -->
+<h2>Game Design Concepts</h2>
+<ul class="quest-list">
+  <li><strong>Cohesive design</strong> &mdash; every mechanic ties back to being made of jello (shooting costs body mass, crafting uses jello ingredients, inventory floats inside you)</li>
+  <li><strong>Dynamic tension</strong> &mdash; the game breathes between peaceful exploration and intense combat, controlled by light and music</li>
+  <li><strong>Scope management</strong> &mdash; dreamed big (full castle, all bosses, hard mode) then identified the 3 must-haves for a 2-week build</li>
+  <li><strong>Risk/reward tradeoffs</strong> &mdash; growing bigger gives more health but blocks passages; splitting gives access but risks losing pieces</li>
 </ul>
 
+<!-- ═══════════════════════════════════════════════════════
+     7. ILLUMINATE CONNECTION
+     ═══════════════════════════════════════════════════════ -->
 <div class="illuminate">
-  <strong>How This Maps to LASD Illuminate:</strong> The Illuminate Inquiry Exhibition (March 15) asks students to explore a driving question through research, creativity, and real-world application. Quest Craft answers: <em>"What can kids create when they have professional tools and an AI partner?"</em> The kids are learning collaboration, iterative design, technical communication, and computational thinking — not by studying these concepts, but by doing them to ship a real product.
+  <strong>How This Maps to LASD Illuminate:</strong> The Illuminate Inquiry Exhibition (March 15) asks students to explore a driving question through research, creativity, and real-world application. Quest Craft answers: <em>&ldquo;What can kids create when they have professional tools and an AI partner?&rdquo;</em> The kids are learning collaboration, iterative design, technical communication, and computational thinking &mdash; not by studying these concepts, but by doing them to ship a real product.
 </div>
 
-<div class="video-box">
-  <!-- REPLACE THIS LINK with the Loom recording URL -->
-  <a href="LOOM_LINK_HERE">Watch: The first playable moment of Split</a>
-  <div class="caption">Recorded live — the title screen and character demo generated from today's session</div>
+<!-- ═══════════════════════════════════════════════════════
+     8. VIDEO LINK
+     ═══════════════════════════════════════════════════════ -->
+<a class="video-cta" href="LOOM_LINK_HERE">
+  <div class="label">Watch: The first playable moment of Split</div>
+  <div class="caption">Recorded live &mdash; the title screen and character demo generated from today's session</div>
+</a>
+
+<!-- ═══════════════════════════════════════════════════════
+     9. CLOSING QUOTE
+     ═══════════════════════════════════════════════════════ -->
+<div class="closing-quote">
+  This is just the spark. The seed. But right now, they're playing a game that didn't exist 3 hours ago. They designed it.
 </div>
 
-<p class="quote">"This is just the spark. The seed. But right now, they're playing a game that didn't exist 3 hours ago. They designed it."</p>
+<!-- ═══════════════════════════════════════════════════════
+     10. FOOTER / SEAL
+     ═══════════════════════════════════════════════════════ -->
+<div class="ornament-divider">&#9670; &#9670; &#9670;</div>
 
-<div class="footer">
-  Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026<br>
-  Next session: Deep Design — characters, world, levels, art, sound, and controls
-</div>
+<footer class="footer">
+  <div class="credits">Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026</div>
+  <div class="next-session">Next session: Deep Design &mdash; characters, world, levels, art, sound, and controls</div>
+</footer>
 
 </body>
 </html>
