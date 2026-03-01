@@ -20,10 +20,12 @@
 
 ## Project Status
 
-**Current Phase:** Session 1 — Dream (in progress)
-**Current Session:** Day 1 Dream — concept brainstorm
-**Game Name:** TBD (team still deciding)
+**Current Phase:** Session 1 — Dream (COMPLETE)
+**Current Session:** Day 1 Dream — concept brainstorm DONE
+**Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
+**Core Word:** Survival
+**Players:** Single player
 
 ---
 
@@ -60,6 +62,16 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 | 2026-02-28 | Dead Cells pixel art style | Team |
 | 2026-02-28 | BotW-style enemy awareness (? and ! indicators, stealth) | Team |
 | 2026-02-28 | Simple/Advanced control toggle for exhibition accessibility | Team |
+| 2026-02-28 | Game title: **Split** | Team |
+| 2026-02-28 | Single player game | Team |
+| 2026-02-28 | School-appropriate: no weapons, jello powers and attacks only | Team |
+| 2026-02-28 | Combat: jello shot (costs body mass), ground pound (stun), jello dodge | Team |
+| 2026-02-28 | Items stored visibly inside the jello body | Team |
+| 2026-02-28 | Ancient shield artifacts project light shields | Team |
+| 2026-02-28 | Tutorial: starts in jail cell, contextual teaching like Zelda | Team |
+| 2026-02-28 | Top 3 for exhibition: attacks/combat, crafting at pots, enemies | Team |
+| 2026-02-28 | Sound: record real foley sounds, royalty-free or classical music | Team |
+| 2026-02-28 | Pick up jello by rolling over it; too much = explode | Team |
 
 ---
 
@@ -74,6 +86,17 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 - Splitting: divide into fourths to fit through small spaces (risk losing pieces)
 - Size matters: too big = can't fit through some passages
 - Stealth: sneak past enemies, BotW-style awareness (? and !)
+
+**Combat System:**
+- Jello Shot (main attack): shoot bits of yourself, lose body mass, roll over spare jello to reload, explode if too much
+- Ground Pound: jump + slam, stuns enemies, kills small ones
+- Jello Dodge: perfect-dodge timing, body goes liquid briefly and reforms, confuses lower enemies, creates attack window
+- Ancient Shield: artifact that projects a light energy shield for defense
+- Items stored visibly inside transparent jello body
+
+**Tutorial Flow:**
+- Start in a jail cell, move forward to escape
+- Contextual teaching: game pauses on first encounter with new mechanic (like Zelda)
 
 **Character:** Jello cube with little eyeballs
 
@@ -115,22 +138,16 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 
 ---
 
-## Dream Session Progress (Feb 28)
+## Dream Session Progress (Feb 28) — COMPLETE
 
-| # | Question | Status |
-|---|----------|--------|
-| 1 | Opening — what game would you play? | Done |
-| 2 | Genre — what type of game? | Done |
-| 3 | The Hook — what makes it unique? | Done — jello splitting |
-| 4 | Experience — what do friends say? | Not yet |
-| 5 | Feeling — how should players feel? | Done |
-| 6 | Win/Lose — how do you win/lose? | Done |
-| 7 | Inspiration — what inspired this? | Partial — Zelda, Dead Cells, BotW, Minecraft |
-| 8 | The Pitch — summary and confirm | Done |
-| 9 | Title — what's it called? | Not yet |
-| 10 | Scope — top 3 for 2 weeks? | Not yet |
-| 11 | Music/Soundtrack/SFX | Not yet (brief mentions so far) |
-| 12 | Attacks & Defenses detail | Not yet |
+All Dream questions answered. Ready for Session 2 (Design).
+
+**Exhibition Scope (top 3 priorities):**
+1. Core movement + all attacks (jello shot, ground pound, jello dodge)
+2. Crafting at cooking pots (jello powder + water = grow/heal)
+3. Enemies to fight (roly-polys, alcohol bottles if far enough)
+
+Hidden puzzles are a "nice to have" after core is solid.
 
 ---
 

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | In Progress |
+| **Status** | Dream Complete |
 | **Author** | Ethan, Eins, Andrew, Nathan |
 | **Date** | 2026-02-28 |
 | **Reviewed by** | Mark (Team Advisor) |
@@ -11,7 +11,9 @@
 
 ## What Game Are We Making?
 
-> A 2D side-scrolling platformer where you play as a jello cube with eyeballs, trapped in the dungeon of a dark castle in the desert. Fight monsters, solve hidden puzzles, craft health from jello ingredients, and escape floor by floor to the rooftop where the final boss waits.
+> **Split** — A 2D side-scrolling platformer where you play as a jello cube with eyeballs, trapped in the dungeon of a dark castle in the desert. Fight monsters with your own jello body, solve hidden puzzles, craft health from jello ingredients, and escape floor by floor to the rooftop where the final boss waits. Single player. School-appropriate — no weapons, just jello powers.
+>
+> **The game in one word: Survival.**
 
 ---
 
@@ -55,7 +57,7 @@ Die = restart from the very beginning. This creates high tension — every encou
 Pixel art style. A detailed background showing the castle with the desert behind it, more detailed than the gameplay itself (like Minecraft's 3D menu or Zelda's title screen). The jello cube character doing a pose. Big pixely title at the top. Buttons: Play, Settings, Controls. Controls page has a Simple/Advanced toggle.
 
 **You press Play. What happens first?**
-You wake up in the dungeon. Dark stone walls, creeping vines, torches flickering. The music is calm but mysterious.
+You wake up in a jail cell in the dungeon. You move forward, escape the cell, and the game teaches you as you go — the first time you encounter something new (a monster, a lever, a cooking pot), the game pauses and shows you what to do, like Zelda. Dark stone walls, creeping vines, torches flickering. The music is calm but mysterious.
 
 **You're playing the game now. What are you doing?**
 Running through castle corridors, jumping on platforms, spotting a lever half-hidden behind vines. Pulling it opens a secret alcove with jello powder. Fighting off roly-polys that swarm you. Finding a cooking pot, mixing water and powder to grow bigger. Approaching a dark area where the torches run out and the music gets intense...
@@ -79,6 +81,29 @@ A glowing door appears. You touch it, get pulled through, and arrive on the next
 | Final boss | Final | At the top of the castle | Game completion |
 
 **Enemy awareness:** Breath of the Wild style — question mark (?) when suspicious, exclamation mark (!) when they spot you. You can sneak past enemies.
+
+---
+
+## Combat System
+
+**School-appropriate: no weapons. All attacks are jello powers.**
+
+### Attacks
+| Attack | How It Works | Notes |
+|--------|-------------|-------|
+| Jello Shot | Shoot bits of yourself at enemies | Main attack. Costs body mass — you shrink as you shoot. Roll over spare jello to reload. Pick up too much = explode! |
+| Ground Pound | Jump up, slam down | Stuns enemies around you. Kills small roly-polys. No damage to big enemies. |
+| Jello Dodge | Perfect-dodge when enemy attacks | Body goes liquid briefly and reforms. Confuses lower enemies, creates attack window. Like BotW Flurry Rush. |
+
+### Defense
+| Defense | How It Works |
+|---------|-------------|
+| Ancient Shield | Square artifact found in castle. Activate to project a light energy shield around you. |
+| Jello Armor | Defense up — absorbs damage |
+| Jello Costume | Disguise as roly-poly. Fools alcohol bottles, not bosses. |
+
+### Inventory
+Items are stored **visibly inside the transparent jello body**. Players can see water bottles, pills, and shields floating inside the cube. Functional AND hilarious.
 
 ---
 
@@ -131,18 +156,38 @@ The game BREATHES between two moods:
 
 ---
 
-## Open Questions
+## Sound Direction
 
-- [ ] Game title — not yet decided
+- **Foley:** Record real sounds (smack jello for landing, real clicks for levers)
+- **Music:** Royalty-free game music or classical music (public domain). NO copyrighted game music (Zelda, Minecraft, etc.)
+- **Dynamic music:** Peaceful during exploration, intense/scary in dark areas and near bosses
+
+---
+
+## Exhibition Scope (2-Week Build)
+
+**If we had a year, the game would have:** All floors, all bosses, all items, full story, hard mode, hidden puzzles everywhere.
+
+**The 3 most important things for the exhibition version:**
+1. **Core movement + all attacks** (jello shot, ground pound, jello dodge)
+2. **Crafting at cooking pots** (jello powder + water = grow/heal)
+3. **Enemies to fight** (roly-polys for sure, alcohol bottles if players get far enough)
+
+Hidden puzzles are a "nice to have" once the core feels great.
+
+---
+
+## Open Questions (for Design sessions)
+
+- [x] ~~Game title~~ — **Split**
 - [ ] Final boss design
 - [ ] Big boss designs for each floor
 - [ ] What the alcohol bottle enemy drops
-- [ ] Detailed attack/defense mechanics
-- [ ] Music and sound effects specifics
+- [x] ~~Detailed attack/defense mechanics~~ — jello shot, ground pound, jello dodge, ancient shield
+- [ ] Music and sound effects specifics (direction set, details TBD)
 - [ ] How many floors/levels?
 - [ ] What does hard mode change?
-- [ ] What do friends say when they see it? (the "wow" factor)
-- [ ] Top 3 features to build first for the 2-week scope
+- [x] ~~Top 3 features to build first~~ — attacks, crafting, enemies
 
 ---
 
