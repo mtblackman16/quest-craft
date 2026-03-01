@@ -176,7 +176,11 @@ Hidden puzzles are a "nice to have" after core is solid.
 
 ## Build Progress
 
-*Updated during Sessions 3-5 as features are built.*
+| Date | What | File |
+|------|------|------|
+| 2026-02-28 | Spark demo created — title screen + playable jello cube platformer | `game/spark.py` |
+
+**Spark demo features:** Animated title screen with glowing "SPLIT" letters, bobbing jello cube preview, dungeon dust particles. Gameplay scene with translucent jello cube (eyeballs, squish physics, trail), 5 stone platforms, 7 collectible jello powder diamonds, torchlit castle background with vines and flickering torches. Arrow keys + SPACE to jump, ESC to return to title.
 
 ---
 
