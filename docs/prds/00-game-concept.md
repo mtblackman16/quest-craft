@@ -102,6 +102,22 @@ A glowing door appears. You touch it, get pulled through, and arrive on the next
 | Jello Armor | Defense up — absorbs damage |
 | Jello Costume | Disguise as roly-poly. Fools alcohol bottles, not bosses. |
 
+### Keyboard Controls (Temporary)
+
+Keyboard is the primary input during development. Nintendo Pro Controller + Joy-Con mapping will be finalized in Session 2.
+
+| Action | Key |
+|--------|-----|
+| Move Left | A or Left Arrow |
+| Move Right | D or Right Arrow |
+| Jump | W or Up Arrow or Space |
+| Jello Shot | J |
+| Ground Pound | S or Down Arrow (while airborne) |
+| Jello Dodge | K |
+| Interact | E |
+| Shield | L |
+| Pause | ESC |
+
 ### Inventory
 Items are stored **visibly inside the transparent jello body**. Players can see water bottles, pills, and shields floating inside the cube. Functional AND hilarious.
 
@@ -188,6 +204,9 @@ Hidden puzzles are a "nice to have" once the core feels great.
 - [ ] How many floors/levels?
 - [ ] What does hard mode change?
 - [x] ~~Top 3 features to build first~~ — attacks, crafting, enemies
+- [ ] Full controller mapping (Pro Controller + Joy-Cons) — Session 2
+- [ ] Simple vs Advanced control toggle details — Session 2
+- [ ] Single Joy-Con sideways vs two Joy-Cons — Session 2
 
 ---
 

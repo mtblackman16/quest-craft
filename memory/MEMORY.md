@@ -72,6 +72,7 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 | 2026-02-28 | Top 3 for exhibition: attacks/combat, crafting at pots, enemies | Team |
 | 2026-02-28 | Sound: record real foley sounds, royalty-free or classical music | Team |
 | 2026-02-28 | Pick up jello by rolling over it; too much = explode | Team |
+| 2026-02-28 | Controllers: keyboard for now, Nintendo Pro Controller + Joy-Cons pairing in Session 2 | Mark |
 
 ---
 
@@ -141,6 +142,8 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 ## Dream Session Progress (Feb 28) — COMPLETE
 
 All Dream questions answered. Ready for Session 2 (Design).
+
+**Session 2 TODO:** Full controller mapping discussion (Pro Controller + Joy-Cons), Simple vs Advanced toggle design, hardware pairing
 
 **Exhibition Scope (top 3 priorities):**
 1. Core movement + all attacks (jello shot, ground pound, jello dodge)
