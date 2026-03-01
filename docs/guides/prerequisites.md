@@ -63,6 +63,46 @@ Want to make sure everything works? Try connecting to the Pi:
 
 ---
 
+## macOS Setup
+
+If you're on a Mac instead of Windows, the setup is almost identical.
+
+### Step 1: Install VS Code (Free)
+
+1. Go to https://code.visualstudio.com
+2. Click **Download for Mac** (it detects your chip automatically)
+3. Drag VS Code to your Applications folder
+4. Open VS Code and install the **Remote - SSH** extension (same as Windows — search for it in the Extensions sidebar)
+
+### Step 2: Install Wispr Flow (Free)
+
+1. Go to https://wisprflow.ai/
+2. Download the Mac version and install
+3. Follow the setup wizard — same experience as Windows
+
+### Step 3: Viewing the Pi Display
+
+You have two options:
+
+**Option A: Built-in VNC viewer (macOS only)**
+1. Open **Finder**
+2. Press **Cmd+K** (Connect to Server)
+3. Enter: `vnc://100.118.252.70:5900`
+4. Click Connect
+
+**Option B: Browser method (works on any platform)**
+1. Open any browser
+2. Go to `http://100.118.252.70:6080/vnc.html`
+3. Click Connect
+
+> **Note:** The browser method (noVNC) works identically on both Windows and macOS. Use whichever is more convenient.
+
+### Step 4: That's It!
+
+Same as Windows — everything else runs on the Pi. Your Mac just needs VS Code to connect.
+
+---
+
 ## Questions?
 
 Ask Mark! He set everything up and can help troubleshoot.

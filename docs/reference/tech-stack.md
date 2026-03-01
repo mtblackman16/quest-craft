@@ -124,3 +124,35 @@ git checkout feature/x # Switch to a branch
 | Sounds | `.wav` or `.ogg` | Sound effects and music |
 | Fonts | `.ttf` | Custom text fonts |
 | Markdown | `.md` | Documentation (like this file) |
+
+---
+
+## Headless Display: wayvnc
+
+**What it is:** A VNC server for Wayland compositors.
+**What it does:** Exposes the Pi's Wayland desktop over VNC so you can view it from another device — essential when the Pi has no monitor connected (headless).
+**Usage:**
+```bash
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+wayvnc 0.0.0.0 5900 &
+```
+
+---
+
+## Browser VNC: noVNC + websockify
+
+**What it is:** A browser-based VNC client (noVNC) paired with a WebSocket-to-TCP bridge (websockify).
+**What it does:** Lets you view the Pi's display from any device with a web browser — no VNC app needed. websockify bridges the browser's WebSocket connection to wayvnc's VNC port.
+**Usage:**
+```bash
+websockify --web /usr/share/novnc 6080 localhost:5900 &
+```
+Then open `http://<PI_IP>:6080/vnc.html` in any browser.
+
+---
+
+## Static Hosting: GitHub Pages
+
+**What it is:** Free static website hosting from GitHub.
+**What it does:** Serves parent summaries and artist briefs directly from our repository at `mtblackman16.github.io/quest-craft/`.
+**How it works:** Any HTML file pushed to the `docs/` folder on the `main` branch is automatically published. Parent summaries live at `docs/parent-summaries/` and are accessible via `https://mtblackman16.github.io/quest-craft/parent-summaries/`.

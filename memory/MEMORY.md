@@ -73,6 +73,9 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 | 2026-02-28 | Sound: record real foley sounds, royalty-free or classical music | Team |
 | 2026-02-28 | Pick up jello by rolling over it; too much = explode | Team |
 | 2026-02-28 | Controllers: keyboard for now, Nintendo Pro Controller + Joy-Cons pairing in Session 2 | Mark |
+| 2026-02-28 | Keyboard controls: Up=jump, SPACE=shoot, Z=split, Down(air)=ground pound | Team |
+| 2026-02-28 | GitHub Pages enabled for parent summaries at mtblackman16.github.io/quest-craft/ | Mark |
+| 2026-02-28 | Headless Pi display via wayvnc + noVNC (browser access on port 6080) | Mark |
 
 ---
 
@@ -140,6 +143,14 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 - Play, Settings, Controls buttons
 - Controls page has Simple/Advanced toggle
 
+**Keyboard Controls (Session 1 final):**
+- Up Arrow = Jump
+- Left/Right Arrows = Move
+- SPACE = Jello Shot (costs body mass)
+- Z = Split into 4 pieces
+- Down Arrow (airborne) = Ground Pound
+- ESC = Pause / Back to title
+
 **Andrew's Artist Brief:** `docs/andrew-artist-brief.md` (+ HTML for printing)
 
 ---
@@ -180,7 +191,7 @@ Hidden puzzles are a "nice to have" after core is solid.
 |------|------|------|
 | 2026-02-28 | Spark demo created — title screen + playable jello cube platformer | `game/spark.py` |
 
-**Spark demo features:** Animated title screen with glowing "SPLIT" letters, bobbing jello cube preview, dungeon dust particles. Gameplay scene with translucent jello cube (eyeballs, squish physics, trail), 5 stone platforms, 7 collectible jello powder diamonds, torchlit castle background with vines and flickering torches. Arrow keys + SPACE to jump, ESC to return to title.
+**Spark demo features:** Animated title screen with glowing "SPLIT" letters, bobbing jello cube preview, dungeon dust particles. Gameplay scene with translucent jello cube (eyeballs, squish physics, trail), 5 stone platforms, 7 collectible jello powder diamonds, torchlit castle background with vines and flickering torches. Three new mechanics added: jello shot (SPACE, costs body mass), ground pound (Down while airborne), and split into 4 pieces (Z). Arrow keys to move/jump, ESC to return to title.
 
 ---
 

@@ -107,3 +107,32 @@
 | [Session 1 Guide](../sessions/session-1-dream.md) | Full dream session breakdown |
 | [Master Plan](../plans/master-plan.md) | 5-session roadmap |
 | [Local Credentials](../onboarding/local-credentials.md) | Passwords and IPs (print this) |
+
+---
+
+## Headless Display Setup
+
+If the Pi is running headless (no monitor connected), you need to start VNC **before** the Spark demo so kids can see the game. See [headless-setup.md](headless-setup.md) for full instructions.
+
+**Quick version:**
+
+```bash
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+wayvnc 0.0.0.0 5900 &>/dev/null &
+websockify --web /usr/share/novnc 6080 localhost:5900 &>/dev/null &
+```
+
+Then open a browser on any device and go to `http://<PI_IP>:6080/vnc.html`
+
+> **Tip:** Do this as part of session prep (Pre-Session Checklist), not scrambling during the Spark moment.
+
+---
+
+## Parent Summary Distribution
+
+After the session, the parent summary HTML is auto-hosted via GitHub Pages. To publish:
+
+1. Push the HTML file to `docs/parent-summaries/` on the `main` branch
+2. Share the link with parents: `https://mtblackman16.github.io/quest-craft/parent-summaries/session-N-name.html`
+
+GitHub Pages serves from the `docs/` folder, so any HTML pushed there is live within a few minutes.
