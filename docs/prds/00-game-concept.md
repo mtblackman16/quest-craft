@@ -2,92 +2,147 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Draft |
-| **Author** | — |
-| **Date** | — |
-| **Reviewed by** | — |
+| **Status** | In Progress |
+| **Author** | Ethan, Eins, Andrew, Nathan |
+| **Date** | 2026-02-28 |
+| **Reviewed by** | Mark (Team Advisor) |
 
 ---
 
 ## What Game Are We Making?
 
-> Describe the game in one or two sentences. Imagine you're telling a friend about it.
-
-**The game is:** ___
+> A 2D side-scrolling platformer where you play as a jello cube with eyeballs, trapped in the dungeon of a dark castle in the desert. Fight monsters, solve hidden puzzles, craft health from jello ingredients, and escape floor by floor to the rooftop where the final boss waits.
 
 ---
 
 ## The Big Questions
 
 ### What type of game is it?
-> Pick one (or make up your own):
-- [ ] Platformer (run, jump, avoid obstacles — like Mario)
-- [ ] Top-down adventure (explore a world — like Zelda)
-- [ ] Side-scroller shooter (shoot enemies while moving — like Mega Man)
-- [ ] Puzzle game (solve puzzles to progress — like Tetris)
-- [ ] Racing game (race to the finish — like Mario Kart)
-- [ ] Fighting game (battle opponents — like Smash Bros)
-- [ ] Something else: ___
+- [x] Platformer (run, jump, avoid obstacles — like Mario)
+- Combined with puzzle elements hidden in the world (like Zelda shrines but integrated into the level)
+- Stealth elements (like Breath of the Wild enemy awareness)
+- Art style: Dead Cells pixel art — small pixels, clean readable shapes
 
 ### What makes it special?
-> Every game needs something that makes it YOUR game. What's the twist?
+**The Jello Splitting Mechanic.** Since you're made of jello, you can split into fourths to squeeze through small passages. But you can only control one piece at a time — and you might lose the other pieces. Growing bigger (from crafting health) makes you stronger but blocks some passages. Players constantly decide: big and strong, or small and nimble?
 
-___
+**Everything ties to being jello.** Your health system is jello powder + water + cooking pots. Your pills change your jello flavor/color. Your disguise costume jiggles like a bug. The whole game is built around what you ARE.
 
 ### Who is the player?
-> Quick description — we'll go deeper in the Characters PRD.
-
-___
+A jello cube with little eyeballs. Lovable, jiggly, determined to escape.
 
 ### What does the player DO?
-> What's the main action? Jump? Shoot? Explore? Collect?
-
-___
+- Run left/right, jump in a 2D side-scrolling world
+- Fight monsters (roly-polys, alcohol spray bottles, fire talus bosses)
+- Find and solve hidden puzzles (levers, pressure plates) for jello powder
+- Craft health at cooking pots (jello powder + water + heat)
+- Split into smaller pieces to reach secret areas
+- Sneak past enemies using stealth or disguises
+- Collect pills, armor, and items
+- Shop at hidden barrel shops
 
 ### What's the goal?
-> How does the player win? Or does the game go on forever?
-
-___
+Escape the castle. Start in the dungeon, fight up through each floor, reach the rooftop, defeat the final boss. Then unlock hard mode.
 
 ### How does the player lose?
-> What can go wrong? Lives? Health? Time?
-
-___
+Die = restart from the very beginning. This creates high tension — every encounter matters. Players must be strategic about when to fight, when to sneak, and when to run.
 
 ---
 
 ## Imagine You're Playing...
 
-> Close your eyes. You just started the game. The title screen appears...
+**What do you see on the title screen?**
+Pixel art style. A detailed background showing the castle with the desert behind it, more detailed than the gameplay itself (like Minecraft's 3D menu or Zelda's title screen). The jello cube character doing a pose. Big pixely title at the top. Buttons: Play, Settings, Controls. Controls page has a Simple/Advanced toggle.
 
-**What do you see on the title screen?** ___
+**You press Play. What happens first?**
+You wake up in the dungeon. Dark stone walls, creeping vines, torches flickering. The music is calm but mysterious.
 
-**You press Start. What happens first?** ___
+**You're playing the game now. What are you doing?**
+Running through castle corridors, jumping on platforms, spotting a lever half-hidden behind vines. Pulling it opens a secret alcove with jello powder. Fighting off roly-polys that swarm you. Finding a cooking pot, mixing water and powder to grow bigger. Approaching a dark area where the torches run out and the music gets intense...
 
-**You're playing the game now. What are you doing?** ___
+**Something goes wrong! What happened?**
+Too many roly-polys swarmed you in a dark corridor. Or an alcohol spray bottle landed a devastating slow shot you didn't dodge. Or you split to reach a secret area and lost a piece of yourself.
 
-**Something goes wrong! What happened?** ___
+**You beat the level! What happens next?**
+A glowing door appears. You touch it, get pulled through, and arrive on the next floor of the castle. Higher up. Harder enemies. Less light. More gloom. The music shifts.
 
-**You beat the level! What happens next?** ___
+---
+
+## Enemies
+
+| Enemy | Type | Behavior | Drops |
+|-------|------|----------|-------|
+| Roly-poly | Common | Small bugs, swarm in groups, can overwhelm | Water, rarely shrink pills |
+| Alcohol spray bottle | Common | Slow but deadly shots, must dodge | TBD |
+| Fire talus | Mini-boss | Shoots fireballs, like a Zelda talus | Fire pills |
+| Big bosses | Boss (per floor) | TBD | TBD |
+| Final boss | Final | At the top of the castle | Game completion |
+
+**Enemy awareness:** Breath of the Wild style — question mark (?) when suspicious, exclamation mark (!) when they spot you. You can sneak past enemies.
+
+---
+
+## Items & Resources
+
+### Water Types
+| Type | Uses for Jello Crafting |
+|------|------------------------|
+| Small water | 1 use |
+| Normal water | 2 uses |
+| Big water tank | 5 uses |
+| Simmered water | Already hot — no cooking pot needed |
+
+### Pills
+| Pill | Effect | Source |
+|------|--------|--------|
+| Fire pill | Turns you orange, extra damage vs alcohol & bugs | Fire talus drop |
+| Shrink pill | Shrink without splitting | Rare roly-poly drop |
+| Incense pill | Keeps small monsters away | Shops (maybe) |
+| Mighty pill | Attack and energy up | TBD |
+
+### Equipment
+| Item | Effect |
+|------|--------|
+| Jello armor | Defense up |
+| Jello costume | Disguise as roly-poly — fools alcohol bottles, not bosses |
+
+### World Objects
+- Chests — open for loot
+- Barrels — break them, occasionally find a shopkeeper inside
+- Cooking pots — craft jello powder + water into health
+- Levers and pressure plates — hidden puzzle elements
 
 ---
 
 ## Inspiration
 
-> What games, movies, or shows inspired this idea?
+1. **Zelda: Breath of the Wild** — shrine puzzles, enemy awareness system (? and !), gloom mechanic, title screen style
+2. **Dead Cells** — pixel art style, difficulty, side-scrolling combat
+3. **Mario** — 2D side-scrolling platformer movement, level progression
+4. **Minecraft** — menu screen style (detailed background), pixel aesthetic
 
-1. ___
-2. ___
-3. ___
+---
+
+## The Feeling
+
+The game BREATHES between two moods:
+- **Peaceful** — exploring, solving puzzles, discovering secrets, calm music, torchlit corridors
+- **Intense** — darkness closing in, music building, monsters swarming, one death = restart everything
 
 ---
 
 ## Open Questions
 
-> Things we still need to figure out:
-
-- [ ] ___
-- [ ] ___
+- [ ] Game title — not yet decided
+- [ ] Final boss design
+- [ ] Big boss designs for each floor
+- [ ] What the alcohol bottle enemy drops
+- [ ] Detailed attack/defense mechanics
+- [ ] Music and sound effects specifics
+- [ ] How many floors/levels?
+- [ ] What does hard mode change?
+- [ ] What do friends say when they see it? (the "wow" factor)
+- [ ] Top 3 features to build first for the 2-week scope
 
 ---
 
