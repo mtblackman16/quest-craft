@@ -180,7 +180,20 @@ Hidden puzzles are a "nice to have" after core is solid.
 
 ---
 
+## End-of-Session Checklist
+
+Every session ends with:
+1. Save all decisions to `memory/MEMORY.md`
+2. Update relevant PRDs in `docs/prds/`
+3. Git commit + push
+4. Generate parent summary HTML in `docs/parent-summaries/session-N-name.html` (use TEMPLATE.html)
+5. Mark records Loom video of the day's output, adds link to the summary
+6. Email summary to parents
+
+---
+
 ## See Also
 
 - `patterns.md` — Code patterns that work
 - `lessons.md` — Mistakes and fixes
+- `docs/parent-summaries/TEMPLATE.html` — Reusable parent email template

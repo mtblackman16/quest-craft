@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: #2d2d2d; line-height: 1.5; max-width: 680px; margin: 0 auto; padding: 30px 20px; font-size: 14px; }
+  .header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #7c3aed; }
+  .header h1 { font-size: 22px; color: #7c3aed; margin-bottom: 2px; }
+  .header .subtitle { font-size: 15px; color: #555; }
+  .header .date { font-size: 12px; color: #888; margin-top: 4px; }
+  .tagline { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; padding: 14px 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-size: 15px; line-height: 1.4; }
+  .tagline strong { font-size: 16px; }
+  h2 { font-size: 15px; color: #7c3aed; margin: 18px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e5e5e5; }
+  .game-box { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .game-box .title { font-size: 20px; font-weight: 700; color: #7c3aed; }
+  .game-box .desc { font-style: italic; color: #555; margin-top: 6px; font-size: 13px; line-height: 1.5; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .skill { background: #f8f8f8; border-radius: 6px; padding: 10px 12px; }
+  .skill .name { font-weight: 600; font-size: 13px; color: #333; }
+  .skill .detail { font-size: 12px; color: #666; margin-top: 2px; }
+  .highlight-list { list-style: none; padding: 0; }
+  .highlight-list li { padding: 5px 0 5px 20px; position: relative; font-size: 13px; }
+  .highlight-list li::before { content: "→"; position: absolute; left: 0; color: #7c3aed; font-weight: bold; }
+  .video-box { background: #f0f0f0; border-radius: 8px; padding: 16px; text-align: center; margin: 16px 0; }
+  .video-box a { color: #7c3aed; font-weight: 600; font-size: 14px; }
+  .video-box .caption { font-size: 12px; color: #888; margin-top: 4px; }
+  .illuminate { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
+  .illuminate strong { color: #92400e; }
+  .footer { text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid #e5e5e5; font-size: 11px; color: #aaa; }
+  .quote { font-style: italic; color: #555; text-align: center; margin: 12px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Quest Craft — Session 1 Recap</h1>
+  <div class="subtitle">Dream Session: Designing a Video Game with AI</div>
+  <div class="date">February 28, 2026 &nbsp;|&nbsp; Ethan, Eins &amp; Nathan</div>
+</div>
+
+<div class="tagline">
+  <strong>Today, three kids designed an entire video game from scratch.</strong><br>
+  No code. No templates. Just their ideas, their voices, and an AI engineering partner.
+</div>
+
+<div class="game-box">
+  <div class="title">SPLIT</div>
+  <div class="desc">"You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters."</div>
+</div>
+
+<h2>What They Built Today</h2>
+<ul class="highlight-list">
+  <li>Designed a complete game concept: characters, world, enemies, combat, items, crafting, and art direction</li>
+  <li>Invented original game mechanics — a jello cube that shoots pieces of itself, splits apart to dodge attacks, and stores items visibly inside its transparent body</li>
+  <li>Named the game, wrote the "back of the box" marketing copy, and prioritized features for a 2-week build</li>
+  <li>Created an artist brief for their teammate Andrew with a clear creative assignment</li>
+  <li>Saved everything to version control — three checkpoints committed and pushed to GitHub</li>
+</ul>
+
+<h2>Real-World Skills Practiced</h2>
+<div class="skills-grid">
+  <div class="skill">
+    <div class="name">VS Code + Remote SSH</div>
+    <div class="detail">Connected laptops to a Raspberry Pi 5 server — the same remote development workflow used by professional engineering teams</div>
+  </div>
+  <div class="skill">
+    <div class="name">Git &amp; GitHub</div>
+    <div class="detail">Learned commits as "save points," wrote descriptive messages, pushed to a shared repo — version control fundamentals</div>
+  </div>
+  <div class="skill">
+    <div class="name">AI Prompting (Claude Code)</div>
+    <div class="detail">Directed an AI to understand, organize, and document their ideas — the #1 skill in modern software development</div>
+  </div>
+  <div class="skill">
+    <div class="name">Voice-to-Text (Wispr Flow)</div>
+    <div class="detail">Spoke naturally to communicate complex game ideas — learning that clear communication IS the skill, not typing</div>
+  </div>
+  <div class="skill">
+    <div class="name">Markdown &amp; Documentation</div>
+    <div class="detail">Saw how structured documents (PRDs, briefs) capture decisions — the same format used at every tech company</div>
+  </div>
+  <div class="skill">
+    <div class="name">Game Design Fundamentals</div>
+    <div class="detail">Core loops, dynamic tension, scope prioritization, cohesive design, contextual tutorials — real design principles</div>
+  </div>
+</div>
+
+<h2>Game Design Concepts They Applied</h2>
+<ul class="highlight-list">
+  <li><strong>Cohesive design</strong> — every mechanic ties back to being made of jello (shooting costs body mass, crafting uses jello ingredients, inventory floats inside you)</li>
+  <li><strong>Dynamic tension</strong> — the game breathes between peaceful exploration and intense combat, controlled by light and music</li>
+  <li><strong>Scope management</strong> — dreamed big (full castle, all bosses, hard mode) then identified the 3 must-haves for a 2-week build</li>
+  <li><strong>Risk/reward tradeoffs</strong> — growing bigger gives more health but blocks passages; splitting gives access but risks losing pieces</li>
+</ul>
+
+<div class="illuminate">
+  <strong>How This Maps to LASD Illuminate:</strong> The Illuminate Inquiry Exhibition (March 15) asks students to explore a driving question through research, creativity, and real-world application. Quest Craft answers: <em>"What can kids create when they have professional tools and an AI partner?"</em> The kids are learning collaboration, iterative design, technical communication, and computational thinking — not by studying these concepts, but by doing them to ship a real product.
+</div>
+
+<div class="video-box">
+  <!-- REPLACE THIS LINK with the Loom recording URL -->
+  <a href="LOOM_LINK_HERE">Watch: The first playable moment of Split</a>
+  <div class="caption">Recorded live — the title screen and character demo generated from today's session</div>
+</div>
+
+<p class="quote">"This is just the spark. The seed. But right now, they're playing a game that didn't exist 3 hours ago. They designed it."</p>
+
+<div class="footer">
+  Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026<br>
+  Next session: Deep Design — characters, world, levels, art, sound, and controls
+</div>
+
+</body>
+</html>
