@@ -1,272 +1,807 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPLIT — Artist Brief for Andrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Press+Start+2P&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #333; font-size: 14px; }
-h1 { color: #1a1a2e; border-bottom: 3px solid #e94560; padding-bottom: 10px; font-size: 24px; }
-h2 { color: #1a1a2e; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px; font-size: 18px; }
-h3 { color: #16213e; font-size: 15px; }
-table { border-collapse: collapse; width: 100%; margin: 15px 0; font-size: 13px; }
-th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-th { background-color: #1a1a2e; color: white; }
-tr:nth-child(even) { background-color: #f9f9f9; }
-blockquote { border-left: 4px solid #e94560; margin: 15px 0; padding: 10px 20px; background: #f9f9f9; font-style: italic; }
-strong { color: #1a1a2e; }
-hr { border: none; border-top: 1px solid #ddd; margin: 25px 0; }
-code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
-ul, ol { padding-left: 25px; }
-li { margin-bottom: 5px; }
-.header-info { color: #666; font-size: 13px; margin-bottom: 5px; }
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Color Tokens ── */
+  :root {
+    --deep-stone: #1a1a2e;
+    --warm-stone: #2d2d44;
+    --torchlight: #e8a838;
+    --torch-glow: #f5e6c8;
+    --jello-green: #7ddf64;
+    --ember: #c44b2b;
+    --dim-text: #a89e8a;
+    --border-glow: rgba(232, 168, 56, 0.25);
+    --parchment: #f0e4cc;
+  }
+
+  /* ── Page Background with Vignette + Stone Noise ── */
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--torch-glow);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-size: 15px;
+    min-height: 100vh;
+    background-color: var(--deep-stone);
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 50% 0%, #2d2d44 0%, #1a1a2e 70%);
+  }
+
+  /* ── Torch Flicker Animation ── */
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.92; }
+  }
+
+  /* ── 1. Title Block ── */
+  .title-block {
+    text-align: center;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }
+
+  .title-block .program-name {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dim-text);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .title-block .session-number {
+    font-family: 'Cinzel Decorative', Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--torchlight);
+    line-height: 1.1;
+    animation: flicker 4s ease-in-out infinite;
+    margin-bottom: 8px;
+  }
+
+  .title-block .session-subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .title-block .meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--dim-text);
+    line-height: 1.4;
+  }
+
+  /* ── Fading Gradient Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(232, 168, 56, 0.5) 20%,
+      rgba(232, 168, 56, 0.5) 80%,
+      transparent 100%
+    );
+    margin: 0;
+  }
+
+  /* ── Hook / Double-Frame Panel ── */
+  .hook {
+    background: rgba(45, 45, 68, 0.6);
+    border: 1.5px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 22px 20px;
+    margin: 28px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hook::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(232, 168, 56, 0.08);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .hook .headline {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--torchlight);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .hook .supporting {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.5;
+  }
+
+  /* ── Game Title ── */
+  .game-showcase {
+    text-align: center;
+    padding: 28px 0 24px;
+  }
+
+  .game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 28px;
+    color: var(--jello-green);
+    text-shadow:
+      0 0 8px rgba(125, 223, 100, 0.5),
+      0 0 24px rgba(125, 223, 100, 0.2),
+      0 0 48px rgba(125, 223, 100, 0.08);
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+
+  /* ── Blockquote with Decorative Quote Mark ── */
+  .game-blurb {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 20px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .game-blurb::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -18px;
+    left: -2px;
+    line-height: 1;
+  }
+
+  blockquote {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 12px 20px 12px 28px;
+    margin: 16px 0;
+    border: none;
+    background: none;
+  }
+
+  blockquote::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -8px;
+    left: -2px;
+    line-height: 1;
+  }
+
+  /* ── Section Headings (h2) with Ornamental Lines ── */
+  h2 {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--torchlight);
+    text-align: center;
+    margin: 40px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before,
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  h2::before {
+    background: linear-gradient(to right, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  h2::after {
+    background: linear-gradient(to left, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  /* ── h3 Sub-headings ── */
+  h3 {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--torchlight);
+    margin: 24px 0 12px;
+  }
+
+  /* ── Diamond Bullet List ── */
+  .quest-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .quest-list li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--torch-glow);
+  }
+
+  .quest-list li::before {
+    content: '\25C6';
+    position: absolute;
+    left: 0;
+    color: var(--torchlight);
+    font-size: 10px;
+    top: 11px;
+  }
+
+  .quest-list li + li {
+    margin-top: 4px;
+  }
+
+  .quest-list li strong {
+    color: var(--torch-glow);
+  }
+
+  /* ── Paragraph Styling ── */
+  p {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--torch-glow);
+    margin: 10px 0;
+  }
+
+  p strong {
+    color: var(--torchlight);
+  }
+
+  /* ── Table Styling (Dark Theme) ── */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+  }
+
+  th {
+    background: rgba(232, 168, 56, 0.15);
+    color: var(--torchlight);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--border-glow);
+  }
+
+  td {
+    padding: 8px 12px;
+    border: 1px solid rgba(232, 168, 56, 0.1);
+    color: var(--torch-glow);
+    background: rgba(45, 45, 68, 0.3);
+  }
+
+  tr:nth-child(even) td {
+    background: rgba(45, 45, 68, 0.5);
+  }
+
+  td strong {
+    color: var(--torchlight);
+  }
+
+  /* ── Skill Cards (Stacked) ── */
+  .skill-card {
+    background: rgba(45, 45, 68, 0.4);
+    border-left: 3px solid var(--torchlight);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .skill-card .name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--torchlight);
+    line-height: 1.3;
+  }
+
+  .skill-card .detail {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #c4b8a0;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── YOUR TASK Highlighted Panel (Parchment Callout) ── */
+  .task-panel {
+    background: var(--parchment);
+    border: 2px solid #d4c4a0;
+    border-radius: 4px;
+    padding: 24px 22px;
+    color: #3a3020;
+    margin: 28px 0;
+    position: relative;
+  }
+
+  .task-panel::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border: 1px solid rgba(240, 228, 204, 0.15);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .task-panel h2 {
+    color: #6b4c1e;
+    margin: 0 0 16px;
+  }
+
+  .task-panel h2::before {
+    background: linear-gradient(to right, transparent, rgba(107, 76, 30, 0.4));
+  }
+
+  .task-panel h2::after {
+    background: linear-gradient(to left, transparent, rgba(107, 76, 30, 0.4));
+  }
+
+  .task-panel h3 {
+    color: #6b4c1e;
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 20px 0 10px;
+  }
+
+  .task-panel p {
+    color: #3a3020;
+    font-size: 14px;
+  }
+
+  .task-panel p strong {
+    color: #6b4c1e;
+  }
+
+  .task-panel .quest-list li {
+    color: #3a3020;
+    font-size: 14px;
+  }
+
+  .task-panel .quest-list li::before {
+    color: #6b4c1e;
+  }
+
+  .task-panel .quest-list li strong {
+    color: #6b4c1e;
+  }
+
+  /* ── Closing Quote ── */
+  .closing-quote {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 8px 32px;
+    margin: 28px 0;
+  }
+
+  .closing-quote::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -12px;
+    left: 2px;
+    line-height: 1;
+  }
+
+  .closing-quote::after {
+    content: '\201D';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    bottom: -28px;
+    right: 2px;
+    line-height: 1;
+  }
+
+  /* ── Footer / Seal ── */
+  .ornament-divider {
+    text-align: center;
+    margin: 36px 0 20px;
+    color: var(--torchlight);
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: var(--dim-text);
+    line-height: 1.4;
+    padding-bottom: 20px;
+  }
+
+  .footer .credits {
+    margin-bottom: 6px;
+  }
+
+  .footer .next-session {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #b8aa96;
+  }
 </style>
 </head>
 <body>
 
-<h1>SPLIT — Artist Brief for Andrew</h1>
-<br>
-<p><strong>Date:</strong> February 28, 2026</p>
-<p><strong>From:</strong> The Split Design Team (Ethan, Eins, Nathan, Mark + Claude)</p>
-<p><strong>To:</strong> Andrew — Artist & Creative Director</p>
-<br>
-<hr>
-<br>
+<!-- ═══════════════════════════════════════════════════════
+     1. TITLE BLOCK
+     ═══════════════════════════════════════════════════════ -->
+<header class="title-block">
+  <div class="program-name">Quest Craft</div>
+  <div class="session-number">Artist Brief</div>
+  <div class="session-subtitle">SPLIT &mdash; Title Screen Design Assignment</div>
+  <div class="meta">February 28, 2026 &nbsp;|&nbsp; For Andrew &mdash; Artist &amp; Creative Director</div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     2. THE HOOK
+     ═══════════════════════════════════════════════════════ -->
+<div class="hook">
+  <div class="headline">From: The Split Design Team (Ethan, Eins, Nathan, Mark + Claude)</div>
+  <div class="supporting">To: Andrew &mdash; Artist &amp; Creative Director</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     3. INTRO
+     ═══════════════════════════════════════════════════════ -->
 <h2>Hey Andrew!</h2>
-<br>
 <p>We had our first Dream session today and designed the entire game concept. You're the artist and creative director, so we need you up to speed on everything. Here's the full picture.</p>
-<br>
-<hr>
-<br>
-<h2>The Game: Split</h2>
-<br>
-<p><strong>Back of the box:</strong></p>
-<br>
-<blockquote>You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.</blockquote>
-<br>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     4. THE GAME
+     ═══════════════════════════════════════════════════════ -->
+<h2>The Game</h2>
+
+<section class="game-showcase">
+  <div class="game-title">SPLIT</div>
+  <div class="game-blurb">You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle &mdash; upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.</div>
+</section>
+
 <p><strong>Genre:</strong> 2D side-scrolling platformer (like Mario meets Dead Cells)</p>
-<p><strong>Art Style:</strong> Dead Cells pixel art — small pixels, but clean and readable shapes. NOT muddy like Minecraft pixels.</p>
+<p><strong>Art Style:</strong> Dead Cells pixel art &mdash; small pixels, but clean and readable shapes. NOT muddy like Minecraft pixels.</p>
 <p><strong>Mood:</strong> Dark but not scary. Mysterious. Alternates between peaceful exploration and intense combat.</p>
 <p><strong>Players:</strong> Single player</p>
 <p><strong>School-appropriate:</strong> No weapons, no blood. Everything is jello-based.</p>
-<br>
-<hr>
-<br>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     5. THE WORLD
+     ═══════════════════════════════════════════════════════ -->
 <h2>The World</h2>
-<br>
+
 <p>You're inside a massive castle in the middle of a desert. The game starts in the dungeon and goes UP floor by floor.</p>
-<br>
-<p><strong>Castle Interior:</strong></p>
-<ul>
-<li>Old stone walls covered in creeping vines</li>
-<li>Torches on walls providing warm light</li>
-<li>Occasional windows — light comes through but you CAN'T see outside</li>
-<li>A creeping "gloom" darkness that takes over parts of the castle</li>
-<li>Less light = more dangerous areas</li>
-<li>Chests to open, barrels to break</li>
-<li>Cooking pots (where you craft health)</li>
-<li>Levers and pressure plates (hidden puzzle elements)</li>
-<li>Glowing door at the end of each level (portal to next floor)</li>
-<br>
-<p><strong>Outside (title screen only):</strong></p>
-<ul>
-<li>Desert landscape surrounding the castle</li>
-<li>The castle itself — tall, dark, imposing</li>
-<br>
-<hr>
-<br>
+
+<h3>Castle Interior:</h3>
+<ul class="quest-list">
+  <li>Old stone walls covered in creeping vines</li>
+  <li>Torches on walls providing warm light</li>
+  <li>Occasional windows &mdash; light comes through but you CAN'T see outside</li>
+  <li>A creeping &ldquo;gloom&rdquo; darkness that takes over parts of the castle</li>
+  <li>Less light = more dangerous areas</li>
+  <li>Chests to open, barrels to break</li>
+  <li>Cooking pots (where you craft health)</li>
+  <li>Levers and pressure plates (hidden puzzle elements)</li>
+  <li>Glowing door at the end of each level (portal to next floor)</li>
+</ul>
+
+<h3>Outside (title screen only):</h3>
+<ul class="quest-list">
+  <li>Desert landscape surrounding the castle</li>
+  <li>The castle itself &mdash; tall, dark, imposing</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     6. THE CHARACTER
+     ═══════════════════════════════════════════════════════ -->
 <h2>The Character</h2>
-<br>
+
 <p><strong>A jello cube with little eyeballs.</strong></p>
-<ul>
-<li>Transparent/translucent body</li>
-<li>Small cute eyeballs</li>
-<li>Jiggly — wobbles when moving, squishes on landing</li>
-<li>Items are stored INSIDE the body (you can see water bottles, pills, shields floating inside)</li>
-<li>Changes color when using pills (e.g., turns orange with fire pill)</li>
-<li>Can split into fourths (4 smaller cubes)</li>
-<li>Gets bigger when crafting health (jello powder + water)</li>
-<br>
-<hr>
-<br>
+<ul class="quest-list">
+  <li>Transparent/translucent body</li>
+  <li>Small cute eyeballs</li>
+  <li>Jiggly &mdash; wobbles when moving, squishes on landing</li>
+  <li>Items are stored INSIDE the body (you can see water bottles, pills, shields floating inside)</li>
+  <li>Changes color when using pills (e.g., turns orange with fire pill)</li>
+  <li>Can split into fourths (4 smaller cubes)</li>
+  <li>Gets bigger when crafting health (jello powder + water)</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     7. THE ENEMIES
+     ═══════════════════════════════════════════════════════ -->
 <h2>The Enemies</h2>
-<br>
-<table><tr>
-<th>Enemy</th>
-<th>What It Looks Like</th>
-<th>Notes</th>
-</tr>
+
+<table>
+  <tr>
+    <th>Enemy</th>
+    <th>What It Looks Like</th>
+    <th>Notes</th>
+  </tr>
+  <tr>
+    <td><strong>Roly-poly</strong></td>
+    <td>A small round bug, roly-poly/pill bug shape</td>
+    <td>Common enemy, appears in swarms</td>
+  </tr>
+  <tr>
+    <td><strong>Alcohol spray bottle</strong></td>
+    <td>A spray bottle character</td>
+    <td>Shoots slow but deadly projectiles</td>
+  </tr>
+  <tr>
+    <td><strong>Fire talus</strong></td>
+    <td>A fireball creature, like a Zelda stone talus but made of fire</td>
+    <td>Mini-boss, shoots fireballs</td>
+  </tr>
+  <tr>
+    <td><strong>Big bosses</strong></td>
+    <td>TBD &mdash; you can help design these!</td>
+    <td>One per floor</td>
+  </tr>
+  <tr>
+    <td><strong>Final boss</strong></td>
+    <td>TBD &mdash; at the very top of the castle</td>
+    <td>The ultimate challenge</td>
+  </tr>
 </table>
-<p>|-------|--------------------|-------|</p>
-<table><tr>
-<th><strong>Roly-poly</strong></th>
-<th>A small round bug, roly-poly/pill bug shape</th>
-<th>Common enemy, appears in swarms</th>
-</tr>
-<tr>
-<td><strong>Alcohol spray bottle</strong></td>
-<td>A spray bottle character</td>
-<td>Shoots slow but deadly projectiles</td>
-</tr>
-<tr>
-<td><strong>Fire talus</strong></td>
-<td>A fireball creature, like a Zelda stone talus but made of fire</td>
-<td>Mini-boss, shoots fireballs</td>
-</tr>
-<tr>
-<td><strong>Big bosses</strong></td>
-<td>TBD — you can help design these!</td>
-<td>One per floor</td>
-</tr>
-<tr>
-<td><strong>Final boss</strong></td>
-<td>TBD — at the very top of the castle</td>
-<td>The ultimate challenge</td>
-</tr>
-<br>
-</table>
+
 <p><strong>All enemies have awareness indicators:</strong></p>
-<ul>
-<li><strong>?</strong> — question mark above head when suspicious</li>
-<li><strong>!</strong> — exclamation mark when they spot you</li>
-<br>
-<hr>
-<br>
+<ul class="quest-list">
+  <li><strong>?</strong> &mdash; question mark above head when suspicious</li>
+  <li><strong>!</strong> &mdash; exclamation mark when they spot you</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     8. ITEMS TO DESIGN
+     ═══════════════════════════════════════════════════════ -->
 <h2>Items to Design</h2>
-<br>
-<table><tr>
-<th>Item</th>
-<th>Visual Description</th>
-</tr>
+
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Visual Description</th>
+  </tr>
+  <tr>
+    <td>Jello powder</td>
+    <td>Packets or piles of colored powder</td>
+  </tr>
+  <tr>
+    <td>Water bottles</td>
+    <td>3 sizes: small, normal, big tank</td>
+  </tr>
+  <tr>
+    <td>Simmered water</td>
+    <td>Hot water &mdash; maybe steam coming off it</td>
+  </tr>
+  <tr>
+    <td>Fire pill</td>
+    <td>Orange/red pill</td>
+  </tr>
+  <tr>
+    <td>Shrink pill</td>
+    <td>Small pill, maybe blue?</td>
+  </tr>
+  <tr>
+    <td>Incense pill</td>
+    <td>Smoky/misty pill</td>
+  </tr>
+  <tr>
+    <td>Mighty pill</td>
+    <td>Bold/strong-looking pill</td>
+  </tr>
+  <tr>
+    <td>Jello armor</td>
+    <td>Armor made of hardened jello</td>
+  </tr>
+  <tr>
+    <td>Jello costume</td>
+    <td>Disguise that looks like a roly-poly</td>
+  </tr>
+  <tr>
+    <td>Ancient shield</td>
+    <td>Square artifact that projects a light energy shield</td>
+  </tr>
+  <tr>
+    <td>Cooking pot</td>
+    <td>Where you craft health</td>
+  </tr>
+  <tr>
+    <td>Chests</td>
+    <td>Castle-style treasure chests</td>
+  </tr>
+  <tr>
+    <td>Barrels</td>
+    <td>Breakable wooden barrels</td>
+  </tr>
+  <tr>
+    <td>Torches</td>
+    <td>Wall-mounted, flickering</td>
+  </tr>
 </table>
-<p>|------|--------------------|</p>
-<table><tr>
-<th>Jello powder</th>
-<th>Packets or piles of colored powder</th>
-</tr>
-<tr>
-<td>Water bottles</td>
-<td>3 sizes: small, normal, big tank</td>
-</tr>
-<tr>
-<td>Simmered water</td>
-<td>Hot water — maybe steam coming off it</td>
-</tr>
-<tr>
-<td>Fire pill</td>
-<td>Orange/red pill</td>
-</tr>
-<tr>
-<td>Shrink pill</td>
-<td>Small pill, maybe blue?</td>
-</tr>
-<tr>
-<td>Incense pill</td>
-<td>Smoky/misty pill</td>
-</tr>
-<tr>
-<td>Mighty pill</td>
-<td>Bold/strong-looking pill</td>
-</tr>
-<tr>
-<td>Jello armor</td>
-<td>Armor made of hardened jello</td>
-</tr>
-<tr>
-<td>Jello costume</td>
-<td>Disguise that looks like a roly-poly</td>
-</tr>
-<tr>
-<td>Ancient shield</td>
-<td>Square artifact that projects a light energy shield</td>
-</tr>
-<tr>
-<td>Cooking pot</td>
-<td>Where you craft health</td>
-</tr>
-<tr>
-<td>Chests</td>
-<td>Castle-style treasure chests</td>
-</tr>
-<tr>
-<td>Barrels</td>
-<td>Breakable wooden barrels</td>
-</tr>
-<tr>
-<td>Torches</td>
-<td>Wall-mounted, flickering</td>
-</tr>
-<br>
-<hr>
-<br>
-<h2>YOUR TASK: Title Screen Design</h2>
-<br>
-</table>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     9. YOUR TASK — Highlighted Parchment Panel
+     ═══════════════════════════════════════════════════════ -->
+<div class="task-panel">
+
+<h2>Your Task: Title Screen Design</h2>
+
 <p>This is what we need from you, Andrew. Design the title screen for Split.</p>
-<br>
+
 <h3>What the Title Screen Should Include:</h3>
-<br>
+
 <p>1. <strong>The word "SPLIT" in big pixel-style letters at the top</strong></p>
-<ul>
-<li>Should feel bold and memorable</li>
-<li>Pixel art style matching the Dead Cells aesthetic</li>
-<br>
+<ul class="quest-list">
+  <li>Should feel bold and memorable</li>
+  <li>Pixel art style matching the Dead Cells aesthetic</li>
+</ul>
+
 <p>2. <strong>The jello cube character doing a pose</strong></p>
-<ul>
-<li>Front and center</li>
-<li>Showing personality — maybe looking determined, or mid-jiggle</li>
-<li>Transparent body with eyeballs visible</li>
-<br>
+<ul class="quest-list">
+  <li>Front and center</li>
+  <li>Showing personality &mdash; maybe looking determined, or mid-jiggle</li>
+  <li>Transparent body with eyeballs visible</li>
+</ul>
+
 <p>3. <strong>A detailed background scene</strong></p>
-<ul>
-<li>The castle with the desert behind it</li>
-<li>MORE detailed than the actual gameplay (like how Minecraft's menu has a 3D world, or Zelda shows Link in a detailed scene)</li>
-<li>Moody lighting — torches, shadows, maybe a sunset desert sky</li>
-<br>
+<ul class="quest-list">
+  <li>The castle with the desert behind it</li>
+  <li>MORE detailed than the actual gameplay (like how Minecraft's menu has a 3D world, or Zelda shows Link in a detailed scene)</li>
+  <li>Moody lighting &mdash; torches, shadows, maybe a sunset desert sky</li>
+</ul>
+
 <p>4. <strong>Three buttons (we'll add these digitally):</strong></p>
-<ul>
-<li>Play</li>
-<li>Settings</li>
-<li>Controls</li>
-<br>
+<ul class="quest-list">
+  <li>Play</li>
+  <li>Settings</li>
+  <li>Controls</li>
+</ul>
+
 <h3>References to Look At:</h3>
-<ul>
-<li><strong>Dead Cells</strong> title screen — for pixel art style and mood</li>
-<li><strong>Zelda: Breath of the Wild</strong> title screen — for the detailed background with character</li>
-<li><strong>Minecraft</strong> main menu — for how the background is more detailed than gameplay</li>
-<li><strong>Celeste</strong> title screen — for a clean, bold game title</li>
-<br>
+<ul class="quest-list">
+  <li><strong>Dead Cells</strong> title screen &mdash; for pixel art style and mood</li>
+  <li><strong>Zelda: Breath of the Wild</strong> title screen &mdash; for the detailed background with character</li>
+  <li><strong>Minecraft</strong> main menu &mdash; for how the background is more detailed than gameplay</li>
+  <li><strong>Celeste</strong> title screen &mdash; for a clean, bold game title</li>
+</ul>
+
 <h3>Deliverable:</h3>
-<ul>
-<li>A drawn/sketched title screen design</li>
-<li>Can be pencil, colored pencil, marker, digital — whatever you want</li>
-<li>Show where the title goes, where the character is, what the background looks like</li>
-<li>Include color notes if drawing in pencil (e.g., "dark blue sky", "orange torch glow")</li>
-<li>If you have ideas for the character design (the jello cube), sketch those too!</li>
-<br>
+<ul class="quest-list">
+  <li>A drawn/sketched title screen design</li>
+  <li>Can be pencil, colored pencil, marker, digital &mdash; whatever you want</li>
+  <li>Show where the title goes, where the character is, what the background looks like</li>
+  <li>Include color notes if drawing in pencil (e.g., &ldquo;dark blue sky&rdquo;, &ldquo;orange torch glow&rdquo;)</li>
+  <li>If you have ideas for the character design (the jello cube), sketch those too!</li>
+</ul>
+
 <h3>Important Notes:</h3>
-<ul>
-<li>The art style is pixel art (Dead Cells), so think in terms of clean shapes and readable silhouettes</li>
-<li>The mood is dark/mysterious but NOT horror — more like a spooky adventure</li>
-<li>The jello cube should feel lovable and determined, not scared</li>
-<li>Everything should be school-appropriate</li>
-<br>
-<hr>
-<br>
+<ul class="quest-list">
+  <li>The art style is pixel art (Dead Cells), so think in terms of clean shapes and readable silhouettes</li>
+  <li>The mood is dark/mysterious but NOT horror &mdash; more like a spooky adventure</li>
+  <li>The jello cube should feel lovable and determined, not scared</li>
+  <li>Everything should be school-appropriate</li>
+</ul>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     10. WHAT'S COMING NEXT
+     ═══════════════════════════════════════════════════════ -->
 <h2>What's Coming Next</h2>
-<br>
-<ul>
-<li><strong>Session 2 (Design):</strong> We'll go deep on characters, world, art style, and more. Your input will shape everything.</li>
-<li><strong>Session 3 (Blueprint):</strong> Technical plan — we'll figure out how to turn your art into game sprites.</li>
-<li><strong>Session 4 (Build):</strong> Claude builds the game code, you help with art assets.</li>
-<li><strong>Session 5 (Polish):</strong> Final art, bug fixes, exhibition prep.</li>
-<br>
-<p><strong>Exhibition: March 15, 2026 — LASD Illuminate Inquiry Exhibition</strong></p>
-<br>
-<hr>
-<br>
+
+<ul class="quest-list">
+  <li><strong>Session 2 (Design):</strong> We'll go deep on characters, world, art style, and more. Your input will shape everything.</li>
+  <li><strong>Session 3 (Blueprint):</strong> Technical plan &mdash; we'll figure out how to turn your art into game sprites.</li>
+  <li><strong>Session 4 (Build):</strong> Claude builds the game code, you help with art assets.</li>
+  <li><strong>Session 5 (Polish):</strong> Final art, bug fixes, exhibition prep.</li>
+</ul>
+
+<p><strong>Exhibition: March 15, 2026 &mdash; LASD Illuminate Inquiry Exhibition</strong></p>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     11. QUESTIONS
+     ═══════════════════════════════════════════════════════ -->
 <h2>Questions?</h2>
-<br>
-<p>Talk to Ethan, Eins, or Nathan — they were all part of the Dream session. Or ask Mark to open a Claude session and you can talk through ideas directly with Claude.</p>
-<br>
-<p><strong>Welcome to Split, Andrew. We need your eyes on this.</strong></p>
-<br>
-</body></html>
+
+<p>Talk to Ethan, Eins, or Nathan &mdash; they were all part of the Dream session. Or ask Mark to open a Claude session and you can talk through ideas directly with Claude.</p>
+
+<!-- ═══════════════════════════════════════════════════════
+     12. CLOSING QUOTE
+     ═══════════════════════════════════════════════════════ -->
+<div class="closing-quote">
+  Welcome to Split, Andrew. We need your eyes on this.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     13. FOOTER / SEAL
+     ═══════════════════════════════════════════════════════ -->
+<div class="ornament-divider">&#9670; &#9670; &#9670;</div>
+
+<footer class="footer">
+  <div class="credits">Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026</div>
+  <div class="next-session">Next session: Deep Design &mdash; characters, world, levels, art, sound, and controls</div>
+</footer>
+
+</body>
+</html>
