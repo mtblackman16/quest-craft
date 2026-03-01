@@ -124,12 +124,86 @@ class Collectible:
 
 
 # ═══════════════════════════════════════════════════════════
+#  JELLO PROJECTILE (jello shot)
+# ═══════════════════════════════════════════════════════════
+class JelloProjectile:
+    def __init__(self, x, y, direction):
+        self.x = x
+        self.y = y
+        self.direction = direction  # 1 = right, -1 = left
+        self.speed = 9
+        self.radius = 6
+        self.lifetime = 50
+        self.max_lifetime = 50
+        self.trail = []
+
+    def update(self):
+        self.x += self.speed * self.direction
+        self.lifetime -= 1
+        # Trail
+        self.trail.append((self.x, self.y, self.lifetime))
+        if len(self.trail) > 8:
+            self.trail.pop(0)
+        return self.lifetime > 0 and 0 < self.x < SCREEN_W
+
+    def draw(self, surf):
+        # Trail
+        for i, (tx, ty, tl) in enumerate(self.trail):
+            alpha = int(80 * (i / len(self.trail)))
+            s = max(1, int(self.radius * 0.5 * (i / len(self.trail))))
+            ts = pygame.Surface((s * 2, s * 2), pygame.SRCALPHA)
+            pygame.draw.circle(ts, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], alpha), (s, s), s)
+            surf.blit(ts, (int(tx) - s, int(ty) - s))
+        # Glow
+        fade = self.lifetime / self.max_lifetime
+        glow_s = int(self.radius * 3)
+        glow = pygame.Surface((glow_s * 2, glow_s * 2), pygame.SRCALPHA)
+        pygame.draw.circle(glow, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], int(30 * fade)),
+                           (glow_s, glow_s), glow_s)
+        surf.blit(glow, (int(self.x) - glow_s, int(self.y) - glow_s))
+        # Main ball
+        r = int(self.radius * fade) + 2
+        pygame.draw.circle(surf, JELLO_GREEN, (int(self.x), int(self.y)), r)
+        # Highlight
+        pygame.draw.circle(surf, (180, 240, 160), (int(self.x) - 1, int(self.y) - 2), max(1, r // 2))
+
+
+# ═══════════════════════════════════════════════════════════
+#  SHOCKWAVE (ground pound impact)
+# ═══════════════════════════════════════════════════════════
+class Shockwave:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = 5
+        self.max_radius = 80
+        self.lifetime = 15
+        self.max_lifetime = 15
+
+    def update(self):
+        self.radius += (self.max_radius - self.radius) * 0.25
+        self.lifetime -= 1
+        return self.lifetime > 0
+
+    def draw(self, surf):
+        fade = self.lifetime / self.max_lifetime
+        alpha = int(180 * fade)
+        width = max(1, int(3 * fade))
+        ring = pygame.Surface((int(self.radius * 2) + 4, int(self.radius) + 4), pygame.SRCALPHA)
+        pygame.draw.ellipse(ring, (TORCH_AMBER[0], TORCH_AMBER[1], TORCH_AMBER[2], alpha),
+                            (0, 0, int(self.radius * 2) + 4, int(self.radius * 0.4) + 4), width)
+        surf.blit(ring, (int(self.x - self.radius) - 2, int(self.y - self.radius * 0.2) - 2))
+
+
+# ═══════════════════════════════════════════════════════════
 #  JELLO CUBE (the player)
 # ═══════════════════════════════════════════════════════════
 class JelloCube:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.base_w = 40
+        self.base_h = 40
         self.w = 40
         self.h = 40
         self.vx = 0
@@ -143,31 +217,46 @@ class JelloCube:
         self.trail = []
         self.facing = 1  # 1 = right, -1 = left
         self.jiggle_phase = 0
+        # Ground pound
+        self.ground_pounding = False
+        # Split
+        self.is_split = False
+        self.split_timer = 0
+        self.split_pieces = []  # [(offset_x, offset_y, phase), ...]
+        self.split_duration = 180  # 3 seconds at 60fps
 
     def update(self, keys, platforms):
-        # Horizontal movement
-        self.vx = 0
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.vx = -self.speed
-            self.facing = -1
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.vx = self.speed
-            self.facing = 1
+        # Horizontal movement (not during ground pound)
+        if not self.ground_pounding:
+            self.vx = 0
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                self.vx = -self.speed
+                self.facing = -1
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                self.vx = self.speed
+                self.facing = 1
 
-        # Jump
-        if (keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w]) and self.on_ground:
+        # Jump — Up Arrow only
+        if keys[pygame.K_UP] and self.on_ground and not self.ground_pounding:
             self.vy = self.jump_power
             self.on_ground = False
             self.squish = -0.3
 
         # Gravity
-        self.vy += self.gravity
-        if self.vy > 15:
-            self.vy = 15
+        if self.ground_pounding:
+            self.vy = 20  # fast slam
+            self.vx = 0
+        else:
+            self.vy += self.gravity
+            if self.vy > 15:
+                self.vy = 15
 
         # Move
         self.x += self.vx
         self.y += self.vy
+
+        # Track if we just landed from ground pound
+        self.just_landed_pound = False
 
         # Platform collisions
         self.on_ground = False
@@ -176,14 +265,22 @@ class JelloCube:
                     self.y + self.h > py and self.y + self.h < py + ph + 8 and
                     self.vy >= 0):
                 self.y = py - self.h
-                if self.vy > 4:
+                if self.ground_pounding:
+                    self.squish = 0.6
+                    self.just_landed_pound = True
+                    self.ground_pounding = False
+                elif self.vy > 4:
                     self.squish = 0.4
                 self.vy = 0
                 self.on_ground = True
 
         # Ground collision
         if self.y + self.h > GROUND_Y:
-            if self.vy > 4:
+            if self.ground_pounding:
+                self.squish = 0.6
+                self.just_landed_pound = True
+                self.ground_pounding = False
+            elif self.vy > 4:
                 self.squish = 0.4
             self.y = GROUND_Y - self.h
             self.vy = 0
@@ -203,11 +300,75 @@ class JelloCube:
         # Jiggle
         self.jiggle_phase += 0.15 if abs(self.vx) > 0 else 0.05
 
+        # Split timer
+        if self.is_split:
+            self.split_timer -= 1
+            # Update orbiting pieces
+            t = pygame.time.get_ticks()
+            for i, (ox, oy, phase) in enumerate(self.split_pieces):
+                self.split_pieces[i] = (ox, oy, phase)
+            if self.split_timer <= 0:
+                self.unsplit()
+
         # Trail
         if abs(self.vx) > 0 or not self.on_ground:
             self.trail.append((self.x + self.w // 2, self.y + self.h, pygame.time.get_ticks()))
         if len(self.trail) > 20:
             self.trail.pop(0)
+
+    def start_ground_pound(self):
+        """Initiate ground pound — only works while airborne."""
+        if not self.on_ground and not self.ground_pounding:
+            self.ground_pounding = True
+            self.vy = 20
+            self.vx = 0
+
+    def shoot(self):
+        """Fire a jello shot. Returns a JelloProjectile or None if too small."""
+        if self.w <= 20 or self.h <= 20:
+            return None
+        self.w -= 2
+        self.h -= 2
+        cx = self.x + self.w / 2 + self.facing * (self.w / 2 + 8)
+        cy = self.y + self.h / 2
+        self.squish = -0.15  # recoil squish
+        return JelloProjectile(cx, cy, self.facing)
+
+    def grow(self, amount=2):
+        """Restore body mass from collecting jello powder."""
+        self.w = min(self.base_w, self.w + amount)
+        self.h = min(self.base_h, self.h + amount)
+
+    def split(self):
+        """Split into 4 pieces. Returns particles for the burst effect."""
+        if self.is_split:
+            return self.unsplit()
+        self.is_split = True
+        self.split_timer = self.split_duration
+        # Store original size, shrink to half
+        self.pre_split_w = self.w
+        self.pre_split_h = self.h
+        self.w = max(16, self.w // 2)
+        self.h = max(16, self.h // 2)
+        # 3 ghost pieces orbit around (the 4th is the player)
+        self.split_pieces = [
+            (-20, -15, 0),
+            (20, -10, math.pi * 0.66),
+            (0, -25, math.pi * 1.33),
+        ]
+        return True
+
+    def unsplit(self):
+        """Reform from split."""
+        if not self.is_split:
+            return False
+        self.is_split = False
+        self.split_timer = 0
+        self.w = self.pre_split_w
+        self.h = self.pre_split_h
+        self.split_pieces = []
+        self.squish = 0.3
+        return True
 
     def draw(self, surf):
         # Trail glow
@@ -256,17 +417,43 @@ class JelloCube:
         surf.blit(body, (draw_x + jiggle_x, draw_y))
 
         # Eyes
+        eye_size = max(3, int(5 * (self.w / self.base_w)))
+        pupil_size = max(2, int(3 * (self.w / self.base_w)))
         eye_y = draw_y + draw_h * 0.35
         eye_spread = draw_w * 0.22
         cx = draw_x + draw_w / 2 + jiggle_x
         for ex_offset in [-eye_spread, eye_spread]:
             ex = cx + ex_offset
             # White
-            pygame.draw.circle(surf, (255, 255, 255), (int(ex), int(eye_y)), 5)
-            # Pupil — looks in movement direction
-            px = ex + self.facing * 2
-            py = eye_y + (1 if not self.on_ground and self.vy > 0 else 0)
-            pygame.draw.circle(surf, (20, 20, 40), (int(px), int(py)), 3)
+            pygame.draw.circle(surf, (255, 255, 255), (int(ex), int(eye_y)), eye_size)
+            # Pupil — looks in movement direction, down during ground pound
+            pupil_x = ex + self.facing * 2
+            if self.ground_pounding:
+                pupil_y = eye_y + 3  # looking down
+            else:
+                pupil_y = eye_y + (1 if not self.on_ground and self.vy > 0 else 0)
+            pygame.draw.circle(surf, (20, 20, 40), (int(pupil_x), int(pupil_y)), pupil_size)
+
+        # Draw split ghost pieces
+        if self.is_split:
+            t = pygame.time.get_ticks()
+            piece_w = self.w
+            piece_h = self.h
+            for i, (ox, oy, phase) in enumerate(self.split_pieces):
+                # Orbit around player
+                orbit_x = self.x + self.w / 2 + ox + math.sin(t * 0.004 + phase) * 12
+                orbit_y = self.y + oy + math.cos(t * 0.005 + phase) * 8
+                # Ghost piece body
+                ghost = pygame.Surface((piece_w, piece_h), pygame.SRCALPHA)
+                pygame.draw.rect(ghost, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], 80),
+                                 (0, 0, piece_w, piece_h), border_radius=4)
+                pygame.draw.rect(ghost, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], 120),
+                                 (0, 0, piece_w, piece_h), 1, border_radius=4)
+                surf.blit(ghost, (int(orbit_x - piece_w / 2), int(orbit_y - piece_h / 2)))
+                # Tiny eyes on each piece
+                for eo in [-3, 3]:
+                    pygame.draw.circle(surf, (255, 255, 255, 180), (int(orbit_x + eo), int(orbit_y - 2)), 2)
+                    pygame.draw.circle(surf, (20, 20, 40), (int(orbit_x + eo), int(orbit_y - 2)), 1)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -486,9 +673,12 @@ def title_screen():
             screen.blit(prompt, prompt_rect)
 
         # Controls hint
-        controls = font_small.render("Arrow keys to move  |  SPACE to jump  |  ESC to quit", True, (120, 110, 90))
-        cr = controls.get_rect(center=(SCREEN_W // 2, 550))
-        screen.blit(controls, cr)
+        controls1 = font_small.render("Arrows = move/jump  |  SPACE = shoot  |  Z = split  |  Down(air) = ground pound", True, (120, 110, 90))
+        cr1 = controls1.get_rect(center=(SCREEN_W // 2, 540))
+        screen.blit(controls1, cr1)
+        controls2 = font_small.render("ESC = quit", True, (90, 85, 70))
+        cr2 = controls2.get_rect(center=(SCREEN_W // 2, 560))
+        screen.blit(controls2, cr2)
 
         # Fade overlay
         if alpha < 255:
@@ -527,8 +717,11 @@ def gameplay():
     ]
 
     particles = []
+    projectiles = []
+    shockwaves = []
     score = 0
     fade_in = 0
+    screen_shake = 0
 
     # Optional: controller support
     joystick = None
@@ -550,6 +743,39 @@ def gameplay():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return  # back to title
+                # SPACE = Jello Shot
+                if event.key == pygame.K_SPACE:
+                    proj = player.shoot()
+                    if proj:
+                        projectiles.append(proj)
+                        # Recoil particles
+                        for _ in range(5):
+                            particles.append(Particle(
+                                proj.x - proj.direction * 10,
+                                proj.y + random.uniform(-5, 5),
+                                JELLO_GREEN, size=3, speed=0.5, lifetime=20,
+                                drift_x=-proj.direction * random.uniform(0.5, 1.5)
+                            ))
+                # Down Arrow = Ground Pound (while airborne)
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    player.start_ground_pound()
+                # Z = Split
+                if event.key == pygame.K_z:
+                    result = player.split()
+                    if result:
+                        # Burst particles
+                        cx = player.x + player.w / 2
+                        cy = player.y + player.h / 2
+                        for _ in range(20):
+                            angle = random.uniform(0, math.pi * 2)
+                            spd = random.uniform(1, 4)
+                            particles.append(Particle(
+                                cx + random.uniform(-5, 5),
+                                cy + random.uniform(-5, 5),
+                                JELLO_GREEN, size=4, speed=spd * 0.3,
+                                lifetime=40,
+                                drift_x=math.cos(angle) * spd
+                            ))
 
         # Controller hot-plug
         if joystick is None and pygame.joystick.get_count() > 0:
@@ -561,19 +787,36 @@ def gameplay():
 
         keys = pygame.key.get_pressed()
 
-        # Controller input overlay
-        if joystick:
-            try:
-                axis_x = joystick.get_axis(0)
-                if axis_x < -0.3:
-                    keys_dict = dict(enumerate(keys))
-                    # We'll handle this via a mutable list
-                elif axis_x > 0.3:
-                    pass
-            except Exception:
-                joystick = None
-
         player.update(keys, platforms)
+
+        # Ground pound landing — spawn shockwave and particles
+        if player.just_landed_pound:
+            land_x = player.x + player.w / 2
+            land_y = player.y + player.h
+            shockwaves.append(Shockwave(land_x, land_y))
+            screen_shake = 8
+            for _ in range(25):
+                angle = random.uniform(-math.pi, 0)  # upward half
+                spd = random.uniform(2, 6)
+                particles.append(Particle(
+                    land_x + random.uniform(-10, 10),
+                    land_y,
+                    TORCH_AMBER, size=4, speed=spd * 0.5,
+                    lifetime=45,
+                    drift_x=math.cos(angle) * spd
+                ))
+
+        # Update projectiles
+        projectiles = [p for p in projectiles if p.update()]
+
+        # Update shockwaves
+        shockwaves = [s for s in shockwaves if s.update()]
+
+        # Screen shake decay
+        if screen_shake > 0:
+            screen_shake *= 0.8
+            if screen_shake < 0.5:
+                screen_shake = 0
 
         # Check collectibles
         for c in collectibles:
@@ -582,6 +825,7 @@ def gameplay():
                 if c.check_collect(player.x, player.y, player.w, player.h):
                     c.alive = False
                     score += 1
+                    player.grow(3)
                     # Burst particles
                     for _ in range(15):
                         particles.append(Particle(
@@ -607,13 +851,25 @@ def gameplay():
             fade_in = min(255, fade_in + 5)
 
         # ── Draw ──
+        # Apply screen shake offset
+        shake_x = random.uniform(-screen_shake, screen_shake) if screen_shake > 0 else 0
+        shake_y = random.uniform(-screen_shake, screen_shake) if screen_shake > 0 else 0
+
         draw_castle_bg(screen)
         draw_platforms(screen, platforms)
+
+        # Shockwaves (behind player)
+        for s in shockwaves:
+            s.draw(screen)
 
         # Collectibles
         for c in collectibles:
             if c.alive:
                 c.draw(screen)
+
+        # Projectiles
+        for p in projectiles:
+            p.draw(screen)
 
         # Particles
         for p in particles:
@@ -622,10 +878,38 @@ def gameplay():
         # Player
         player.draw(screen)
 
+        # ── HUD ──
+        # Body mass bar
+        mass_ratio = player.w / player.base_w
+        bar_w = 80
+        bar_h = 6
+        bar_x = 20
+        bar_y = 20
+        # Label
+        mass_label = font_small.render("BODY MASS", True, var_dim_text := (168, 158, 138))
+        screen.blit(mass_label, (bar_x, bar_y - 14))
+        # Background
+        pygame.draw.rect(screen, (30, 30, 50), (bar_x, bar_y, bar_w, bar_h), border_radius=3)
+        # Fill
+        fill_color = JELLO_GREEN if mass_ratio > 0.4 else EMBER
+        pygame.draw.rect(screen, fill_color,
+                         (bar_x, bar_y, int(bar_w * mass_ratio), bar_h), border_radius=3)
+        # Border
+        pygame.draw.rect(screen, (80, 80, 100), (bar_x, bar_y, bar_w, bar_h), 1, border_radius=3)
+
         # Score
         if score > 0:
             score_text = font_prompt.render(f"Jello Powder: {score}", True, TORCH_AMBER)
-            screen.blit(score_text, (20, 20))
+            screen.blit(score_text, (20, 36))
+
+        # Split indicator
+        if player.is_split:
+            split_text = font_small.render("SPLIT!", True, JELLO_GREEN)
+            split_rect = split_text.get_rect(center=(SCREEN_W // 2, 20))
+            # Pulse
+            pulse = int(180 + math.sin(t * 0.01) * 75)
+            split_text.set_alpha(pulse)
+            screen.blit(split_text, split_rect)
 
         # All collected message
         alive_count = sum(1 for c in collectibles if c.alive)
@@ -638,6 +922,11 @@ def gameplay():
                              border_radius=8)
             screen.blit(glow, (msg_rect.x - 20, msg_rect.y - 10))
             screen.blit(msg, msg_rect)
+
+        # Controls reminder at bottom
+        ctrl = font_small.render("SPACE=shoot  Z=split  Down=pound  Up=jump  ESC=menu", True, (60, 55, 50))
+        ctrl_rect = ctrl.get_rect(center=(SCREEN_W // 2, SCREEN_H - 12))
+        screen.blit(ctrl, ctrl_rect)
 
         # Fade in overlay
         if fade_in < 255:
