@@ -17,6 +17,12 @@
 
 ---
 
+## Back of the Box
+
+> You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.
+
+---
+
 ## The Big Questions
 
 ### What type of game is it?

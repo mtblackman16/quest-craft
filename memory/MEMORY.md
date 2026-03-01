@@ -131,11 +131,16 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 - Intense/scary as darkness increases and monsters appear
 - Music gets more dense approaching bosses or dark areas
 
+**Back of the Box:**
+> You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.
+
 **Title Screen:**
 - Pixel art style, detailed background (castle + desert, more detailed than gameplay)
 - Jello cube character posing
 - Play, Settings, Controls buttons
 - Controls page has Simple/Advanced toggle
+
+**Andrew's Artist Brief:** `docs/andrew-artist-brief.md` (+ HTML for printing)
 
 ---
 
@@ -158,7 +163,7 @@ Hidden puzzles are a "nice to have" after core is solid.
 
 | Document | Status |
 |----------|--------|
-| 00-game-concept | In Progress (Dream session) |
+| 00-game-concept | Dream Complete |
 | 01-characters | Not Started |
 | 02-story-world | Not Started |
 | 03-gameplay | Not Started |
