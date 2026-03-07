@@ -225,7 +225,7 @@ class JelloCube:
         self.split_pieces = []  # [(offset_x, offset_y, phase), ...]
         self.split_duration = 180  # 3 seconds at 60fps
 
-    def update(self, keys, platforms):
+    def update(self, keys, platforms, joystick=None):
         # Horizontal movement (not during ground pound)
         if not self.ground_pounding:
             self.vx = 0
@@ -235,9 +235,31 @@ class JelloCube:
             if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                 self.vx = self.speed
                 self.facing = 1
+            # Controller: left stick + d-pad
+            if joystick:
+                axis_x = joystick.get_axis(0)
+                if axis_x < -0.3:
+                    self.vx = -self.speed
+                    self.facing = -1
+                elif axis_x > 0.3:
+                    self.vx = self.speed
+                    self.facing = 1
+                hat = joystick.get_hat(0)
+                if hat[0] == -1:
+                    self.vx = -self.speed
+                    self.facing = -1
+                elif hat[0] == 1:
+                    self.vx = self.speed
+                    self.facing = 1
 
-        # Jump — Up Arrow only
-        if keys[pygame.K_UP] and self.on_ground and not self.ground_pounding:
+        # Jump — Up Arrow, or controller A button (1), or d-pad up
+        wants_jump = keys[pygame.K_UP]
+        if joystick:
+            if joystick.get_button(1):  # A button = jump
+                wants_jump = True
+            if joystick.get_hat(0)[1] == 1:  # d-pad up
+                wants_jump = True
+        if wants_jump and self.on_ground and not self.ground_pounding:
             self.vy = self.jump_power
             self.on_ground = False
             self.squish = -0.3
@@ -546,6 +568,15 @@ def title_screen():
     particles = []
     alpha = 0  # fade in
 
+    # Controller init
+    joystick = None
+    if pygame.joystick.get_count() > 0:
+        try:
+            joystick = pygame.joystick.Joystick(0)
+            joystick.init()
+        except Exception:
+            joystick = None
+
     while True:
         dt = clock.tick(FPS)
         t = pygame.time.get_ticks()
@@ -560,6 +591,20 @@ def title_screen():
                     sys.exit()
                 if event.key == pygame.K_SPACE and alpha >= 250:
                     return  # start game
+            # Controller: A to start, Plus to quit
+            if event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 1 and alpha >= 250:  # A button = start
+                    return
+                if event.button == 10:  # Plus = quit
+                    pygame.quit()
+                    sys.exit()
+            # Controller hot-plug
+            if event.type == pygame.JOYDEVICEADDED:
+                try:
+                    joystick = pygame.joystick.Joystick(event.device_index)
+                    joystick.init()
+                except Exception:
+                    joystick = None
 
         # Fade in
         if alpha < 255:
@@ -664,20 +709,20 @@ def title_screen():
             pupil_x = SCREEN_W // 2 + eye_off + int(math.sin(t * 0.002) * 2)
             pygame.draw.circle(screen, (20, 20, 40), (pupil_x, int(eye_y)), 3)
 
-        # "Press SPACE to play" prompt
+        # "Press SPACE / A to play" prompt
         if alpha >= 250:
             prompt_alpha = int(128 + math.sin(t * 0.005) * 127)
-            prompt = font_prompt.render("Press SPACE to play", True, TORCH_GLOW)
+            prompt = font_prompt.render("Press SPACE or  A  to play", True, TORCH_GLOW)
             prompt.set_alpha(prompt_alpha)
             prompt_rect = prompt.get_rect(center=(SCREEN_W // 2, 480))
             screen.blit(prompt, prompt_rect)
 
-        # Controls hint
-        controls1 = font_small.render("Arrows = move/jump  |  SPACE = shoot  |  Z = split  |  Down(air) = ground pound", True, (120, 110, 90))
-        cr1 = controls1.get_rect(center=(SCREEN_W // 2, 540))
+        # Controls hint (keyboard + controller)
+        controls1 = font_small.render("Arrows/Stick = move  |  Up/A = jump  |  SPACE/B = shoot  |  Z/X = split", True, (120, 110, 90))
+        cr1 = controls1.get_rect(center=(SCREEN_W // 2, 530))
         screen.blit(controls1, cr1)
-        controls2 = font_small.render("ESC = quit", True, (90, 85, 70))
-        cr2 = controls2.get_rect(center=(SCREEN_W // 2, 560))
+        controls2 = font_small.render("Down(air) = ground pound  |  ESC/Plus = quit", True, (90, 85, 70))
+        cr2 = controls2.get_rect(center=(SCREEN_W // 2, 550))
         screen.blit(controls2, cr2)
 
         # Fade overlay
@@ -732,6 +777,9 @@ def gameplay():
         except Exception:
             joystick = None
 
+    # Ground pound edge detection for analog stick
+    stick_was_down = False
+
     while True:
         clock.tick(FPS)
         t = pygame.time.get_ticks()
@@ -776,18 +824,61 @@ def gameplay():
                                 lifetime=40,
                                 drift_x=math.cos(angle) * spd
                             ))
+            # Controller button events
+            if event.type == pygame.JOYBUTTONDOWN:
+                # B (button 0) = Jello Shot
+                if event.button == 0:
+                    proj = player.shoot()
+                    if proj:
+                        projectiles.append(proj)
+                        for _ in range(5):
+                            particles.append(Particle(
+                                proj.x - proj.direction * 10,
+                                proj.y + random.uniform(-5, 5),
+                                JELLO_GREEN, size=3, speed=0.5, lifetime=20,
+                                drift_x=-proj.direction * random.uniform(0.5, 1.5)
+                            ))
+                # X (button 2) = Split
+                if event.button == 2:
+                    result = player.split()
+                    if result:
+                        cx = player.x + player.w / 2
+                        cy = player.y + player.h / 2
+                        for _ in range(20):
+                            angle = random.uniform(0, math.pi * 2)
+                            spd = random.uniform(1, 4)
+                            particles.append(Particle(
+                                cx + random.uniform(-5, 5),
+                                cy + random.uniform(-5, 5),
+                                JELLO_GREEN, size=4, speed=spd * 0.3,
+                                lifetime=40,
+                                drift_x=math.cos(angle) * spd
+                            ))
+                # Plus (button 10) = back to title
+                if event.button == 10:
+                    return
+            # Controller d-pad ground pound
+            if event.type == pygame.JOYHATMOTION:
+                if event.value[1] == -1:  # d-pad down
+                    player.start_ground_pound()
+            # Controller hot-plug
+            if event.type == pygame.JOYDEVICEADDED:
+                try:
+                    joystick = pygame.joystick.Joystick(event.device_index)
+                    joystick.init()
+                except Exception:
+                    joystick = None
 
-        # Controller hot-plug
-        if joystick is None and pygame.joystick.get_count() > 0:
-            try:
-                joystick = pygame.joystick.Joystick(0)
-                joystick.init()
-            except Exception:
-                joystick = None
+        # Controller: analog stick ground pound (edge detection)
+        if joystick:
+            stick_down = joystick.get_axis(1) > 0.5
+            if stick_down and not stick_was_down:
+                player.start_ground_pound()
+            stick_was_down = stick_down
 
         keys = pygame.key.get_pressed()
 
-        player.update(keys, platforms)
+        player.update(keys, platforms, joystick)
 
         # Ground pound landing — spawn shockwave and particles
         if player.just_landed_pound:
@@ -924,7 +1015,7 @@ def gameplay():
             screen.blit(msg, msg_rect)
 
         # Controls reminder at bottom
-        ctrl = font_small.render("SPACE=shoot  Z=split  Down=pound  Up=jump  ESC=menu", True, (60, 55, 50))
+        ctrl = font_small.render("B/SPACE=shoot  X/Z=split  Down=pound  A/Up=jump  Plus/ESC=menu", True, (60, 55, 50))
         ctrl_rect = ctrl.get_rect(center=(SCREEN_W // 2, SCREEN_H - 12))
         screen.blit(ctrl, ctrl_rect)
 
