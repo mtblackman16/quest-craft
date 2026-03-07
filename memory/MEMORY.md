@@ -245,6 +245,7 @@ Hidden puzzles are a "nice to have" after core is solid.
 | Date | What | File |
 |------|------|------|
 | 2026-02-28 | Spark demo created — title screen + playable jello cube platformer | `game/spark.py` |
+| 2026-03-06 | Added full Pro Controller support to Spark (A=jump, B=shoot, X=split, stick/dpad=move, Plus=menu) | `game/spark.py` |
 
 **Spark demo features:** Animated title screen with glowing "SPLIT" letters, bobbing jello cube preview, dungeon dust particles. Gameplay scene with translucent jello cube (eyeballs, squish physics, trail), 5 stone platforms, 7 collectible jello powder diamonds, torchlit castle background with vines and flickering torches. Three new mechanics added: jello shot (SPACE, costs body mass), ground pound (Down while airborne), and split into 4 pieces (Z). Arrow keys to move/jump, ESC to return to title.
 
