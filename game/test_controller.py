@@ -161,6 +161,7 @@ while running:
             screen.blit(bt, (370, y + 10))
 
             # Show Pro Controller button names if applicable
+            # Actual mapping from Pi 5 + hid_nintendo (14 buttons, 4 axes, 1 hat):
             PRO_NAMES = {
                 0: "A",
                 1: "B",
@@ -173,11 +174,9 @@ while running:
                 8: "R Click",
                 9: "L Bump",
                 10: "R Bump",
-                11: "D-Up",
-                12: "D-Down",
-                13: "D-Left",
-                14: "D-Right",
-                15: "Capture",
+                11: "ZL",
+                12: "ZR",
+                13: "Capture",
             }
             if pressed:
                 names = [
@@ -186,6 +185,20 @@ while running:
                 name_str = "  ".join(names)
                 name_text = font_small.render(name_str, True, CREAM)
                 screen.blit(name_text, (370, y + 35))
+
+            # Hat (D-pad) display
+            num_hats = joy.get_numhats()
+            if num_hats > 0:
+                hat = joy.get_hat(0)
+                hat_names = []
+                if hat[1] == 1: hat_names.append("Up")
+                if hat[1] == -1: hat_names.append("Down")
+                if hat[0] == -1: hat_names.append("Left")
+                if hat[0] == 1: hat_names.append("Right")
+                hat_str = "D-pad: " + ("+".join(hat_names) if hat_names else "(center)")
+                hat_color = TORCH_AMBER if hat_names else DIM
+                ht = font_small.render(hat_str, True, hat_color)
+                screen.blit(ht, (370, y + 55))
 
             y += axes_height + 25
 
