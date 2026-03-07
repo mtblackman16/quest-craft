@@ -20,8 +20,8 @@
 
 ## Project Status
 
-**Current Phase:** Session 1 — Dream (COMPLETE)
-**Current Session:** Day 1 Dream — concept brainstorm DONE
+**Current Phase:** Session 2 — Design (PREP COMPLETE, ready for Sunday March 8)
+**Current Session:** Day 2 Design — prep done, session pending
 **Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
 **Core Word:** Survival
@@ -160,6 +160,36 @@ Voice-first via Wispr Flow. Slash commands drive each phase.
 All Dream questions answered. Ready for Session 2 (Design).
 
 **Session 2 TODO:** Full controller mapping discussion (Pro Controller + Joy-Cons), Simple vs Advanced toggle design, hardware pairing
+
+## Session 2 Prep (March 6) — COMPLETE
+
+**Pi readiness verified:**
+- Git synced to latest (commit a2f6dc8)
+- Pygame 2.6.1 OK
+- Pillow 11.1.0 OK (was already installed)
+- Bluetooth active, ClassicBondedOnly=false set
+- hid_nintendo kernel module loaded + set for auto-boot
+- joystick + evtest tools installed
+- test_controller.py deployed and parseable
+- Asset directories created (drawings/, player/, enemies/)
+
+**New files for Session 2:**
+- `docs/guides/day2-runbook.md` — Mark's facilitator guide
+- `docs/guides/session-2-claude-guide.md` — Claude's internal session context
+- `game/test_controller.py` — Visual controller test (Split-themed)
+- `docs/printables/controller-mapping-worksheet.html` — Printable button mapping worksheet
+- `assets/images/drawings/` — Directory for Andrew's uploaded artwork
+
+**Andrew integration plan:**
+- Photo-to-sprite workflow ready (Pillow installed, directories created)
+- Artist brief exists: `docs/andrew-artist-brief.md` + `.html`
+- Andrew leads visual design decisions (Characters, Art Style topics)
+
+**Controller prep done:**
+- Bluetooth configured for Nintendo controllers
+- hid_nintendo driver loaded
+- Pro Controller pairing steps documented in day2-runbook.md
+- USB-C fallback plan documented (zero-config wired connection)
 
 **Exhibition Scope (top 3 priorities):**
 1. Core movement + all attacks (jello shot, ground pound, jello dodge)
