@@ -22,100 +22,36 @@
 ### The Night Before (Saturday)
 
 - [ ] **Pull latest code** on the Pi: `cd ~/quest-craft && git pull`
-- [ ] **Install Pillow** (needed for art-to-sprite conversion): `pip install Pillow`
-- [ ] **Print controller diagrams** — print a blank Pro Controller layout diagram for each kid to label with game actions (search "Nintendo Switch Pro Controller button layout" and print)
+- [ ] **Print controller worksheets** — open `docs/printables/controller-mapping-worksheet.html` in a browser and print 4 copies
 - [ ] **Print Andrew's artist brief** if he hasn't seen it: `docs/andrew-artist-brief.md`
 - [ ] **Prep art supplies** — white paper, black markers/Sharpies, colored markers, pencils, graph paper
 - [ ] **Confirm Andrew has his artwork** — text his parents to remind him to bring his drawings
 - [ ] **Review Session 1 game concept** — re-read `docs/prds/00-game-concept.md` so you're fresh
 
-### Sunday Morning (1-2 hours before)
+### Sunday Morning (one command does everything)
 
-- [ ] **Power on the Pi**, HDMI display connected
-- [ ] **Verify Pi on Tailscale:** `ssh mark@100.118.252.70`
-- [ ] **Start headless display** (if no monitor):
-  ```bash
-  export XDG_RUNTIME_DIR=/run/user/$(id -u)
-  wayvnc 0.0.0.0 5900 &>/dev/null &
-  websockify --web /usr/share/novnc 6080 localhost:5900 &>/dev/null &
-  ```
-- [ ] **Verify Spark demo runs:** `cd ~/quest-craft && python3 game/spark.py` (ESC to quit)
-- [ ] **Pygame test:** `python3 -c "import pygame; pygame.init(); print('OK')"`
-- [ ] **Pillow test:** `python3 -c "from PIL import Image; print('OK')"`
-
-### Controller Pairing (DO THIS BEFORE THE KIDS ARRIVE)
-
-This is the most important prep step. If controllers don't work, you can fall back to keyboard.
-
-**Step 1: Check Bluetooth packages**
 ```bash
-# These should already be installed
-sudo apt install bluetooth bluez joystick evtest
+bash ~/quest-craft/scripts/startup.sh
 ```
 
-**Step 2: Check the hid-nintendo driver**
+This pulls latest code, starts VNC, reconnects the Pro Controller (MAC: `60:1A:C7:B7:72:9F`), and verifies Pygame.
+
+- [ ] **Power on the Pi**
+- [ ] **SSH from both laptops:** Open VS Code → `Ctrl+Shift+P` → "Remote-SSH: Connect to Host" → `mark@100.118.252.70` → open `~/quest-craft`
+- [ ] **Run startup script** (from either terminal): `bash ~/quest-craft/scripts/startup.sh`
+- [ ] **Open VNC** in browser: `http://100.118.252.70:6080/vnc.html`
+- [ ] **Verify Spark runs with controller:** `cd ~/quest-craft && python3 game/spark.py` — press A on Pro Controller to start
+
+### Controller Already Paired
+
+The Pro Controller was paired and verified on March 6. It auto-reconnects on boot.
+
+**If it doesn't reconnect,** hold the SYNC button on the controller for 2 seconds (LEDs flash), then:
 ```bash
-# Should return module info — this is the Nintendo controller driver
-modinfo hid_nintendo
-
-# If it's not loaded, load it
-sudo modprobe hid_nintendo
+bluetoothctl connect 60:1A:C7:B7:72:9F
 ```
 
-**Step 3: Edit Bluetooth config (one-time)**
-```bash
-sudo nano /etc/bluetooth/input.conf
-# Find: #ClassicBondedOnly=true
-# Change to: ClassicBondedOnly=false
-# Save and exit (Ctrl+X, Y, Enter)
-sudo systemctl restart bluetooth
-```
-
-**Step 4: Pair the Pro Controller**
-```bash
-bluetoothctl
-```
-Then inside bluetoothctl:
-```
-power on
-agent on
-default-agent
-scan on
-```
-Now **press and hold the SYNC button** on the top of the Pro Controller (small button near USB-C port) for 2 seconds. The player LEDs will flash.
-
-Watch for "Pro Controller" to appear with a MAC address like `XX:XX:XX:XX:XX:XX`. Then:
-```
-scan off
-pair XX:XX:XX:XX:XX:XX
-trust XX:XX:XX:XX:XX:XX
-connect XX:XX:XX:XX:XX:XX
-exit
-```
-
-**Step 5: Verify**
-```bash
-ls /dev/input/js*
-# Should show /dev/input/js0
-```
-
-**Step 6: Test in Pygame**
-```bash
-cd ~/quest-craft && python3 game/test_controller.py
-```
-Press buttons on the controller — you should see them light up on screen. Press ESC to exit.
-
-**Fallback:** If Bluetooth won't pair, connect the Pro Controller via **USB-C cable**. It works instantly with zero configuration.
-
-**If Joy-Cons are also being used:**
-```bash
-# Install joycond (handles Joy-Con sideways mode)
-sudo apt install libevdev-dev libudev-dev cmake build-essential
-cd /tmp && git clone https://github.com/DanielOgorchock/joycond.git
-cd joycond && cmake . && sudo make install
-sudo systemctl enable --now joycond
-```
-Then pair each Joy-Con separately via bluetoothctl using the SYNC button on the Joy-Con rail.
+**Fallback:** Connect the Pro Controller via **USB-C cable**. Works instantly with zero configuration.
 
 ---
 
@@ -127,7 +63,7 @@ Then pair each Joy-Con separately via bluetoothctl using the SYNC button on the 
 
 **Step 1: Everyone plays the Spark demo (10 min)**
 1. Run on the Pi: `python3 game/spark.py`
-2. Hand the keyboard to each kid for 1-2 minutes
+2. Hand the **Pro Controller** to each kid for 1-2 minutes (A=jump, B=shoot, X=split, stick=move, Plus=menu)
 3. As they play, ask each one: **"What's the coolest part?"** and **"What would you change?"**
 4. Let them be loud and excited — this is their game!
 
@@ -242,7 +178,7 @@ Then pair each Joy-Con separately via bluetoothctl using the SYNC button on the 
 | Pause | Plus (button 10) | Standard |
 | Movement | Left Stick (axis 0,1) | Standard |
 
-**If time:** Claude adds controller support to `spark.py` live and kids test with the actual controller.
+**Controller support is already in Spark!** The kids will have been playing with it since Block 1. This activity is about them *deciding* the final mapping — they may want to change what A/B/X/Y do.
 
 ---
 
