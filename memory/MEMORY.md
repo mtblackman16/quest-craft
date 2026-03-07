@@ -186,10 +186,35 @@ All Dream questions answered. Ready for Session 2 (Design).
 - Andrew leads visual design decisions (Characters, Art Style topics)
 
 **Controller prep done:**
-- Bluetooth configured for Nintendo controllers
-- hid_nintendo driver loaded
+- Pro Controller paired via Bluetooth (MAC: 60:1A:C7:B7:72:9F)
+- Bluetooth configured for Nintendo controllers (ClassicBondedOnly=false)
+- hid_nintendo driver loaded + auto-boot configured
 - Pro Controller pairing steps documented in day2-runbook.md
 - USB-C fallback plan documented (zero-config wired connection)
+- startup.sh one-command boot script created
+
+**Controller Button Mapping (VERIFIED via evtest on live hardware, March 6 2026):**
+```
+Pygame  0 = B (bottom)       BTN_SOUTH (304)
+Pygame  1 = A (right)        BTN_EAST (305)
+Pygame  2 = X (top)          BTN_NORTH (307)
+Pygame  3 = Y (left)         BTN_WEST (308)
+Pygame  4 = Capture          BTN_Z (309)
+Pygame  5 = L Bumper         BTN_TL (310)
+Pygame  6 = R Bumper         BTN_TR (311)
+Pygame  7 = ZL               BTN_TL2 (312)
+Pygame  8 = ZR               BTN_TR2 (313)
+Pygame  9 = Minus (-)        BTN_SELECT (314)
+Pygame 10 = Plus (+)         BTN_START (315)
+Pygame 11 = Home             BTN_MODE (316)
+Pygame 12 = L Stick Click    BTN_THUMBL (317)
+Pygame 13 = R Stick Click    BTN_THUMBR (318)
+Axes 0-3 = LStickX, LStickY, RStickX, RStickY
+D-pad = Hat 0 (tuple, NOT buttons)
+```
+NOTE: SDL2 Joystick API maps buttons by kernel event code order.
+This mapping is specific to Pi 5 + hid_nintendo + SDL2 2.32.4.
+Online references are WRONG for this setup — always use this verified mapping.
 
 **Exhibition Scope (top 3 priorities):**
 1. Core movement + all attacks (jello shot, ground pound, jello dodge)
