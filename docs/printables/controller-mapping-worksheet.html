@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split — Controller Mapping Worksheet</title>
+<style>
+  @media print {
+    body { margin: 0.5in; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    max-width: 7.5in;
+    margin: 0 auto;
+    padding: 20px;
+    color: #1a1a2e;
+    line-height: 1.5;
+  }
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 4px;
+    color: #1a1a2e;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .name-line {
+    border: 2px solid #1a1a2e;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+  .name-line span {
+    color: #888;
+  }
+
+  /* Controller diagram using CSS art */
+  .controller-box {
+    border: 2px solid #333;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 16px 0;
+    background: #f8f8f8;
+    position: relative;
+  }
+  .controller-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+  /* Mapping table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+  th {
+    background: #1a1a2e;
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 13px;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+  }
+  td:first-child {
+    font-weight: 600;
+    width: 30%;
+    white-space: nowrap;
+  }
+  td:nth-child(2) {
+    width: 20%;
+    color: #666;
+    font-size: 12px;
+  }
+  td:last-child {
+    border-bottom: 1.5px dashed #ccc;
+    min-width: 150px;
+  }
+  tr:last-child td {
+    border-bottom: 2px solid #1a1a2e;
+  }
+
+  .section-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #e8a838;
+    color: #1a1a2e;
+  }
+
+  .note-box {
+    border: 2px dashed #e8a838;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: #fff9f0;
+  }
+  .note-box strong {
+    color: #c44b2b;
+  }
+
+  .feel-section {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0;
+  }
+  .feel-option {
+    flex: 1;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .feel-option .emoji {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .feel-option .label {
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .feel-option .desc {
+    font-size: 11px;
+    color: #888;
+  }
+  .checkbox {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+  }
+
+  .print-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 32px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #2d2d44; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print This Worksheet (4 copies)</button>
+
+<h1>Split — Controller Mapping</h1>
+<p class="subtitle">Nintendo Switch Pro Controller &rarr; Game Actions</p>
+
+<div class="name-line">
+  Designer: <span>___________________________</span> &nbsp;&nbsp;&nbsp; Date: <span>_______________</span>
+</div>
+
+<div class="section-title">Face Buttons (Right Side)</div>
+<table>
+  <tr>
+    <th>Button</th>
+    <th>Pygame #</th>
+    <th>Game Action (write yours!)</th>
+  </tr>
+  <tr>
+    <td>A (right)</td>
+    <td>Button 0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>B (bottom)</td>
+    <td>Button 1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>X (top)</td>
+    <td>Button 2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Y (left)</td>
+    <td>Button 3</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="section-title">Bumpers &amp; Triggers</div>
+<table>
+  <tr>
+    <th>Button</th>
+    <th>Pygame #</th>
+    <th>Game Action</th>
+  </tr>
+  <tr>
+    <td>L Bumper</td>
+    <td>Button 9</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>R Bumper</td>
+    <td>Button 10</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ZL (L Trigger)</td>
+    <td>Axis 4</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>ZR (R Trigger)</td>
+    <td>Axis 5</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="section-title">Sticks &amp; D-Pad</div>
+<table>
+  <tr>
+    <th>Control</th>
+    <th>Pygame #</th>
+    <th>Game Action</th>
+  </tr>
+  <tr>
+    <td>Left Stick</td>
+    <td>Axis 0, 1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Right Stick</td>
+    <td>Axis 2, 3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>D-Pad Up</td>
+    <td>Button 11</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>D-Pad Down</td>
+    <td>Button 12</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>D-Pad Left</td>
+    <td>Button 13</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>D-Pad Right</td>
+    <td>Button 14</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="section-title">System Buttons</div>
+<table>
+  <tr>
+    <th>Button</th>
+    <th>Pygame #</th>
+    <th>Game Action</th>
+  </tr>
+  <tr>
+    <td>Plus (+)</td>
+    <td>Button 6</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Minus (-)</td>
+    <td>Button 4</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>L Stick Click</td>
+    <td>Button 7</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>R Stick Click</td>
+    <td>Button 8</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="note-box">
+  <strong>Remember:</strong> Your game's actions are: <strong>Move</strong>, <strong>Jump</strong>, <strong>Jello Shot</strong> (shoot bits of yourself), <strong>Ground Pound</strong> (slam down), <strong>Split</strong> (divide into 4), <strong>Jello Dodge</strong> (perfect dodge), <strong>Interact</strong> (levers, pots, chests), <strong>Shield</strong>, and <strong>Pause</strong>.
+</div>
+
+<div class="section-title">Movement Feel</div>
+<p style="font-size: 14px; margin-bottom: 8px;">How should the jello cube FEEL when you move? Circle one:</p>
+<div class="feel-section">
+  <div class="feel-option">
+    <span class="label">Snappy</span>
+    <span class="desc">Like Mario — instant response, tight control</span>
+  </div>
+  <div class="feel-option">
+    <span class="label">Bouncy</span>
+    <span class="desc">Like Kirby — light, floaty, jello-like</span>
+  </div>
+  <div class="feel-option">
+    <span class="label">Weighty</span>
+    <span class="desc">Like Dead Cells — heavy, satisfying impact</span>
+  </div>
+</div>
+
+<div class="section-title">Simple vs Advanced Mode</div>
+<p style="font-size: 14px;">For the exhibition, visitors who've never played need simpler controls. Design both:</p>
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Simple Mode</th>
+    <th>Advanced Mode</th>
+  </tr>
+  <tr>
+    <td>Move</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Jump</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Attack</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Special</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="footer">
+  Quest Craft &mdash; Split &mdash; Session 2: Design &mdash; March 2026
+</div>
+
+</body>
+</html>
