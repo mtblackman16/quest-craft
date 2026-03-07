@@ -162,21 +162,22 @@ while running:
 
             # Show Pro Controller button names if applicable
             # Actual mapping from Pi 5 + hid_nintendo (14 buttons, 4 axes, 1 hat):
+            # Verified mapping: Pi 5 + hid_nintendo + SDL2 (evtest ground truth)
             PRO_NAMES = {
-                0: "A",
-                1: "B",
-                2: "X",
-                3: "Y",
-                4: "Minus",
-                5: "Home",
-                6: "Plus",
-                7: "L Click",
-                8: "R Click",
-                9: "L Bump",
-                10: "R Bump",
-                11: "ZL",
-                12: "ZR",
-                13: "Capture",
+                0: "B",        # BTN_SOUTH (304)
+                1: "A",        # BTN_EAST (305)
+                2: "X",        # BTN_NORTH (307)
+                3: "Y",        # BTN_WEST (308)
+                4: "Capture",  # BTN_Z (309)
+                5: "L Bump",   # BTN_TL (310)
+                6: "R Bump",   # BTN_TR (311)
+                7: "ZL",       # BTN_TL2 (312)
+                8: "ZR",       # BTN_TR2 (313)
+                9: "Minus",    # BTN_SELECT (314)
+                10: "Plus",    # BTN_START (315)
+                11: "Home",    # BTN_MODE (316)
+                12: "L Click", # BTN_THUMBL (317)
+                13: "R Click", # BTN_THUMBR (318)
             }
             if pressed:
                 names = [

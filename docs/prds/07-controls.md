@@ -94,30 +94,35 @@
 > Technical notes for coding (Claude will reference this)
 
 ```python
-# Nintendo Switch Pro Controller button mapping in Pygame:
-# Button 0 = B (bottom)
-# Button 1 = A (right)
-# Button 2 = Y (left)
-# Button 3 = X (top)
-# Button 4 = L
-# Button 5 = R
-# Button 6 = ZL
-# Button 7 = ZR
-# Button 8 = Select (-)
-# Button 9 = Start (+)
-# Button 10 = Left Stick press
-# Button 11 = Right Stick press
-# Button 12 = Home
-# Button 13 = Capture
-
+# Nintendo Switch Pro Controller button mapping in Pygame
+# (Pi 5 + hid_nintendo driver — verified via evtest March 2026)
+#
+# Button 0  = B (bottom)       BTN_SOUTH (304)
+# Button 1  = A (right)        BTN_EAST (305)
+# Button 2  = X (top)          BTN_NORTH (307)
+# Button 3  = Y (left)         BTN_WEST (308)
+# Button 4  = Capture          BTN_Z (309)
+# Button 5  = L Bumper         BTN_TL (310)
+# Button 6  = R Bumper         BTN_TR (311)
+# Button 7  = ZL               BTN_TL2 (312)
+# Button 8  = ZR               BTN_TR2 (313)
+# Button 9  = Minus (-)        BTN_SELECT (314)
+# Button 10 = Plus (+)         BTN_START (315)
+# Button 11 = Home             BTN_MODE (316)
+# Button 12 = L Stick Click    BTN_THUMBL (317)
+# Button 13 = R Stick Click    BTN_THUMBR (318)
+#
 # Axes:
 # Axis 0 = Left stick X (-1 left, 1 right)
 # Axis 1 = Left stick Y (-1 up, 1 down)
 # Axis 2 = Right stick X
 # Axis 3 = Right stick Y
+#
+# D-pad = Hat 0 (tuple, NOT buttons)
+#   joy.get_hat(0) → (x, y) where x: -1=left, 1=right; y: 1=up, -1=down
 ```
 
-> Note: Button numbers may vary. We'll test and update this when we connect the controller.
+> Verified on live hardware March 6, 2026. Button indices follow kernel event code order (BTN_SOUTH=304 onwards).
 
 ---
 

@@ -170,20 +170,25 @@ Run `/design [topic]` for each topic. Prioritize by importance and Andrew's invo
 
 **Button mapping reference (Pro Controller in Pygame):**
 
-| Button | Index | Proposed Action |
-|--------|-------|-----------------|
-| A (east) | 0 | Jump |
-| B (south) | 1 | Jello Shot |
-| X (north) | 2 | Split |
-| Y (west) | 3 | Interact / Shield |
-| L Bumper | 9 | Jello Dodge |
-| R Bumper | 10 | (TBD) |
-| ZL (axis 4) | — | (TBD) |
-| ZR (axis 5) | — | (TBD) |
-| D-pad | 11-14 | Menu navigation / alt movement |
-| Plus | 6 | Pause |
-| Minus | 4 | (TBD) |
+| Button | Pygame Index | Proposed Action |
+|--------|-------------|-----------------|
+| B (south) | Button 0 | Jello Shot |
+| A (east) | Button 1 | Jump |
+| X (north) | Button 2 | Split |
+| Y (west) | Button 3 | Interact / Shield |
+| Capture | Button 4 | (TBD) |
+| L Bumper | Button 5 | Jello Dodge |
+| R Bumper | Button 6 | (TBD) |
+| ZL | Button 7 | (TBD) |
+| ZR | Button 8 | (TBD) |
+| Minus | Button 9 | (TBD) |
+| Plus | Button 10 | Pause |
+| Home | Button 11 | — |
+| L Stick Click | Button 12 | (TBD) |
+| R Stick Click | Button 13 | (TBD) |
+| D-pad | Hat 0 | Menu navigation / alt movement |
 | Left Stick | Axis 0,1 | Movement |
+| Right Stick | Axis 2,3 | (TBD) |
 
 > **Note:** Let the KIDS decide the mapping. Show them the options and let them argue about it. This is a design decision, not a technical one.
 

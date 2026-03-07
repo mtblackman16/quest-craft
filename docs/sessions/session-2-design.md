@@ -149,17 +149,20 @@ Make a sound list — every single sound the game needs, organized by category.
 
 ### Reference: Nintendo Switch Controller in Pygame
 ```
-Button 0 = B (bottom)      Button 1 = A (right)
-Button 2 = Y (left)        Button 3 = X (top)
-Button 4 = Minus            Button 5 = Home
-Button 6 = Plus             Button 7 = L Stick Press
-Button 8 = R Stick Press    Button 9 = L Bumper
-Button 10 = R Bumper        Button 11 = D-pad Up
-Button 12 = D-pad Down      Button 13 = D-pad Left
-Button 14 = D-pad Right
+Verified mapping: Pi 5 + hid_nintendo + SDL2 (evtest ground truth)
+
+Button 0 = B (bottom)       Button 1 = A (right)
+Button 2 = X (top)          Button 3 = Y (left)
+Button 4 = Capture          Button 5 = L Bumper
+Button 6 = R Bumper         Button 7 = ZL
+Button 8 = ZR               Button 9 = Minus
+Button 10 = Plus            Button 11 = Home
+Button 12 = L Stick Click   Button 13 = R Stick Click
+
 Axis 0 = Left Stick X       Axis 1 = Left Stick Y
 Axis 2 = Right Stick X      Axis 3 = Right Stick Y
-Axis 4 = L Trigger           Axis 5 = R Trigger
+
+D-pad = Hat 0 (not buttons — use joy.get_hat(0))
 ```
 
 ### Creative Activity:

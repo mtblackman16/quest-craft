@@ -234,12 +234,12 @@ Then pair each Joy-Con separately via bluetoothctl using the SYNC button on the 
 
 | Action | Pro Controller Button | Why |
 |--------|----------------------|-----|
-| Jump | A (right, button 0) | Standard platformer convention |
-| Jello Shot | B (bottom, button 1) | Easy to reach while moving |
+| Jump | A (right, button 1) | Standard platformer convention |
+| Jello Shot | B (bottom, button 0) | Easy to reach while moving |
 | Split | X (top, button 2) | Special move, separate from combat |
 | Interact/Shield | Y (left, button 3) | Context-sensitive |
-| Jello Dodge | L Bumper (button 9) | Quick access, defensive |
-| Pause | Plus (button 6) | Standard |
+| Jello Dodge | L Bumper (button 5) | Quick access, defensive |
+| Pause | Plus (button 10) | Standard |
 | Movement | Left Stick (axis 0,1) | Standard |
 
 **If time:** Claude adds controller support to `spark.py` live and kids test with the actual controller.
