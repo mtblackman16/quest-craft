@@ -2,9 +2,9 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Draft |
-| **Author** | — |
-| **Date** | — |
+| **Status** | In Progress |
+| **Author** | Team (Ethan, Eins, Andrew, Nathan) |
+| **Date** | 2026-03-08 |
 | **Reviewed by** | — |
 | **Depends on** | [00-game-concept.md](00-game-concept.md), [01-characters.md](01-characters.md) |
 
@@ -12,131 +12,148 @@
 
 ## Core Mechanic
 
-> The "core mechanic" is the ONE thing the player does most. In Mario it's jumping. In Pac-Man it's eating dots.
+**Our core mechanic is:** Mass management — your health IS your ammo. Every jelly shot costs body mass, so every attack is a risk/reward decision.
 
-**Our core mechanic is:** ___
-
-**Why is it fun?** ___
+**Why is it fun?** Players constantly choose between offense and survival. Aggressive players burn through mass fast and need to find cooking pots. Careful players conserve mass but fights take longer.
 
 ---
 
 ## Player Actions
 
-> List everything the player can do and how it works:
-
-| Action | How It Works | Button |
-|--------|-------------|--------|
-| Move left/right | ___ | Left stick |
-| Jump | ___ | A button? |
-| Attack | ___ | B button? |
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
+| Action | How It Works | Notes |
+|--------|-------------|-------|
+| Move | Left stick / arrows | Standard movement with jelly physics (wobbly) |
+| Jump | A button | Needed for ground pound and platforming |
+| Jelly Shot | Basic attack button | Costs mass — ammo = health |
+| Ground Pound | Down + attack in air | Must be airborne. Higher fall = more damage |
+| Perfect Dodge | Timed dodge button | Brief invulnerability. Slow-mo on success. Confuses dumb enemies |
+| Split | Split button | Break into pieces, switch control between them. Reveals secrets via camera change |
+| Water Absorb | Near water source | Temporarily hold water. Squirt into cooking pots or at enemies/fires |
 
 ---
 
 ## Health & Lives
 
-**Does the player have health?**
-- [ ] Yes — health bar (how many hit points? ___)
-- [ ] Yes — hearts (how many? ___)
-- [ ] No — one hit and you're out
-- [ ] No health system — game is about something else
+**Health = Mass.** The Jello Cube's body mass is its health pool.
 
-**Does the player have lives?**
-- [ ] Yes (how many? ___)
-- [ ] No — infinite retries
-- [ ] No — one life only (roguelike)
+**Visual feedback:**
+- Health bar displayed at top of screen
+- Jello Cube visually shrinks at ~25% thresholds (4 visible size stages)
+- Players can SEE how much health they have just by looking at their character
 
 **What happens when the player takes damage?**
-___
+- Mass decreases, cube shrinks at thresholds
+- Sanitizer contact causes slow mass loss over time
+- Sun exposure starts a fire on the jello's head, screen edges turn red and close in
 
 **What happens when the player dies?**
-- [ ] Restart the level
-- [ ] Restart from a checkpoint
-- [ ] Game over — back to title screen
-- [ ] Other: ___
+- Depends on difficulty setting (see Difficulty section)
 
 ---
 
-## Scoring & Collectibles
+## Healing: Jello Cooking System
 
-**Is there a score?**
-- [ ] Yes — points for doing things
-- [ ] No — no score system
+| Step | What Happens |
+|------|-------------|
+| 1. Collect Jello Powder | Dropped by enemies, found in shrines/puzzles |
+| 2. Find a Cooking Pot | Scattered around castle floors with water source nearby |
+| 3. Absorb Water | Walk to water source, absorb it into your body |
+| 4. Squirt into Pot | Deposit water into the cooking pot |
+| 5. Add Powder & Cook | Combine and cook to create jello |
+| 6. Eat | Restore mass/health |
 
-**If yes, how do you earn points?**
-| Action | Points |
-|--------|--------|
-| ___ | ___ |
-| ___ | ___ |
-
-**Are there collectibles?** (coins, stars, gems, etc.)
-- [ ] Yes: ___
-- [ ] No
-
-**What do collectibles do?**
-- [ ] Just give points
-- [ ] Give power-ups
-- [ ] Unlock things
-- [ ] Other: ___
+**Simmered Water:** Rare consumable. No pot needed. Also grants heat resistance.
 
 ---
 
-## Power-Ups & Special Abilities
+## Elemental Pills (Shrine Rewards)
 
-> Does the player get special powers?
+Found at the 8 shrines scattered across the castle. Stored as pills you can swallow whenever you choose.
 
-| Power-Up | What It Does | How Long It Lasts |
-|----------|-------------|-------------------|
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
+| Pill | Effect | Duration | Rarity |
+|------|--------|----------|--------|
+| **Fire** | Extra damage, especially vs sanitizer enemies | 75 seconds | Medium |
+| **Water** | Waters down jelly-based enemies, forcing them to regather mass | 75 seconds | Medium |
+| **Ice** | Protects from hot/fire areas (heat resistance) | 60 seconds | Rare |
+| **Electricity** | Shocks and stuns enemies, giving a free attack window | 90 seconds | Common |
+| **Attack Up** | Straight damage boost | 60 seconds | Rare |
+
+**Strategy:** Rare pills (Attack Up, Ice) are shorter — when you pop one, you feel pressure to make it count. Common pills (Electricity) last longer for sustained use.
 
 ---
 
-## Difficulty
+## 8 Shrines
 
-**How does the game get harder?**
-- [ ] Enemies get faster/smarter
-- [ ] More enemies appear
-- [ ] Levels get more complex
-- [ ] Timer gets shorter
-- [ ] Other: ___
+- Scattered across all 15 castle floors
+- Each contains a **puzzle or parkour challenge**
+- Rewards: Jello Powder, elemental pills, permanent upgrades
+- **Permanent upgrades include:** Jelly shot costs less mass, ability improvements
+- Some shrines are hidden — discoverable via the Split mechanic (camera angle change)
 
-**Are there difficulty settings?**
-- [ ] Easy / Medium / Hard
-- [ ] No — one difficulty for everyone
-- [ ] Adaptive (gets harder as you get better)
+---
+
+## Environmental Hazards
+
+### Sun / Drying Out
+- Broken walls and roofs in hallways let sunshine through
+- **2-second grace period** before heat damage starts
+- Damage is small but accumulates
+- **Visual:** Fire starts on the Jello Cube's head
+- **Screen effect:** Edges turn red and slowly close in, blocking view
+- **Counters:** Simmered Water, Ice pill, or just move through quickly
+
+### Sanitizer Puddles
+- Left by Small Sanitizer Bottles (patrol trails) and Sanitizer Warrior globs
+- Contact causes mass loss
+- Puddles from defeated bottles slowly fade away
+
+---
+
+## Difficulty Settings
+
+Chosen at game start. Cannot be changed mid-playthrough.
+
+| Difficulty | Checkpoints | Special |
+|------------|------------|---------|
+| **Easy** | Generous | Learn at your pace |
+| **Normal** | Standard | The intended experience |
+| **Hard** | None | Fall and restart the floor |
+| **Earthquake Mode** | None + TIMED | Castle collapses around you. Crumbling platforms never respawn. Screen shaking, debris falling. |
+
+### Earthquake Mode Rewards
+- **Special achievement**
+- **Captain's Hat** — equipable cosmetic (the ONLY cosmetic in the game)
+- **Secret cutscene** — Jello Cube escapes the castle, falls into a sinkhole, teasing a sequel
 
 ---
 
 ## Win & Lose Conditions
 
-**How do you WIN the game?**
-___
+**How do you WIN:** Defeat The Last Guard on Floor 15.
 
-**How do you LOSE the game?**
-___
+**How do you LOSE:** Run out of mass (health reaches zero). Restart depends on difficulty setting.
 
-**Can you play again after winning?**
-- [ ] Yes — new game+, harder
-- [ ] Yes — try for a higher score
-- [ ] No — the game ends
+**After winning:**
+- Normal ending for Easy/Normal/Hard
+- Secret sinkhole cutscene + Captain's Hat for Earthquake Mode
 
 ---
 
-## Imagine You're Playing...
+## Platform Types
 
-> You're in the middle of the hardest level...
-
-**What makes it hard?** ___
-
-**You're about to lose! What do you do?** ___
-
-**You just pulled off an amazing move! What happened?** ___
+| Platform | Behavior |
+|----------|----------|
+| **Solid** | Normal, always there |
+| **Moving** | Travels along a path, time your jumps |
+| **Crumbling** | Breaks when you stand on it. Respawns on Easy/Normal/Hard. NEVER respawns in Earthquake Mode |
+| **Elevator** | Moves vertically between areas |
 
 ---
 
 ## Open Questions
 
-- [ ] ___
-- [ ] ___
+- [ ] Is there a score system?
+- [ ] Are there collectibles beyond Jello Powder and pills?
+- [ ] Exact button mapping for all actions
+- [ ] Can you change difficulty mid-game, or locked in?
+- [ ] Does difficulty affect enemy health/damage, or purely checkpoints/timers?

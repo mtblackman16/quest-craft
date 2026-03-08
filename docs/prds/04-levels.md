@@ -2,134 +2,175 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Draft |
-| **Author** | — |
-| **Date** | — |
+| **Status** | In Progress |
+| **Author** | Team (Ethan, Eins, Andrew, Nathan) |
+| **Date** | 2026-03-08 |
 | **Reviewed by** | — |
 | **Depends on** | [00-game-concept.md](00-game-concept.md), [02-story-world.md](02-story-world.md), [03-gameplay.md](03-gameplay.md) |
 
 ---
 
-## Level Structure
+## Castle Structure
 
-**How is the game organized?**
-- [ ] Individual levels (Level 1, Level 2, Level 3...)
-- [ ] Open world (one big connected area)
-- [ ] Endless / infinite (goes on forever, getting harder)
-- [ ] Rooms / screens (move from room to room)
-- [ ] Other: ___
+**15 floors total.** The game takes place inside an ancient castle. Each floor is a level with its own look, enemies, and challenges. The player climbs from the bottom to the top.
 
-**How many levels are we aiming for?**
-> Be realistic — even 3 good levels is a great game!
-
-Target: ___ levels
+**Camera:** Side-scrolling, follows the player.
 
 ---
 
-## Level Design
+## Color Progression
 
-### Level 1 (or First Area)
+The castle gets lighter as you climb — a visual story of rising out of darkness.
 
-**Name:** ___
-
-**Purpose:** This level teaches the player how to play.
-
-**What does it look like?**
-> Draw a rough sketch on paper if you can!
-
-___
-
-**What does the player learn here?**
-- [ ] How to move
-- [ ] How to jump
-- [ ] How to attack
-- [ ] How to collect items
-- [ ] Other: ___
-
-**Enemies in this level:**
-___
-
-**Obstacles / Platforms:**
-___
-
-**How does the player finish this level?**
-___
+| Floors | Color Palette | Mood |
+|--------|--------------|------|
+| 1–3 | Dark bluish-brown | Oppressive, damp, dungeon-like |
+| 4–6 | Shifting to red and green | Warming up, more varied |
+| 7–8 | Transitioning lighter | Building tension |
+| 9–11 | Getting noticeably brighter | Fast-paced, adrenaline |
+| 12–14 | Light but ominous | Slow, deadly, memorable |
+| 15 | Lightest | The top — final confrontation |
 
 ---
 
-### Level 2 (or Second Area)
+## Floor Layout
 
-**Name:** ___
+### Room-Based Structure
+- Each floor is a series of **connected rooms** (not one long hallway)
+- Rooms include hallways, chambers, open areas, and vertical shafts
+- **Partly randomized:** Some rooms/sections are fixed every playthrough (boss arenas, shrines, story moments), other sections randomize (enemy placement, room connections, platform layouts)
+- This means every playthrough feels different — major replay value
 
-**What's different from Level 1?**
-___
-
-**New mechanic or enemy introduced:**
-___
-
-**How does the player finish this level?**
-___
+### Transitions Between Floors
+- TBD — stairs, doors, elevators, or portals (needs design)
 
 ---
 
-### Level 3 (or Third Area)
+## Floor Zones
 
-**Name:** ___
+### Floors 1–8: The Climb (Combat & Exploration)
 
-**What's the big challenge?**
-___
+**General feel:** Learning curve. Each floor introduces new enemies, mechanics, and hazards gradually.
 
-**How does the player finish this level?**
-___
+**Features:**
+- Rooms with enemies (Small Sanitizer Bottles, Sanitizer Warriors, Jelly Archers)
+- Cooking pots with water sources for healing
+- Sun patches through broken walls/roofs (drying hazard)
+- Shrines with puzzles/parkour for pills and upgrades
+- Mix of combat rooms, exploration rooms, and puzzle rooms
 
----
+**Boss 1: The Big Bottle** (early floor — TBD)
+- Tutorial boss, oversized Small Sanitizer Bottle
+- Teaches dodge, attack, and pattern reading
 
-## Level Flow
-
-> How do levels connect?
-
-```
-[Level 1] --> [Level 2] --> [Level 3] --> [Boss/Ending?]
-```
-
-Or draw your own flow here: ___
-
----
-
-## Screen Size & Camera
-
-**Screen size:** 800 x 600 pixels (default)
-
-**Does the camera move?**
-- [ ] No — everything fits on one screen
-- [ ] Yes — scrolls horizontally (side-scroller)
-- [ ] Yes — scrolls in all directions (top-down)
-- [ ] Yes — follows the player
+**Boss 2: The Cleanser** (floor 8–10)
+- 5-phase platform fight with breaking platforms
+- Reward: permanent speed upgrade
 
 ---
 
-## Checkpoints & Saving
+### Floors 9–11: The Crumbling Floors (Parkour Zone)
 
-**Are there checkpoints?**
-- [ ] Yes — at certain spots in each level
-- [ ] No — restart from the beginning each time
-- [ ] Auto-save between levels
+**General feel:** Speed and survival. A dramatic mid-game shift from combat to parkour.
+
+**Features:**
+- Platforms are ancient and **collapse under you** — keep moving or fall
+- **Lasers** block paths, forcing creative routing
+- No safe spots to stop and think — constant forward momentum
+- Speed upgrade from The Cleanser pays off here
+- Splitting mechanic can reveal secret routes and hidden shrines
+
+**Platform behavior:**
+- Crumbling platforms break when stepped on
+- On Easy/Normal/Hard: platforms eventually respawn
+- On Earthquake Mode: platforms NEVER respawn + timer + castle collapse effects
+
+**Enemies:** Reduced — the floor itself is the enemy. Some enemies may appear but the focus is platforming.
 
 ---
 
-## Imagine You're Playing...
+### Floors 12–14: The Gauntlet (Slow & Deadly)
 
-> You just finished Level 1 and entered Level 2...
+**General feel:** Slow-paced but brutally hard. The floors players remember and warn their friends about. Dark Souls / Hollow Knight design philosophy.
 
-**What changed?** ___
+**Features:**
+- **Hidden traps** — learn by dying and remembering
+- **Strong enemies in tight corridors** — hard to fight in cramped spaces
+- **Running is always an option** but not always safe — sprinting past an enemy might lead straight into a trap
+- Trial-and-death learning — memorize the dangers, execute precisely
+- Every step matters — no rushing
 
-**What's harder?** ___
+**Design philosophy:** These floors test mastery of EVERYTHING learned so far. Combat, dodging, platforming, resource management.
 
-**What's the coolest thing in this new level?** ___
+---
+
+### Floor 15: The Last Guard (Final Boss)
+
+**General feel:** The lightest, brightest floor. The top of the castle.
+
+**The Last Guard — Three-Phase Fight:**
+
+**Phase 1: The Chase**
+- The Guard spots you — RUN
+- Dodge his hands grabbing at you
+- Tests speed and reflexes
+
+**Phase 2: Hand-to-Hand**
+- Stand your ground and fight
+- Dodge attacks, find openings, strike
+- Tests combat mastery
+
+**Phase 3: The Arrows**
+- Large-scale vertical battle
+- Jump high, dodge arrows raining down
+- Tests platforming mastery
+
+**Difficulty:** Radiance-level (Hollow Knight final boss). Every phase tests a different skill. Demands mastery of the entire game.
+
+**Ending:** The Guard gives up. The Jello Cube wins.
+
+---
+
+## Difficulty & Checkpoints
+
+| Difficulty | Checkpoints | Parkour Floors (9–11) | Special |
+|------------|------------|----------------------|---------|
+| Easy | Generous | Platforms respawn | — |
+| Normal | Standard | Platforms respawn | — |
+| Hard | None | Platforms respawn | — |
+| Earthquake Mode | None | Platforms NEVER respawn, TIMED, castle collapsing | Achievement + Captain's Hat + secret cutscene |
+
+---
+
+## 8 Shrines (Distributed Across Floors)
+
+- Contain puzzles or small parkour challenges
+- Rewards: Jello Powder, elemental pills (Fire, Water, Ice, Electricity, Attack Up), permanent upgrades
+- Some are hidden — discoverable via Split mechanic (camera angle change)
+- Distribution across floors: TBD (should be spread so players find them regularly)
+
+---
+
+## Platform Types
+
+| Platform | Behavior | Where |
+|----------|----------|-------|
+| Solid | Always there | All floors |
+| Moving | Travels along a path | All floors |
+| Crumbling | Breaks when stood on | Primarily floors 9–11, some elsewhere |
+| Elevator | Moves vertically between areas | Various floors |
 
 ---
 
 ## Open Questions
 
-- [ ] ___
-- [ ] ___
+- [ ] Detailed room-by-room design for floors 1–8
+- [ ] How do you transition between floors? (Stairs? Doors? Elevators?)
+- [ ] Exact shrine placement across 15 floors
+- [ ] How many rooms per floor?
+- [ ] What fixed vs randomized elements per floor?
+- [ ] Are there any secret/bonus floors?
+- [ ] Specific enemy placement per floor
+- [ ] Boss placement: exactly which floors?
+- [ ] Are there more bosses between Big Bottle and The Cleanser?
+- [ ] Laser types on parkour floors (constant? sweeping? timed?)

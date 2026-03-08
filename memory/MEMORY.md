@@ -34,7 +34,7 @@
 |------|----------|---|
 | 2026-02-28 | 2D side-scrolling platformer (like Mario/Dead Cells) | Team |
 | 2026-02-28 | Player = jello cube with eyeballs, trapped in dark castle dungeon | Team |
-| 2026-02-28 | Jello splitting mechanic — split into fourths, squeeze through gaps | Team |
+| 2026-02-28 | Jello splitting mechanic — split into pieces, switch control between them | Team |
 | 2026-02-28 | Health: jello powder + water + cooking pots = more health/size | Team |
 | 2026-02-28 | Combat: jello shot (costs mass), ground pound (stun), jello dodge | Team |
 | 2026-02-28 | Death = restart from beginning (roguelike tension) | Team |
@@ -44,7 +44,20 @@
 | 2026-02-28 | Items stored visibly inside the transparent jello body | Team |
 | 2026-02-28 | Sound: real foley sounds, royalty-free or classical music | Team |
 | 2026-02-28 | Game title: **Split** | Team |
-| 2026-03-08 | **ART DIRECTION SHIFT:** From pixel art to Andrew's hand-drawn illustration style — detailed, rich digital illustrations with realistic shading, translucent surfaces, and fine detail. Major upgrade from original Dead Cells pixel art plan. | Team |
+| 2026-03-08 | **ART DIRECTION SHIFT:** From pixel art to Andrew's hand-drawn illustration style | Team |
+| 2026-03-08 | 15 castle floors, dark-to-light color progression | Team |
+| 2026-03-08 | 4 difficulty modes: Easy, Normal, Hard, Earthquake Mode | Team |
+| 2026-03-08 | Earthquake Mode: timed, no checkpoints, crumbling platforms never respawn, secret ending | Team |
+| 2026-03-08 | Captain's Hat = only cosmetic, Earthquake Mode reward | Team |
+| 2026-03-08 | 5 pills: Fire (75s), Water (75s), Ice (60s), Electricity (90s), Attack Up (60s) | Team |
+| 2026-03-08 | 8 shrines with puzzles/parkour, pills, permanent upgrades | Team |
+| 2026-03-08 | Floors 9-11 = parkour zone, crumbling platforms + lasers | Team |
+| 2026-03-08 | Floors 12-14 = slow/deadly gauntlet, hidden traps, trial-and-death | Team |
+| 2026-03-08 | Floor 15 final boss: The Last Guard (human, 3 phases, Radiance difficulty) | Team |
+| 2026-03-08 | Boss: The Cleanser (floor 8-10), 5-phase platform fight, speed upgrade reward | Team |
+| 2026-03-08 | Banana Slug hint system — appears when player is stuck, crawls toward objective | Team |
+| 2026-03-08 | Sun/drying mechanic: broken walls let sun in, 2s grace, fire on head, red screen edges | Team |
+| 2026-03-08 | Partly randomized floor layouts (fixed boss/shrine rooms, random enemy/room configs) | Team |
 
 ---
 
@@ -56,9 +69,11 @@
 
 **Combat:** Jello shot (costs body mass), ground pound (stun), jello dodge (liquid briefly, confuses enemies), ancient shield artifact (light energy shield). Items stored visibly inside transparent body.
 
-**Enemies:** Roly-polys (swarm bugs), alcohol spray bottles (slow deadly shots), Sanitizer Warriors (Andrew's design — purple-skinned warriors with syringe weapons + backpack sanitizer bottles), fire talus (mini-boss, fireballs)
+**Enemies:** Small Sanitizer Bottles (basic patrol, zone control, pairs), Sanitizer Warriors (mid-range tactical, dodge-and-punish), Jelly Archers (dark blue jelly sniper, glass cannon, sanitizer-tipped arrows)
 
-**Items:** Jello powder, water (4 types), fire pill, shrink pill, incense pill, mighty pill, jello armor, jello costume (disguise), hand sanitizer bottles (enemy drops)
+**Bosses:** The Big Bottle (tutorial boss, early floor), The Cleanser (floor 8-10, 5-phase platform fight), The Last Guard (floor 15, human, 3-phase, Radiance difficulty)
+
+**Items:** Jello Powder (healing ingredient), Simmered Water (rare, heat resistance), Elemental Pills (Fire 75s, Water 75s, Ice 60s, Electricity 90s, Attack Up 60s), Captain's Hat (cosmetic, Earthquake Mode only)
 
 **World:** Castle interior — stone walls, vines, torches, creeping gloom. Chests, barrels, hidden barrel shops. Glowing door = next floor up. Desert outside (title screen only).
 
@@ -110,7 +125,7 @@ NOTE: Online references are WRONG for this setup — always use this verified ma
 - Every kid had a turn, feedback captured
 
 ### Block 2: Photo-to-Sprite Workshop — COMPLETE
-- Andrew's artwork uploaded (7 original images in `assets/images/Upload/`)
+- Andrew's artwork uploaded (7 originals now in `assets/images/andrew-originals/`)
 - Claude analyzed all artwork, split into individual assets, applied transparent backgrounds
 - **10 final processed images** organized into folders:
 
@@ -149,10 +164,10 @@ Andrew's art is NOT pixel art. It's detailed, rich hand-drawn illustrations with
 | Document | Status |
 |----------|--------|
 | 00-game-concept | Dream Complete |
-| 01-characters | Not Started |
+| 01-characters | **In Progress** — Player, 3 enemies, 3 bosses, banana slug designed |
 | 02-story-world | Not Started |
-| 03-gameplay | Not Started |
-| 04-levels | Not Started |
+| 03-gameplay | **In Progress** — Mass system, cooking, pills, difficulty, platforms designed |
+| 04-levels | **In Progress** — 15-floor structure, zones, color progression, bosses placed |
 | 05-art-style | Not Started |
 | 06-sound | Not Started |
 | 07-controls | Not Started |
@@ -181,6 +196,27 @@ Every session ends with:
 
 ---
 
+## Secret Upgrade Plan (Mark's Eyes Only)
+
+**Master Plan:** `docs/plans/secret-upgrade-master-plan.md`
+**Branch:** `feature/surprise-upgrade` (to be created)
+**Reveal Target:** Session 4 opening
+
+**Family Characters:**
+- **Mama Sloth (Linda)** — Hard boss, Floor 4. Slow but devastating. "Bedtime!" sleep wave, "Clean Your Room!" shockwave, "Mom Look" freeze. Photo pending.
+- **Gracie** — Medium-hard boss, Floor 2. Fast, chaotic. "Copy Cat!" mirrors player moves, "Tag You're It!" reverses controls. Photo pending.
+- **Mark — The Keymaker + The Narrator.** Opens the jail cell door at game start (hand slides key, shadow walks away). Narrator text appears at 12 key moments in a unique font ("They figured it out faster than I expected."). Never named. Never identified. The final line: "This was always their game. I just opened the door."
+
+**6 Expert Reports Filed:**
+- Hardware: Pi 5 handles 500+ particles, 20 enemies, 32-ch audio at 60fps/720p
+- Game Design: 8 easter eggs, boss fights, interactive credits, hint system
+- VFX: 34 effects, 13.6ms budget, 3ms headroom, PerformanceGovernor
+- Sound: 69 SFX, 8-sound minimum, SFXManager with spatial panning
+- Music: 12 mood states, 4-layer adaptive system, classical sourcing
+- Validation: Watchdog, kiosk mode, thermal manager, 15 automated tests
+
+---
+
 ## See Also
 
 - `patterns.md` — Code patterns that work
@@ -188,3 +224,8 @@ Every session ends with:
 - `asset-catalog.txt` — Full descriptions of all 10 artwork assets with hex colors
 - `docs/andrew-artist-brief.md` — Andrew's original artist brief
 - `docs/parent-summaries/TEMPLATE.html` — Reusable parent email template
+- `docs/plans/secret-upgrade-master-plan.md` — Full secret upgrade blueprint
+- `docs/prds/06-sound.md` — Adaptive music system design
+- `docs/prds/06b-sound-effects.md` — Complete SFX catalog
+- `docs/prds/08-vfx-system.md` — Visual effects system design
+- `docs/plans/validation-qa-strategy.md` — QA & exhibition testing strategy
