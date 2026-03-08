@@ -9,7 +9,7 @@ import math
 import random
 
 # ── Constants ──
-SCREEN_W, SCREEN_H = 800, 600
+SCREEN_W, SCREEN_H = 1280, 720
 FPS = 60
 GROUND_Y = 500
 
@@ -28,7 +28,7 @@ STONE_HIGHLIGHT = (55, 55, 80)
 
 # ── Initialize ──
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption("SPLIT")
 clock = pygame.time.Clock()
 
