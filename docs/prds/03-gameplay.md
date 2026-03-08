@@ -117,8 +117,8 @@ Chosen at game start. Cannot be changed mid-playthrough.
 |------------|------------|---------|
 | **Easy** | Generous | Learn at your pace |
 | **Normal** | Standard | The intended experience |
-| **Hard** | None | Fall and restart the floor |
-| **Earthquake Mode** | None + TIMED | Castle collapses around you. Crumbling platforms never respawn. Screen shaking, debris falling. |
+| **Hard** | None | Fall and restart the floor. Enemies deal ~25% more damage. |
+| **Earthquake Mode** | None + TIMED | Castle collapses. Crumbling platforms never respawn. Enemies deal ~25% more damage. |
 
 ### Earthquake Mode Rewards
 - **Special achievement**
@@ -152,8 +152,8 @@ Chosen at game start. Cannot be changed mid-playthrough.
 
 ## Open Questions
 
-- [ ] Is there a score system?
-- [ ] Are there collectibles beyond Jello Powder and pills?
-- [ ] Exact button mapping for all actions
-- [ ] Can you change difficulty mid-game, or locked in?
-- [ ] Does difficulty affect enemy health/damage, or purely checkpoints/timers?
+- [ ] Is there a score system? (decide during build)
+- [ ] Are there collectibles beyond Jello Powder and pills? (decide during build)
+- [ ] Exact button mapping for all actions (Controls PRD)
+- [x] Difficulty is locked in at game start
+- [x] Higher difficulty increases enemy damage by ~25%

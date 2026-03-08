@@ -221,9 +221,7 @@ Items are stored visibly inside the transparent jello body (decided Session 1).
 
 ## Open Questions
 
-- [ ] Are there more enemy types for mid/late castle floors?
-- [ ] More bosses between The Big Bottle and The Cleanser?
-- [ ] Can the Jello Cube interact with the Banana Slug?
-- [ ] Does the Jelly Archer flee when approached?
-- [ ] Full details for The Big Bottle boss fight
-- [ ] Jelly Archer positioning and water pill interaction
+- [x] No more bosses — 3 total (Big Bottle, The Cleanser, The Last Guard)
+- [ ] Can the Jello Cube interact with the Banana Slug? (decide during build)
+- [ ] Jelly Archer behavior details (tune during playtesting)
+- [ ] Big Bottle boss fight details (tune during build)
