@@ -12,6 +12,20 @@ Topics: characters, world, gameplay, levels, art, sound, controls
 
 ---
 
+## Session Status — March 8, 2026
+
+| Block | What | Status |
+|-------|------|--------|
+| 1. Feedback & Welcome | Spark playtest, team feedback | COMPLETE |
+| 2. Art Workshop | Andrew's artwork processed, organized, cataloged | COMPLETE — 10 images processed into `assets/images/` |
+| 3. Design Sprint | Deep dive on characters, world, levels, sound | STARTING NOW |
+| 4. Controller Test | Playtest with Pro Controller | Controller already paired and working |
+| 5. Showcase | Learning reflections | End of session |
+
+**Where we are:** The Spark demo (`game/spark.py`) proved the concept — a title screen and character moving on screen. Now we need to design the FULL game so Claude can build it. That means going beyond the demo into real levels, real enemies, real gameplay — all using Andrew's hand-drawn artwork as the visual foundation.
+
+---
+
 ## How This Session Works
 
 You'll go through 7 design topics with Claude. For each topic, Claude asks deep questions — and keeps going deeper until every detail is nailed down. You can tackle topics in any order, and come back to revisit any topic later.
@@ -80,60 +94,97 @@ Draw a world map or scene. Show the different areas and what makes each one uniq
 
 ---
 
-## Topic 4: Levels
+## Topic 4: Levels — PRIORITY TOPIC
+
+The game takes place in a castle. We need to design MULTIPLE FLOORS, not just one scene. Each floor is a level with its own look, enemies, and challenges. Think of it like climbing a tower — each floor gets harder and introduces something new.
 
 ### Questions Claude Will Ask:
-- "How many levels are in your game? Or is it endless?"
-- "Walk me through Level 1 — what does the player see when it starts?"
-- "What enemies are in Level 1? Where are they?"
-- "What obstacles are there? Pits? Walls? Moving platforms?"
-- "What changes in Level 2? New enemies? New obstacles? Faster speed?"
-- "What about Level 3?"
-- "Is there a boss? What makes the boss fight special and different from regular enemies?"
-- "How does the player know they finished a level? A door? A flag? Defeating the boss?"
-- "Is there a final ending? What happens when you beat the whole game?"
+- "How many floors does the castle have? What's at the very top?"
+- "Walk me through Floor 1 — what does the player see when they enter the castle?"
+- "What enemies are on Floor 1? Where are they? How many?"
+- "What obstacles are there? Pits? Walls? Moving platforms? Traps?"
+- "What changes on Floor 2? New enemies? New obstacles? Different look?"
+- "What about Floor 3? What makes it different from the first two?"
+- "Is there a boss on each floor, or just one big boss at the top?"
+- "What makes each boss fight special and different from regular enemies?"
+- "How does the player get from one floor to the next? Stairs? Elevator? Portal?"
+- "What's the final ending? What happens when you reach the top of the castle?"
 
 ### Game Design Wisdom:
 **Difficulty Curves** — "Level 1 should be easy enough that nobody gets frustrated and quits. Each level adds ONE new thing. By the final level, everything combines into the ultimate challenge."
 
+**Think in Floors** — "Each castle floor should feel like a different world. Maybe Floor 1 is the dungeon (dark, damp), Floor 2 is the armory (traps, weapons), Floor 3 is the throne room (the big boss). What story does your castle tell as you climb?"
+
 ### Creative Activity:
-Draw level maps on graph paper. Show where the player starts, where enemies are, where obstacles go, and where the level ends.
+Draw level maps on graph paper. Show where the player starts on each floor, where enemies are, where obstacles go, and where the stairs/exit to the next floor is. Design at least 3 castle floors.
 
 ---
 
 ## Topic 5: Art Style
 
+### ART DIRECTION SHIFT
+
+**Original plan:** Dead Cells-style pixel art.
+**New direction:** Andrew's detailed hand-drawn illustration style.
+
+Andrew has already created artwork that sets the visual standard for the entire game. His drawings are higher resolution, more realistic, and more detailed than pixel art. This is our art style now — hand-drawn illustrations by Andrew.
+
+**What Andrew has drawn so far (organized in `assets/images/`):**
+- **Player:** Jello cube — front view, three-quarter view (`assets/images/player/`)
+- **Enemy:** Sanitizer warrior — front view, side view, rear view, equipment spread (`assets/images/enemies/`)
+- **Items:** Jelly powder bag, hand sanitizer (front and back), dropped items in puddle (`assets/images/items/`)
+
+These aren't placeholders. These ARE the game's art. The game should be built around this style.
+
+### Creating New Characters from Andrew's Style
+
+Andrew is the visual design lead. When designing new characters and assets:
+
+1. **Look at what exists** — Study Andrew's sanitizer warrior and jello cube. Notice the detail level, the line work, the color choices. New characters should match this quality.
+2. **Andrew draws, everyone contributes ideas** — The whole team can describe what a new enemy or item should DO and how it BEHAVES, but Andrew decides what it LOOKS LIKE and draws it.
+3. **Use existing art as templates** — When Andrew draws a new enemy, aim for the same level of detail as the sanitizer warrior (multiple views, equipment/ability details).
+4. **Design for the game** — Each new character needs: a front-facing view (minimum), an attack/action pose, and enough detail for the team to describe its behavior.
+
 ### Questions Claude Will Ask:
-- "Pixel art (like retro games), hand-drawn (like your sketches), or simple shapes (circles, squares)?"
-- "What's the main color palette? Show me or describe the colors."
-- "How big should characters be on screen? Tiny and far away, or big and close up?"
-- "What does the background look like in each level?"
+- "Andrew's art is detailed and hand-drawn. How big should characters be on screen? Big enough to see the detail?"
+- "What's the main color palette? Andrew's drawings have specific colors — what dominates?"
+- "What does the castle background look like on each floor? Dark stone? Torchlit? Crumbling?"
 - "What does the HUD look like? Where's the health bar? Score? Lives?"
-- "What do the menus look like? Title screen? Pause menu? Game over screen?"
+- "What do the menus look like? Should they use Andrew's art style too?"
 - "Are there visual effects? Explosions? Particles? Screen shake?"
+- "What new characters or items does Andrew want to draw next?"
 
 ### Game Design Wisdom:
 **Juice** — "The little touches that make games FEEL good. Screen shake when you get hit. Particles when you collect a coin. A flash when you land a hit. These tiny details are what separate 'okay' games from 'WOW' games."
 
 ### Creative Activity:
-Draw/color the art style. Create color swatches. Draw the HUD layout. Draw what the menus look like.
+Andrew: sketch new enemies and items in your style. Everyone else: describe what the castle floors look like, design the HUD layout, and pick colors for backgrounds and UI.
 
 ---
 
-## Topic 6: Sound
+## Topic 6: Sound — PRIORITY TOPIC
+
+By the end of today, the team needs a music direction decided and at least one track picked out or described. Music sets the mood for the whole game — don't skip this.
 
 ### Questions Claude Will Ask:
-- "What kind of music plays during normal gameplay? Intense? Chill? 8-bit? Orchestral?"
-- "Does the music change for boss fights? Different levels?"
+
+**Music (decide TODAY):**
+- "What kind of music plays while exploring the castle? Dark and mysterious? Epic and adventurous? Creepy? Orchestral?"
+- "Does the music change on different floors? What about boss fights?"
+- "Name a game, movie, or song that has the VIBE you want. That helps Claude find the right direction."
+- "Where will music come from? Free music libraries? AI-generated? Royalty-free tracks?"
+- "Do you want one track that loops, or different music per floor?"
+
+**Sound Effects:**
 - "List every sound effect you can think of:"
   - Player: jump, land, attack, get hit, die, heal, collect item
   - Enemy: appear, attack, get hit, die
-  - World: door open, switch activate, explosion, ambient sounds
+  - World: door open, switch activate, explosion, ambient castle sounds (dripping, wind, torches)
   - UI: menu select, menu confirm, menu cancel, game start, game over
 - "Where will sounds come from? Free sound websites? Make your own? 8-bit generated?"
 
 ### Creative Activity:
-Make a sound list — every single sound the game needs, organized by category.
+Make a sound list — every single sound the game needs, organized by category. Most importantly: pick the music vibe. Hum it, reference a game, or describe the feeling. Claude can help find or generate tracks that match.
 
 ---
 
@@ -183,15 +234,29 @@ After each topic, Claude writes up the design into the matching PRD file:
 
 ---
 
+## Moving Beyond the Spark Demo
+
+The current `game/spark.py` is a proof of concept — a title screen and a character that moves. It showed that the tech works. Now the goal is to design the REAL game:
+
+- **Real levels** — Multiple castle floors with platforms, enemies, and obstacles
+- **Real art** — Andrew's hand-drawn characters and items replace the placeholder graphics
+- **Real gameplay** — Combat, items, progression, bosses
+- **Real sound** — Music and sound effects that match the mood
+
+Everything you design today feeds directly into what Claude builds in Sessions 3-5. The more detail you give, the better the game will be.
+
+---
+
 ## You're Done When...
 
 - [ ] All 7 topics have been discussed in depth
-- [ ] Character sketches are drawn (player + all enemies)
-- [ ] Level maps are drawn on graph paper
+- [ ] Character sketches are drawn (player + all enemies + new characters in Andrew's style)
+- [ ] At least 3 castle floors are designed with maps on graph paper
 - [ ] HUD layout is designed
 - [ ] Controller mapping is decided
+- [ ] Music direction is chosen (vibe, reference tracks, or specific songs)
 - [ ] Sound effect list is complete
-- [ ] Art style/colors are chosen
+- [ ] Art style confirmed as Andrew's hand-drawn illustration style
 - [ ] Claude has written all 7 PRD documents
 - [ ] `/showcase` learning log filled out
 

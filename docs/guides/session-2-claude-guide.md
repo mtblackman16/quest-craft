@@ -44,92 +44,104 @@ The team (minus Andrew) brainstormed and designed the full game concept for **Sp
 
 ## Session 2 Goals
 
-### Primary Goals (MUST complete):
-1. **Capture feedback** from Session 1 — what the boys loved, what they want changed
-2. **Welcome Andrew** — get him oriented, show him the game, hear his ideas
-3. **Andrew's art workflow** — teach the photo → Claude → sprite pipeline (this is also an Illuminate learning moment)
-4. **Design at least 4 of 7 topics** — Characters, Art Style, Controls, Gameplay (minimum)
-5. **Controller test** — pair Pro Controller, verify it works with Pygame
+### Completed Goals:
+1. ~~**Capture feedback** from Session 1~~ — DONE (Block 1)
+2. ~~**Welcome Andrew** — get him oriented, show him the game~~ — DONE (Block 1)
+3. ~~**Andrew's art workflow** — photo-to-sprite pipeline~~ — DONE (Block 2: 7 images uploaded, 10 assets processed)
+4. ~~**Controller test** — Pro Controller works with Spark demo~~ — DONE (pre-session prep)
+
+### Remaining Goals (MUST complete today):
+5. **Design at least 4 of 7 topics** — Characters, Art Style, Controls, Gameplay (minimum)
+6. **Level expansion** — Design multiple castle floors beyond the single demo scene
+7. **Higher resolution art** — Integrate Andrew's illustrations into the game, replacing placeholder rectangles
+8. **Music integration** — Find or create background music so the game has full audio by end of day
 
 ### Stretch Goals (if time permits):
-6. Complete all 7 design topics (World, Levels, Sound)
-7. Convert one of Andrew's drawings into an actual game sprite
-8. Update the Spark demo with controller support
+9. Complete all 7 design topics (World, Levels, Sound)
 
 ### Exhibition Learning Goals:
-- **AI-assisted art pipeline** — taking hand-drawn art, using AI to analyze and convert to game assets
-- **Hardware integration** — pairing game controllers with a custom-built game
+- **AI-assisted art pipeline** — taking hand-drawn art, using AI to analyze and convert to game assets (DEMONSTRATED in Block 2)
+- **Hardware integration** — pairing game controllers with a custom-built game (DONE in prep)
 - **Collaborative design** — 4 kids with different strengths making decisions together
+- **Art direction evolution** — how a team adapts its creative vision when new talent joins
 
 ---
 
 ## Session Flow
 
-### Block 1: Opening — Feedback & Welcome (20 min)
+### Block 1: Opening — Feedback & Welcome (20 min) — COMPLETE
 
-**1a. Play the Spark Demo (10 min)**
-- Run `python3 game/spark.py` on the Pi display
-- Every kid gets a turn — including Andrew seeing it for the first time
-- Each kid shares: "What's the coolest part?" and "What would you change?"
-- Claude captures all feedback in a list
+> Boys played the Spark demo with Pro Controller. Everyone had a turn.
+> Andrew was welcomed and shown the game concept. Feedback captured.
 
-**1b. Welcome Andrew (5 min)**
-- Quick introductions (Andrew may not know the other boys well)
-- Show Andrew the game concept doc — the one-liner and back-of-the-box blurb
-- "You're the artist and creative director. Your job is to make this game look amazing."
+~~**1a. Play the Spark Demo (10 min)**~~
+~~**1b. Welcome Andrew (5 min)**~~
+~~**1c. Andrew's Art Show & Tell (5 min)**~~
 
-**1c. Andrew's Art Show & Tell (5 min)**
-- Andrew shows whatever artwork he's brought
-- Team reacts — what they love, what matches their vision, what might need adjusting
-- Claude describes what it sees (builds trust in AI analysis)
+### Block 2: Photo-to-Sprite Workshop (20 min) — COMPLETE
 
-### Block 2: Photo-to-Sprite Workshop (20 min)
+> Andrew's artwork was uploaded (7 images), analyzed by Claude, split into individual assets
+> (10 total), organized into player/enemies/items folders, transparent backgrounds applied,
+> and `asset-catalog.txt` created with detailed descriptions and hex color references.
 
-> This is a key Illuminate learning moment — document it well.
+**What Andrew drew:**
+- Jello cube player character (2 angles: front view + three-quarter view)
+- Sanitizer Warrior enemy (3 poses: front, rear, side + equipment spread)
+- Jelly powder bag item ("Eins and Ethans" brand)
+- Hand sanitizer bottles (front + back with detailed fine-print label)
+- Dropped items scene (sanitizer + powder in purple puddle)
 
-**The capability being taught:** Taking a real-world drawing, photographing it, and using AI to analyze and convert it into a game asset.
+**10 processed assets now in:**
+- `assets/images/player/` (2 images)
+- `assets/images/enemies/` (4 images)
+- `assets/images/items/` (4 images)
+- Full catalog: `asset-catalog.txt`
 
-**Step-by-step workflow:**
+**KEY ART DIRECTION SHIFT DISCOVERED:**
+Andrew's art is NOT pixel art. It's detailed, rich hand-drawn illustrations with realistic
+shading, translucent surfaces, and fine detail. The team is shifting AWAY from "Dead Cells
+pixel art" toward Andrew's higher-resolution illustration style. This is a major creative
+upgrade that changes the game's visual identity. All remaining design decisions should
+reflect this new art direction.
 
-1. **Andrew draws** (or shows existing drawing) — character, enemy, or item on white paper with bold markers
-2. **Take the photo** — phone straight above, no flash, good lighting, paper taped flat
-3. **Transfer to Pi** — AirDrop/email photo to laptop → VS Code "Upload..." to `assets/images/`
-4. **Claude analyzes** — kids say: "Read `assets/images/andrew-jello-drawing.jpg` — describe what you see"
-5. **Claude generates sprite** — kids direct Claude to create a pixel art version (32x32 PNG via Pillow script)
-6. **Iterate** — "Make the eyes bigger" / "The green should be brighter" / "Add a darker outline"
-7. **Integrate** — Load the sprite in the game and see it running
+**Andrew's existing artwork serves as templates for creating more characters/items.** His
+style guide is now established through these 10 images — any new assets should match his
+illustration approach (rich shading, translucent surfaces, hand-drawn feel).
 
-**Important:** Andrew should feel ownership. HIS drawing becomes THE character. The AI translates his vision — it doesn't replace it.
+### Block 3: Design Sprint (60-90 min) — NEXT UP
 
-**Files involved:**
-- Input photo: `assets/images/drawings/` (create this directory)
-- Output sprites: `assets/images/player/`, `assets/images/enemies/`, etc.
-- Conversion script: Claude writes on the fly using Pillow
-- Pillow must be installed: `pip install Pillow` (Mark should do this pre-session)
+Run `/design [topic]` for each topic. Minimum 4 topics required.
 
-### Block 3: Design Sprint (60-90 min)
-
-Run `/design [topic]` for each topic. Prioritize by importance and Andrew's involvement.
+**IMPORTANT — Art Direction Context for ALL Design Topics:**
+Andrew's artwork has established a NEW art direction — detailed hand-drawn illustrations,
+NOT pixel art. Every design topic discussion should reference this shift. When discussing
+visuals, use Andrew's existing 10 images as the style baseline. His Sanitizer Warrior
+is the template for how ALL enemies should look. His jello cube is THE player character.
 
 **Recommended order:**
 
 **Priority 1 — Characters (15-20 min)**
-- Andrew leads visual descriptions
-- Define: player (jello cube details), all enemy types, friendly NPCs (shopkeepers?)
+- Andrew leads visual descriptions — his existing artwork IS the character designs
+- Use Sanitizer Warrior as the template: "Andrew, what should the roly-poly enemies look like in YOUR style?"
+- Define: player details (eyeballs? expressions?), all enemy types, friendly NPCs (shopkeepers?)
 - Flesh out: boss designs (fire talus, floor bosses, final boss)
-- Open questions to resolve: final boss design, what alcohol bottles drop
-- Andrew draws character sheets during/after discussion
+- Open questions: final boss design, what alcohol bottles drop, new enemy types inspired by Andrew's sanitizer theme
+- Andrew can draw MORE characters during/after discussion — same illustration style
 - Output: `docs/prds/01-characters.md`
 
 **Priority 2 — Art Style (15 min)**
-- Andrew leads — he's the creative director for visuals
-- Finalize: pixel art size (32x32 player?), color palette, sprite style
-- Define: backgrounds, HUD layout, menu designs, visual effects (screen shake, particles)
-- How Andrew's hand-drawn style translates to pixel art
+- Andrew leads — he IS the creative director for visuals
+- **UPDATED:** No longer pixel art. Discuss Andrew's illustration style as the game's look
+- Define: sprite resolution (his images are 400-1200px, need in-game scaling strategy)
+- Color palette is established (see `asset-catalog.txt` hex colors section)
+- Backgrounds: should they match Andrew's detailed style or be simpler to let characters pop?
+- HUD layout, menu designs, visual effects (screen shake, particles)
+- How to scale Andrew's high-res art for Pygame performance on Pi 5
 - Output: `docs/prds/05-art-style.md`
 
 **Priority 3 — Controls (15 min)**
 - Map every Pro Controller button to a game action
+- Current Spark mapping: A=jump, B=shoot, X=split, stick/dpad=move, Plus=menu
 - Design Simple vs Advanced toggle (exhibition accessibility)
 - Single Joy-Con sideways support?
 - Movement feel: snappy like Mario? How much air control?
@@ -143,9 +155,9 @@ Run `/design [topic]` for each topic. Prioritize by importance and Andrew's invo
 
 **If time permits:**
 
-**Priority 5 — Levels (15 min)**
-- Level 1 design (tutorial jail cell → first combat → first cooking pot)
-- Level 2 and 3 sketches
+**Priority 5 — Levels (15 min)** — ELEVATED PRIORITY (see Block 4)
+- Level 1 design (tutorial jail cell -> first combat -> first cooking pot)
+- Level 2 and 3 sketches — expand beyond single demo scene
 - Camera system (scrolling direction)
 - Output: `docs/prds/04-levels.md`
 
@@ -153,52 +165,61 @@ Run `/design [topic]` for each topic. Prioritize by importance and Andrew's invo
 - Mostly covered in Session 1 — expand and formalize
 - Output: `docs/prds/02-story-world.md`
 
-**Priority 7 — Sound (10 min)**
+**Priority 7 — Sound (10 min)** — ELEVATED PRIORITY (see Block 4)
 - Direction set in Session 1 (foley + royalty-free)
 - Create the full sound effect list
+- **Music integration is a session goal** — need at least background music tracks identified/created
 - Output: `docs/prds/06-sound.md`
 
-### Block 4: Controller Pairing & Test (15-20 min)
+### Block 4: Build Priorities — Levels, Art Integration, Music (30-45 min)
 
-**Pre-requisite:** Mark should have already paired the Pro Controller before the session. If not, do it now.
+> Controller pairing and testing is ALREADY DONE (Block 1 used Pro Controller with Spark demo).
+> This block replaces the original controller pairing plan with the team's updated priorities.
 
-**With the kids:**
-1. Run `python3 game/test_controller.py` — see button presses on screen
-2. Each kid presses every button — map what does what
-3. Fill out the controller diagram on paper (creative activity)
-4. If time: Claude adds controller support to `spark.py` and kids playtest with the Pro Controller
+**Priority 4a — Level Expansion (15-20 min)**
+- The Spark demo currently has ONE scene — expand to multiple castle floors
+- Design at least 2-3 levels with different layouts, enemy placements, and puzzle elements
+- Each floor should feel different: lighting, enemy types, platform density
+- Kids direct the level design; Claude builds the layouts
+- This connects to the Levels design topic from Block 3
 
-**Button mapping reference (Pro Controller in Pygame):**
+**Priority 4b — Higher Resolution Art Integration (10-15 min)**
+- Replace placeholder colored rectangles in Spark demo with Andrew's actual illustrations
+- Load Andrew's PNGs via Pygame's `pygame.image.load()` and scale to game resolution
+- Start with the player character (jello-cube-front.png or jello-cube-three-quarter.png)
+- Then enemies (sanitizer-warrior-side-view.png is the primary gameplay sprite)
+- Then items (jelly-powder-bag.png as collectible)
+- Performance note: Andrew's images are 400-1200px originals — pre-scale at load time, not every frame
 
-| Button | Pygame Index | Proposed Action |
-|--------|-------------|-----------------|
-| B (south) | Button 0 | Jello Shot |
+**Priority 4c — Music Integration (10 min)**
+- Goal: game has background music by end of session
+- Options: royalty-free tracks, classical music (public domain), or simple generated loops
+- Need at least: title screen music, exploration/puzzle music, combat/tension music
+- Pygame mixer can handle OGG/MP3 — place files in `assets/sounds/music/`
+- Volume should be lower than sound effects
+
+**Button mapping reference (already working in Spark demo):**
+
+| Button | Pygame Index | Current Action |
+|--------|-------------|----------------|
 | A (east) | Button 1 | Jump |
+| B (south) | Button 0 | Jello Shot |
 | X (north) | Button 2 | Split |
-| Y (west) | Button 3 | Interact / Shield |
-| Capture | Button 4 | (TBD) |
-| L Bumper | Button 5 | Jello Dodge |
-| R Bumper | Button 6 | (TBD) |
-| ZL | Button 7 | (TBD) |
-| ZR | Button 8 | (TBD) |
-| Minus | Button 9 | (TBD) |
-| Plus | Button 10 | Pause |
-| Home | Button 11 | — |
-| L Stick Click | Button 12 | (TBD) |
-| R Stick Click | Button 13 | (TBD) |
-| D-pad | Hat 0 | Menu navigation / alt movement |
-| Left Stick | Axis 0,1 | Movement |
-| Right Stick | Axis 2,3 | (TBD) |
+| Plus | Button 10 | Menu/Pause |
+| Left Stick / D-pad | Axis 0,1 / Hat 0 | Movement |
 
-> **Note:** Let the KIDS decide the mapping. Show them the options and let them argue about it. This is a design decision, not a technical one.
+> **Note:** Full mapping finalization happens during the Controls design topic in Block 3.
+> Let the KIDS decide any changes. The current mapping came from pre-session testing.
 
 ### Block 5: Showcase & Wrap (15 min)
 
 1. Run `/showcase` — Claude summarizes everything designed today
 2. Each kid shares their favorite design decision
-3. Andrew shows his drawings — these become exhibition material
-4. Preview Session 3: "Next time, Claude builds the REAL game from YOUR designs"
-5. Commit everything to Git
+3. Andrew shows his drawings — these ARE the game's art now (not just exhibition material)
+4. Review what got built: new levels? Andrew's art in the game? Music playing?
+5. Preview Session 3: "Next time, Claude builds the REAL game from YOUR designs"
+6. Commit everything to Git
+7. Generate parent summary highlighting: Andrew's art becoming the game's visual identity, the art direction shift, design decisions made, any new levels/music added
 
 ---
 
@@ -222,47 +243,54 @@ Run `/design [topic]` for each topic. Prioritize by importance and Andrew's invo
 
 ## Andrew-Specific Considerations
 
-Andrew wasn't at Session 1. He needs to feel included and important immediately.
+Andrew has now contributed 10 game assets and his art style has become the game's visual identity. He is fully integrated as the art lead.
 
 **Do:**
 - Defer to Andrew on ALL visual questions — "Andrew, you're the artist. What do you think?"
-- Show genuine interest in his artwork
-- Let him see the Spark demo and react before jumping into design
-- Position him as creative director for art decisions
-- Make sure his artwork physically becomes part of the game (photo workflow)
+- Reference his EXISTING artwork when discussing new characters/enemies: "Andrew, you drew the Sanitizer Warrior — what should the roly-poly look like in your style?"
+- Use his art as the baseline for all art style decisions (resolution, color palette, detail level)
+- Encourage him to draw MORE characters/items during the design sprint
+- When integrating his art into the game, show him the result immediately — seeing his drawings come alive in the game is a powerful moment
 
 **Don't:**
-- Rush past his art show and tell
 - Let the other boys override his visual decisions (he's the art lead)
-- Assume he knows everything from the artist brief — re-explain as needed
-- Skip the photo workflow — this is his moment and a key exhibition story
+- Default back to "pixel art" language — the art direction has shifted to Andrew's illustration style
+- Scale or crop his artwork without discussing it with the team first
+- Forget to credit his work prominently in the exhibition materials
 
 ---
 
 ## Illuminate Documentation
 
 ### Key Learning Moments to Capture:
-1. **AI-Assisted Art Pipeline** — A kid drew on paper, took a photo, and AI converted it to a game asset. This bridges physical art and digital game development.
-2. **Hardware Integration** — Pairing real game controllers with a custom-built game. Understanding input devices.
-3. **Collaborative Design** — 4 kids with different strengths (artist, designers) making consensus decisions.
-4. **Design Thinking** — Breaking a complex system (a game) into 7 designable components.
+1. **AI-Assisted Art Pipeline** — CAPTURED (Block 2). Andrew drew on paper, photos were uploaded, AI analyzed and processed them into 10 game-ready assets with transparent backgrounds. This bridges physical art and digital game development.
+2. **Art Direction Evolution** — NEW. The team started with "Dead Cells pixel art" as their vision, but when Andrew's rich illustration style arrived, they pivoted to embrace it. This is real creative leadership — adapting the vision when better ideas emerge.
+3. **Hardware Integration** — CAPTURED (Block 1 + prep). Pro Controller working with custom game. Kids played the Spark demo with real controllers.
+4. **Collaborative Design** — IN PROGRESS. 4 kids with different strengths (artist, designers) making consensus decisions during the design sprint.
+5. **Design Thinking** — IN PROGRESS. Breaking a complex system (a game) into 7 designable components.
 
 ### For the Parent Summary:
-- Highlight Andrew joining and his art becoming part of the game
-- Show the photo-to-sprite pipeline as a "wow" moment
-- Mention controller pairing as real hardware engineering
-- List the design decisions made
+- Highlight Andrew's art becoming THE game's visual identity (not just illustrations — the actual game art)
+- The art direction shift as a story of creative evolution and teamwork
+- Show the photo-to-sprite pipeline as a "wow" moment (7 photos in, 10 processed assets out)
+- Controller already working — kids played the game with Pro Controller
+- List the design decisions made during the sprint
+- Any new levels, music, or art integration accomplished
 
 ---
 
 ## End-of-Session Checklist
 
-- [ ] All feedback from Session 1 captured
-- [ ] Andrew oriented and contributing
-- [ ] At least one drawing converted to a sprite (photo workflow demonstrated)
-- [ ] At least 4 design topics completed with PRDs written
-- [ ] Controller paired and tested (at least Pro Controller)
-- [ ] Controller mapping decided by the team
+- [x] All feedback from Session 1 captured (Block 1)
+- [x] Andrew oriented and contributing (Block 1)
+- [x] Andrew's drawings converted to game assets — 10 images processed (Block 2)
+- [x] Controller paired and tested — Pro Controller working with Spark (pre-session + Block 1)
+- [x] Art direction shift documented — from pixel art to Andrew's illustration style
+- [ ] At least 4 design topics completed with PRDs written (Block 3)
+- [ ] Controller mapping finalized by the team (Block 3 — Controls topic)
+- [ ] Level expansion — multiple castle floors designed/built (Block 4)
+- [ ] Andrew's art integrated into the game — replacing placeholder rectangles (Block 4)
+- [ ] Music added — at least background music tracks (Block 4)
 - [ ] All decisions saved to `memory/MEMORY.md`
 - [ ] PRDs updated in `docs/prds/`
 - [ ] Git commit + push

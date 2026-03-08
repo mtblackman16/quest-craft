@@ -6,13 +6,13 @@
 
 ## Team
 
-| Name | Age | Username on Pi |
-|------|-----|---------------|
-| Ethan | 9 | ethan |
-| Eins | 11 | eins |
-| Andrew | 11 | andrew (Artist) |
-| Nathan | 9 | nathan |
-| Mark | — | mark (Team Advisor) |
+| Name | Age | Role |
+|------|-----|------|
+| Ethan | 9 | Co-creator & Game Designer |
+| Eins | 11 | Co-creator & Game Designer |
+| Andrew | 11 | Artist & Visual Designer |
+| Nathan | 9 | Co-creator & Game Designer |
+| Mark | — | Team Advisor |
 
 **Exhibition:** LASD Illuminate — March 15, 2026
 
@@ -20,8 +20,7 @@
 
 ## Project Status
 
-**Current Phase:** Session 2 — Design (PREP COMPLETE, ready for Sunday March 8)
-**Current Session:** Day 2 Design — prep done, session pending
+**Current Phase:** Session 2 — Design (Blocks 1-2 complete, Design Sprint next)
 **Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
 **Core Word:** Survival
@@ -29,171 +28,61 @@
 
 ---
 
-## Approach: AI-First
-
-Kids are the game designers. Claude is the engineer. The process:
-1. Dream (Session 1) — game concept via conversation
-2. Design (Session 2) — deep dive on all 7 topics
-3. Blueprint (Session 3) — technical plan + controller test
-4. Build (Session 4) — Claude codes, kids playtest and direct
-5. Polish (Session 5) — bugs, controllers, exhibition prep
-
-Voice-first via Wispr Flow. Slash commands drive each phase.
-
----
-
 ## Key Decisions
 
-| Date | Decision | Decided By |
-|------|----------|-----------|
-| — | AI-first approach: kids design, Claude builds | Mark |
-| — | Using Python 3.13 + Pygame 2.6 | Mark |
-| — | Nintendo Switch controllers for input | Mark |
-| — | Raspberry Pi 5 is the target platform | Mark |
-| — | 5 sessions to complete the game | Mark |
+| Date | Decision | By |
+|------|----------|---|
 | 2026-02-28 | 2D side-scrolling platformer (like Mario/Dead Cells) | Team |
-| 2026-02-28 | Player character is a jello cube with eyeballs | Team |
-| 2026-02-28 | Setting: dark castle in a desert, escape from dungeon to rooftop | Team |
-| 2026-02-28 | Puzzles hidden in-world (levers, pressure plates) not separate rooms | Team |
+| 2026-02-28 | Player = jello cube with eyeballs, trapped in dark castle dungeon | Team |
 | 2026-02-28 | Jello splitting mechanic — split into fourths, squeeze through gaps | Team |
-| 2026-02-28 | Health system: jello powder + water + cooking pots = more health/size | Team |
+| 2026-02-28 | Health: jello powder + water + cooking pots = more health/size | Team |
+| 2026-02-28 | Combat: jello shot (costs mass), ground pound (stun), jello dodge | Team |
 | 2026-02-28 | Death = restart from beginning (roguelike tension) | Team |
-| 2026-02-28 | Beat final boss = unlock hard mode | Team |
-| 2026-02-28 | Dead Cells pixel art style | Team |
-| 2026-02-28 | BotW-style enemy awareness (? and ! indicators, stealth) | Team |
+| 2026-02-28 | BotW-style stealth (? and ! indicators), hidden puzzles in-world | Team |
 | 2026-02-28 | Simple/Advanced control toggle for exhibition accessibility | Team |
+| 2026-02-28 | School-appropriate: no weapons, jello powers only | Team |
+| 2026-02-28 | Items stored visibly inside the transparent jello body | Team |
+| 2026-02-28 | Sound: real foley sounds, royalty-free or classical music | Team |
 | 2026-02-28 | Game title: **Split** | Team |
-| 2026-02-28 | Single player game | Team |
-| 2026-02-28 | School-appropriate: no weapons, jello powers and attacks only | Team |
-| 2026-02-28 | Combat: jello shot (costs body mass), ground pound (stun), jello dodge | Team |
-| 2026-02-28 | Items stored visibly inside the jello body | Team |
-| 2026-02-28 | Ancient shield artifacts project light shields | Team |
-| 2026-02-28 | Tutorial: starts in jail cell, contextual teaching like Zelda | Team |
-| 2026-02-28 | Top 3 for exhibition: attacks/combat, crafting at pots, enemies | Team |
-| 2026-02-28 | Sound: record real foley sounds, royalty-free or classical music | Team |
-| 2026-02-28 | Pick up jello by rolling over it; too much = explode | Team |
-| 2026-02-28 | Controllers: keyboard for now, Nintendo Pro Controller + Joy-Cons pairing in Session 2 | Mark |
-| 2026-02-28 | Keyboard controls: Up=jump, SPACE=shoot, Z=split, Down(air)=ground pound | Team |
-| 2026-02-28 | GitHub Pages enabled for parent summaries at mtblackman16.github.io/quest-craft/ | Mark |
-| 2026-02-28 | Headless Pi display via wayvnc + noVNC (browser access on port 6080) | Mark |
+| 2026-03-08 | **ART DIRECTION SHIFT:** From pixel art to Andrew's hand-drawn illustration style — detailed, rich digital illustrations with realistic shading, translucent surfaces, and fine detail. Major upgrade from original Dead Cells pixel art plan. | Team |
 
 ---
 
 ## Game Concept Summary
 
-**Premise:** You are a jello cube trapped in the dungeon of a castle in the desert. Fight and puzzle your way UP through the floors to the rooftop where the final boss waits.
+**Premise:** You are a jello cube trapped in a castle dungeon in the desert. Fight and puzzle your way UP through floors to the rooftop final boss.
 
-**Core Mechanics:**
-- 2D side-scrolling platformer (run, jump, fight)
-- Hidden puzzles in the world (levers, pressure plates) reward jello powder
-- Jello crafting: powder + water + heat at cooking pots = grow bigger, more health
-- Splitting: divide into fourths to fit through small spaces (risk losing pieces)
-- Size matters: too big = can't fit through some passages
-- Stealth: sneak past enemies, BotW-style awareness (? and !)
+**Core Mechanics:** 2D platformer (run, jump, fight) + hidden puzzles (levers, pressure plates) + jello crafting (powder + water + heat = grow/heal) + splitting into fourths + size-based passage restrictions + BotW-style stealth
 
-**Combat System:**
-- Jello Shot (main attack): shoot bits of yourself, lose body mass, roll over spare jello to reload, explode if too much
-- Ground Pound: jump + slam, stuns enemies, kills small ones
-- Jello Dodge: perfect-dodge timing, body goes liquid briefly and reforms, confuses lower enemies, creates attack window
-- Ancient Shield: artifact that projects a light energy shield for defense
-- Items stored visibly inside transparent jello body
+**Combat:** Jello shot (costs body mass), ground pound (stun), jello dodge (liquid briefly, confuses enemies), ancient shield artifact (light energy shield). Items stored visibly inside transparent body.
 
-**Tutorial Flow:**
-- Start in a jail cell, move forward to escape
-- Contextual teaching: game pauses on first encounter with new mechanic (like Zelda)
+**Enemies:** Roly-polys (swarm bugs), alcohol spray bottles (slow deadly shots), Sanitizer Warriors (Andrew's design — purple-skinned warriors with syringe weapons + backpack sanitizer bottles), fire talus (mini-boss, fireballs)
 
-**Character:** Jello cube with little eyeballs
+**Items:** Jello powder, water (4 types), fire pill, shrink pill, incense pill, mighty pill, jello armor, jello costume (disguise), hand sanitizer bottles (enemy drops)
 
-**Enemies:**
-- Roly-polys — common swarming bugs, can overwhelm in groups
-- Alcohol spray bottles — slow but deadly shots, must dodge
-- Fire talus — mini-boss, shoots fireballs (drops fire pills)
-- Big bosses — TBD
+**World:** Castle interior — stone walls, vines, torches, creeping gloom. Chests, barrels, hidden barrel shops. Glowing door = next floor up. Desert outside (title screen only).
 
-**Items & Resources:**
-- Jello powder — from puzzles, used to craft health
-- Water (4 types): small (1 use), normal (2 uses), big tank (5 uses), simmered (no pot needed)
-- Fire pill — from fire talus, turns you orange, extra damage vs alcohol & bugs
-- Shrink pill — rare drop from roly-polys, shrink without splitting
-- Incense pill — keeps small monsters away (maybe from shops)
-- Mighty pill — attack and energy up
-- Jello armor — defense up
-- Jello costume — disguise as roly-poly, fools alcohol bottles but not bosses
-- Alcohol bottle drop — TBD
+**Tutorial:** Start in jail cell, contextual teaching like Zelda.
 
-**World:**
-- Castle interior: stone walls with vines, torches, occasional windows (can't see out)
-- Gloom creeping through castle — less light = more monsters
-- Chests to open, barrels to break
-- Hidden barrel shops run by little shopkeeper guys
-- Glowing door at end of each level = next floor up
-- Desert outside (seen from title screen but not during gameplay)
+**Controls (Keyboard):** Arrows=move/jump, SPACE=jello shot, Z=split, Down(air)=ground pound, ESC=pause
 
-**Music/Mood:**
-- Peaceful during exploration and puzzles
-- Intense/scary as darkness increases and monsters appear
-- Music gets more dense approaching bosses or dark areas
-
-**Back of the Box:**
-> You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle — upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.
-
-**Title Screen:**
-- Pixel art style, detailed background (castle + desert, more detailed than gameplay)
-- Jello cube character posing
-- Play, Settings, Controls buttons
-- Controls page has Simple/Advanced toggle
-
-**Keyboard Controls (Session 1 final):**
-- Up Arrow = Jump
-- Left/Right Arrows = Move
-- SPACE = Jello Shot (costs body mass)
-- Z = Split into 4 pieces
-- Down Arrow (airborne) = Ground Pound
-- ESC = Pause / Back to title
-
-**Andrew's Artist Brief:** `docs/andrew-artist-brief.md` (+ HTML for printing)
+**Exhibition Top 3:** (1) Core movement + all attacks, (2) Crafting at cooking pots, (3) Enemies to fight
 
 ---
 
-## Dream Session Progress (Feb 28) — COMPLETE
+## Session 1: Dream (Feb 28) — COMPLETE
 
-All Dream questions answered. Ready for Session 2 (Design).
-
-**Session 2 TODO:** Full controller mapping discussion (Pro Controller + Joy-Cons), Simple vs Advanced toggle design, hardware pairing
+All Dream questions answered. Full game concept defined. Spark demo built (`game/spark.py`).
 
 ## Session 2 Prep (March 6) — COMPLETE
 
-**Pi readiness verified:**
-- Git synced to latest (commit a2f6dc8)
-- Pygame 2.6.1 OK
-- Pillow 11.1.0 OK (was already installed)
-- Bluetooth active, ClassicBondedOnly=false set
-- hid_nintendo kernel module loaded + set for auto-boot
-- joystick + evtest tools installed
-- test_controller.py deployed and parseable
-- Asset directories created (drawings/, player/, enemies/)
-
-**New files for Session 2:**
-- `docs/guides/day2-runbook.md` — Mark's facilitator guide
-- `docs/guides/session-2-claude-guide.md` — Claude's internal session context
-- `game/test_controller.py` — Visual controller test (Split-themed)
-- `docs/printables/controller-mapping-worksheet.html` — Printable button mapping worksheet
-- `assets/images/drawings/` — Directory for Andrew's uploaded artwork
-
-**Andrew integration plan:**
-- Photo-to-sprite workflow ready (Pillow installed, directories created)
-- Artist brief exists: `docs/andrew-artist-brief.md` + `.html`
-- Andrew leads visual design decisions (Characters, Art Style topics)
-
-**Controller prep done:**
-- Pro Controller paired via Bluetooth (MAC: 60:1A:C7:B7:72:9F)
-- Bluetooth configured for Nintendo controllers (ClassicBondedOnly=false)
-- hid_nintendo driver loaded + auto-boot configured
-- Pro Controller pairing steps documented in day2-runbook.md
-- USB-C fallback plan documented (zero-config wired connection)
+- Pi readiness verified (Pygame 2.6.1, Pillow 11.1.0, Bluetooth, hid_nintendo)
+- Pro Controller paired (MAC: 60:1A:C7:B7:72:9F), button mapping verified via evtest
+- Session files created: day2-runbook.md, session-2-claude-guide.md, test_controller.py, controller worksheet
+- Asset directories created, Andrew integration plan ready
 - startup.sh one-command boot script created
 
-**Controller Button Mapping (VERIFIED via evtest on live hardware, March 6 2026):**
+**Controller Button Mapping (VERIFIED — Pi 5 + hid_nintendo + SDL2 2.32.4):**
 ```
 Pygame  0 = B (bottom)       BTN_SOUTH (304)
 Pygame  1 = A (right)        BTN_EAST (305)
@@ -212,16 +101,46 @@ Pygame 13 = R Stick Click    BTN_THUMBR (318)
 Axes 0-3 = LStickX, LStickY, RStickX, RStickY
 D-pad = Hat 0 (tuple, NOT buttons)
 ```
-NOTE: SDL2 Joystick API maps buttons by kernel event code order.
-This mapping is specific to Pi 5 + hid_nintendo + SDL2 2.32.4.
-Online references are WRONG for this setup — always use this verified mapping.
+NOTE: Online references are WRONG for this setup — always use this verified mapping.
 
-**Exhibition Scope (top 3 priorities):**
-1. Core movement + all attacks (jello shot, ground pound, jello dodge)
-2. Crafting at cooking pots (jello powder + water = grow/heal)
-3. Enemies to fight (roly-polys, alcohol bottles if far enough)
+## Session 2 Progress (March 8) — IN PROGRESS
 
-Hidden puzzles are a "nice to have" after core is solid.
+### Block 1: Feedback & Welcome — COMPLETE
+- Spark demo played on Pi with Pro Controller
+- Every kid had a turn, feedback captured
+
+### Block 2: Photo-to-Sprite Workshop — COMPLETE
+- Andrew's artwork uploaded (7 original images in `assets/images/Upload/`)
+- Claude analyzed all artwork, split into individual assets, applied transparent backgrounds
+- **10 final processed images** organized into folders:
+
+**Player (2):**
+- `assets/images/player/jello-cube-front.png` — Front view, translucent emerald green cube (724x722)
+- `assets/images/player/jello-cube-three-quarter.png` — 3/4 perspective, shows depth (917x800)
+
+**Enemies (4):**
+- `assets/images/enemies/sanitizer-warrior-front-view.png` — Purple warrior, front (1195x1011)
+- `assets/images/enemies/sanitizer-warrior-rear-view.png` — Rear view showing backpack bottle (999x940)
+- `assets/images/enemies/sanitizer-warrior-side-view.png` — Side profile, primary gameplay sprite (999x940)
+- `assets/images/enemies/sanitizer-warrior-equipment-spread.png` — Weapon, hat, bottle spread (1258x490)
+
+**Items (4):**
+- `assets/images/items/jelly-powder-bag.png` — "Eins and Ethans" brand jelly powder (492x691)
+- `assets/images/items/hand-sanitizer-front.png` — "Germ B Gone" sanitizer bottle (396x975)
+- `assets/images/items/hand-sanitizer-back.png` — Back label with detailed fine print (384x938)
+- `assets/images/items/dropped-items-in-puddle.png` — Sanitizer + powder in purple puddle (1012x246)
+
+**Asset catalog:** `asset-catalog.txt` — Full natural-language descriptions + hex color references
+
+### Art Direction Shift
+Andrew's art is NOT pixel art. It's detailed, rich hand-drawn illustrations with realistic shading, translucent surfaces, and fine detail. The team is shifting AWAY from "Dead Cells pixel art" toward Andrew's higher-resolution illustration style. This is a major creative upgrade that changes the game's visual identity.
+
+### Remaining Session 2 Priorities (in order):
+1. **Design Sprint** — Characters, Art Style, Controls, Gameplay (minimum 4 topics via /design)
+2. **Level Expansion** — Design multiple castle floors beyond the single demo scene
+3. **Higher Resolution Art** — Integrate Andrew's illustrations into the game, replace placeholder rectangles
+4. **Music** — Find or create background music for full audio by end of day
+5. **Showcase & Wrap** — Learning reflections, git commit, parent summary
 
 ---
 
@@ -244,10 +163,9 @@ Hidden puzzles are a "nice to have" after core is solid.
 
 | Date | What | File |
 |------|------|------|
-| 2026-02-28 | Spark demo created — title screen + playable jello cube platformer | `game/spark.py` |
-| 2026-03-06 | Added full Pro Controller support to Spark (A=jump, B=shoot, X=split, stick/dpad=move, Plus=menu) | `game/spark.py` |
-
-**Spark demo features:** Animated title screen with glowing "SPLIT" letters, bobbing jello cube preview, dungeon dust particles. Gameplay scene with translucent jello cube (eyeballs, squish physics, trail), 5 stone platforms, 7 collectible jello powder diamonds, torchlit castle background with vines and flickering torches. Three new mechanics added: jello shot (SPACE, costs body mass), ground pound (Down while airborne), and split into 4 pieces (Z). Arrow keys to move/jump, ESC to return to title.
+| 2026-02-28 | Spark demo — title screen + playable jello cube platformer | `game/spark.py` |
+| 2026-03-06 | Full Pro Controller support added to Spark | `game/spark.py` |
+| 2026-03-08 | Andrew's artwork processed — 10 assets in player/enemies/items | `assets/images/` |
 
 ---
 
@@ -257,8 +175,8 @@ Every session ends with:
 1. Save all decisions to `memory/MEMORY.md`
 2. Update relevant PRDs in `docs/prds/`
 3. Git commit + push
-4. Generate parent summary HTML in `docs/parent-summaries/session-N-name.html` (use TEMPLATE.html)
-5. Mark records Loom video of the day's output, adds link to the summary
+4. Generate parent summary HTML in `docs/parent-summaries/session-N-name.html`
+5. Mark records Loom video, adds link to summary
 6. Email summary to parents
 
 ---
@@ -267,4 +185,6 @@ Every session ends with:
 
 - `patterns.md` — Code patterns that work
 - `lessons.md` — Mistakes and fixes
+- `asset-catalog.txt` — Full descriptions of all 10 artwork assets with hex colors
+- `docs/andrew-artist-brief.md` — Andrew's original artist brief
 - `docs/parent-summaries/TEMPLATE.html` — Reusable parent email template

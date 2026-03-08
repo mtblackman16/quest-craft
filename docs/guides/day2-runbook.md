@@ -17,6 +17,40 @@
 
 ---
 
+## LIVE SESSION STATUS (March 8, 2026)
+
+### COMPLETED
+- [x] Pre-session prep (startup, git pull, controller paired)
+- [x] Block 1: Feedback & Welcome — Spark demo played, team reacted
+- [x] Block 2: Art Workshop — Andrew's 7 images uploaded, split into 10 final assets, organized into player/enemies/items folders
+- [x] Asset catalog created: asset-catalog.txt with detailed descriptions + color palette
+
+### Andrew's Processed Artwork
+| Folder | Files | Description |
+|--------|-------|-------------|
+| player/ | jello-cube-front.png, jello-cube-three-quarter.png | Green jello cube protagonist (2 angles) |
+| enemies/ | sanitizer-warrior-front/rear/side-view.png, equipment-spread.png | Purple Sanitizer Warrior enemy (3 poses + gear layout) |
+| items/ | jelly-powder-bag.png, hand-sanitizer-front/back.png, dropped-items-in-puddle.png | Game items and scene |
+
+### ART DIRECTION SHIFT
+Original: "Dead Cells pixel art"
+**NEW: Andrew's detailed hand-drawn illustration style** — higher resolution, realistic shading, rich detail
+
+### UP NEXT
+- [ ] Block 3: Design Sprint (Characters → Art → Controls → Gameplay → Levels → World → Sound)
+- [ ] Block 4: Controller mapping decisions (controller already working)
+- [ ] Music integration — find/create background tracks
+- [ ] Block 5: Showcase & Wrap
+
+### SESSION GOALS (UPDATED)
+1. Complete at least 4 design topics (Characters, Art Style, Controls, Gameplay)
+2. Design multiple castle floors/levels
+3. Integrate Andrew's high-res art style into the game
+4. Get music playing in the game
+5. Boys create new character designs using Andrew's existing work as templates
+
+---
+
 ## Pre-Session Prep (Mark does this BEFORE the boys arrive)
 
 ### The Night Before (Saturday)
