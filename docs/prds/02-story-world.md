@@ -2,9 +2,9 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Draft |
-| **Author** | — |
-| **Date** | — |
+| **Status** | In Progress |
+| **Author** | Team (Ethan, Eins, Andrew, Nathan) |
+| **Date** | 2026-03-08 |
 | **Reviewed by** | — |
 | **Depends on** | [00-game-concept.md](00-game-concept.md) |
 
@@ -12,97 +12,105 @@
 
 ## The World
 
-### Where does the game take place?
+### Setting
 
-**Setting:** ___
-> Examples: underwater city, haunted forest, outer space, a school, a candy kingdom
+An **ancient castle buried under the desert sand**. The entire game takes place underground. The castle was once a real place where people lived — dining halls, storage rooms, armories — but something went wrong. An unknown substance seeped through the castle, mutating into living sanitizer creatures. Everyone fled or died. Only one guard remains.
 
-**Time period:**
-- [ ] Past (medieval, prehistoric, etc.)
-- [ ] Present (modern day)
-- [ ] Future (sci-fi, robots, space)
-- [ ] Fantasy (doesn't matter — it's a made-up world)
-- [ ] Other: ___
+**Time period:** Ancient / unknown — the castle is old enough that it's been buried by desert sand over time.
 
-**What does the world FEEL like?**
-- [ ] Dark and spooky
-- [ ] Bright and colorful
-- [ ] Mysterious
-- [ ] Funny / silly
-- [ ] Epic / adventurous
-- [ ] Other: ___
+**World feel:** Mysterious, lonely, quietly beautiful. Hollow Knight vibes — not horror, but something haunting. A place that was once alive and is now slowly decaying.
 
 ---
 
 ## The Story
 
-> Does the game have a story? It doesn't have to — some games are just about high scores!
+### Story is told through ENVIRONMENT, not dialogue or cutscenes.
 
-### Is there a story?
-- [ ] Yes — there's a reason the player is doing what they're doing
-- [ ] No — it's just gameplay (score-based, endless, etc.)
+**What happened before the game starts:**
+An unknown substance appeared in the castle. Over time, it mutated into sanitizer-based creatures. The castle's inhabitants fled. The castle was eventually buried by desert sand, forgotten. One guard survived by finding a secret food stash and has lived alone in the castle ever since.
 
-### If yes, answer these:
+**The Setup:**
+The Jello Cube falls down a well in the desert and lands at the bottom of the buried castle. It's trapped. The only way out is UP — 15 floors to the surface.
 
-**What happened before the game starts?** (the setup)
-___
+**The Goal:**
+Escape. Climb through 15 floors of enemies, traps, and a crumbling castle to reach the top and get out.
 
-**What is the player trying to do?** (the goal)
-___
+**The Conflict:**
+The castle's mutated sanitizer creatures and the lone surviving guard stand in the way. The castle itself is a hazard — crumbling platforms, hidden traps, sun exposure through cracks, and the mysterious substance everywhere.
 
-**Who or what is stopping them?** (the conflict)
-___
+**The Resolution:**
+The Jello Cube defeats The Last Guard on Floor 15 (he surrenders, not killed). The Jello Cube escapes.
 
-**What happens at the end?** (the resolution)
-___
+**Post-game reveal:** Tiny microorganisms are seen crawling around, eating the unknown substance. Nature is healing the castle on its own. The Jello Cube didn't need to save anything — it just needed to survive and escape.
 
----
-
-## World Building
-
-### Places in the Game
-
-> List the different areas or levels the player visits:
-
-| # | Place Name | What It Looks Like | What Happens Here |
-|---|-----------|--------------------|--------------------|
-| 1 | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ |
-
-### World Rules
-
-> Every game world has rules. What are yours?
-
-**Gravity:**
-- [ ] Normal (things fall down)
-- [ ] Low gravity (things float a little)
-- [ ] No gravity (space!)
-- [ ] Changes per level
-- [ ] Other: ___
-
-**Can the player go back to previous areas?**
-- [ ] Yes — open world, go anywhere
-- [ ] No — one level after another
-- [ ] Somewhat — hub world with levels
+**Earthquake Mode secret ending:** After escaping, the Jello Cube falls into a sinkhole — teasing a sequel.
 
 ---
 
-## Imagine You're Playing...
+## The Opening Sequence
 
-> You just entered a brand new area of the game...
+### 1. The Well
+- Player sees the bottom of the well — mossy, damp, old stone
+- No sky visible above — you're deep underground
+- Immediate mood: you're trapped
 
-**What do you see?** ___
+### 2. The Pipe
+- A pipe connects the well bottom to the castle
+- Short transition section — slide or crawl through
 
-**What colors stand out?** ___
+### 3. Storage Room (First Room)
+- An underground storage room, mostly empty
+- A few old crates remain
+- First enemy appears here — this is where you learn the controls
+- The deepest, oldest, most forgotten part of the castle
 
-**What sounds do you hear?** ___
+---
 
-**What's the first thing you want to do?** ___
+## Environmental Storytelling
+
+No text dumps. No NPC explanations. The player learns the castle's story by LOOKING.
+
+**What you see as you climb:**
+
+| Floors | Environmental Details |
+|--------|---------------------|
+| 1–3 | Old crates, empty storage, moss, dripping water. The forgotten basement. |
+| 4–6 | Tables and chairs, broken dining areas. Armor and weapons on walls or fallen on the ground. People lived here. |
+| 7–8 | More ornate rooms, paintings on walls showing castle life. This was once a grand place. |
+| 9–11 | Crumbling architecture, everything falling apart. The castle is dying. |
+| 12–14 | **Sand starts leaking through cracks.** First sign of the surface. Hidden traps everywhere — the castle's last defenses. |
+| 15 | The top. Brightest floor. The Last Guard's domain. Almost out. |
+
+---
+
+## The Unknown Substance
+
+- **Origin:** Unknown. Nobody knows how it got into the castle.
+- **Effect:** Over time, it mutated into the sanitizer creatures that now inhabit the castle.
+- **Presence:** Visible throughout the castle — on walls, in puddles, part of the environment.
+- **Resolution:** Post-game, microorganisms are seen eating the substance. Nature handles it.
+- **Design choice:** The substance is NEVER explained. The mystery is the point.
+
+---
+
+## World Rules
+
+**Gravity:** Normal — things fall down. Jelly physics add wobble and bounce.
+
+**Progression:** Linear — climb from Floor 1 to Floor 15. Cannot go back to previous floors.
+
+**Lighting:** Old torches on castle walls. Warm, flickering light. Gets brighter as you climb.
+
+**Sun exposure:** Broken walls and roofs on some floors let sunlight through. Sunlight dries out the Jello Cube (2-second grace period, then slow damage, fire on head visual, red screen edges).
+
+**Cooking pots:** Scattered throughout — remnants of the castle's kitchens and living areas. Water sources nearby.
 
 ---
 
 ## Open Questions
 
-- [ ] ___
-- [ ] ___
+- [ ] What does the well look like from outside (title screen)?
+- [ ] Is there any environmental detail hinting at WHY the substance appeared?
+- [ ] Can you see other rooms/areas through windows or cracks as you climb?
+- [ ] Are there any environmental puzzles tied to the story (like activating old castle mechanisms)?
+- [ ] What does the ending look like — do you climb out of the sand into the desert?
