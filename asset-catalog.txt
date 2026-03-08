@@ -1,0 +1,340 @@
+================================================================================
+SPLIT - GAME ASSET CATALOG
+================================================================================
+
+Purpose:
+  This catalog provides detailed natural language descriptions of every
+  processed artwork image in the Split game project. It exists so that Claude
+  can reference image descriptions in future coding sessions WITHOUT needing
+  to re-read the actual image files. Descriptions are written to be rich
+  enough for accurate game integration -- including colors, dimensions,
+  poses, labels, and suggested engine usage.
+
+Game:
+  "Split" -- a 2D side-scrolling platformer where you play as a jello cube
+  escaping a castle. Built in Python/Pygame on Raspberry Pi 5.
+
+Artist:
+  Andrew (age 11) -- Art & Visual Designer, Quest Craft team
+
+Generated: 2026-03-08
+
+================================================================================
+PLAYER CHARACTERS (assets/images/player/)
+================================================================================
+
+--------------------------------------------------------------------------------
+1. jello-cube-front.png
+   Path: assets/images/player/jello-cube-front.png
+   Dimensions: 724 x 722 px
+--------------------------------------------------------------------------------
+A translucent green jello cube shown from a straight-on front view, nearly
+square in framing. The cube is rendered in rich, deep emerald green with a
+glossy, gelatinous appearance. The front face is the dominant visible surface,
+appearing as a large dark-green square with subtle color gradation -- darker
+toward the center and slightly lighter at the edges. Bright green highlight
+spots and short white specular reflections appear along the top edge, right
+side, and corners, convincingly selling the wet, translucent, jiggly material.
+The top face is visible as a narrow strip along the upper edge, rendered in a
+slightly lighter green. The right side face is partially visible as a narrow
+vertical strip. All edges are softly rounded rather than perfectly sharp,
+giving the cube an organic, wobbly jello feel. The background is transparent
+(alpha channel), making this ready for compositing over any game background.
+This is the primary player character of Split. Suggested use: main player
+sprite for idle/default state; could serve as the base frame for front-facing
+animation. At 724x722 it is nearly square and would scale well to a uniform
+in-game sprite size (e.g. 64x64 or 128x128).
+
+--------------------------------------------------------------------------------
+2. jello-cube-three-quarter.png
+   Path: assets/images/player/jello-cube-three-quarter.png
+   Dimensions: 917 x 800 px
+--------------------------------------------------------------------------------
+A translucent green jello cube shown from a three-quarter perspective angle,
+revealing three faces of the cube simultaneously -- the front, the top, and
+the right side. The cube is the same rich emerald green as the front view,
+with deep dark green on the main body and brighter green highlights along
+every visible edge and corner. Multiple short white specular highlights are
+scattered across the top face and along the upper edges, reinforcing the
+shiny, wet gelatin surface. The top face appears as a receding parallelogram
+rendered in a medium green, while the right side face is a darker green
+vertical strip. The front face is the largest visible area, with a smooth
+dark-green gradient. The edges are softly rounded, and the overall silhouette
+has a slight organic bulge that makes the cube look like it could wobble or
+bounce. The background is transparent. This three-quarter view provides
+dimensionality and depth that the front view does not. Suggested use: player
+sprite for movement/running animation frames, title screen character display,
+or character select screen. The slight perspective makes it ideal for conveying
+motion in a side-scrolling context. At 917x800 it is wider than tall and
+would need proportional scaling for in-game use.
+
+
+================================================================================
+ENEMIES (assets/images/enemies/)
+================================================================================
+
+--------------------------------------------------------------------------------
+3. sanitizer-warrior-front-view.png
+   Path: assets/images/enemies/sanitizer-warrior-front-view.png
+   Dimensions: 1195 x 1011 px
+--------------------------------------------------------------------------------
+A menacing humanoid enemy character -- the Sanitizer Warrior -- shown in a
+front-facing view with a slight three-quarter lean toward the left side of
+the frame. The character has purple/violet skin with visible highlights and
+shading that give the body a glossy, almost slimy appearance. It wears a
+dark brown leather-like tunic or vest over the torso and brown/tan pants
+that taper to pointed purple feet. On its head sits an oversized conical
+Asian-style straw hat (sugegasa/coolie hat) rendered in metallic silver-gray,
+adorned with sharp silver spikes protruding from the brim -- making it look
+both ceremonial and dangerous. The warrior's left arm (viewer's left) extends
+forward, gripping a massive gray metal weapon resembling a giant syringe or
+battering ram. The weapon has a cylindrical barrel with diagonal ribbed/textured
+lines etched along its surface, a round ring pommel at the far end, and small
+green and red indicator lights near the grip. A thick black hose or tube
+curves from the weapon around the character's body and connects to a large
+hand sanitizer bottle strapped to the warrior's back. The bottle is gray/silver
+with a pump dispenser on top, and its label reads "and sanitizer" (partially
+visible) in teal/green text with brown decorative bands above and below the
+text. A red circle with a line through it (prohibition symbol) is visible on
+the bottle's label with what appears to be a green germ inside it. Two small
+dots appear in the upper right corner of the image (one light purple, one
+dark brown) which are likely minor artifacts. The background is transparent.
+Suggested use: primary enemy sprite for the front-facing idle or alert state.
+This is a key antagonist -- a warrior who weaponizes hand sanitizer against
+the jello cube protagonist. At 1195x1011 this is a large source image that
+should be scaled down significantly for in-game use (e.g. 96x80 or 128x108).
+
+--------------------------------------------------------------------------------
+4. sanitizer-warrior-rear-view.png
+   Path: assets/images/enemies/sanitizer-warrior-rear-view.png
+   Dimensions: 999 x 940 px
+--------------------------------------------------------------------------------
+The Sanitizer Warrior seen from behind, revealing details of the character's
+back and equipment. The purple-skinned warrior stands in a similar aggressive
+forward-leaning pose, with both arms extended to the left gripping the large
+syringe-like weapon. From this rear angle, the character's back is prominently
+visible, showing the dark brown tunic and the large hand sanitizer bottle
+mounted on the warrior's back like a backpack. The bottle's label is clearly
+readable from this angle: "Hand sanitizer" in teal/green text at the top,
+with brown decorative bands and a red-and-white prohibition symbol containing
+a green germ silhouette in the center. The pump dispenser sits at the top of
+the bottle. The thick black hose runs from the bottle's pump, curves around
+the body, and connects to the barrel weapon in the warrior's hands. The
+spiked conical hat is seen from behind, showing its circular brim lined with
+sharp silver spikes and the pointed apex. The warrior's purple hands are
+wrapped around the weapon grip, and the ribbed gray barrel extends to the
+left with the ring pommel visible at the end. Brown pants and pointed purple
+feet complete the figure. A small dark brown dot artifact appears in the
+upper right corner. The background is transparent. Suggested use: this rear
+view is valuable as a reference for understanding the character's equipment
+layout, and could be used as a sprite for when the enemy is facing away from
+the player (walking away animation). At 999x940 it should be scaled to match
+the front view's in-game size.
+
+--------------------------------------------------------------------------------
+5. sanitizer-warrior-side-view.png
+   Path: assets/images/enemies/sanitizer-warrior-side-view.png
+   Dimensions: 999 x 940 px
+--------------------------------------------------------------------------------
+The Sanitizer Warrior in a right-facing side profile view, showing the
+character's full silhouette from head to toe in a combat-ready stance. The
+purple-skinned warrior leans forward aggressively with both arms extended,
+gripping the large syringe/battering-ram weapon that points to the left.
+From this side angle, the spiked conical hat's profile is dramatic -- the
+pointed tip juts forward and the brim's silver spikes are visible as a
+jagged edge. The dark brown tunic covers the torso, and the brown pants are
+visible on the legs. The large hand sanitizer bottle is visible on the
+warrior's back, with "nd sanitizer" partially readable on the label (the
+"Ha" is obscured by the body from this angle). The prohibition symbol with
+the green germ is visible on the bottle. The thick black hose arcs from the
+bottle over the warrior's shoulder and down to the weapon barrel. The weapon's
+ribbed gray surface and ring pommel are clearly visible in profile. The
+warrior's stance shows bent knees and a forward lean, conveying aggression
+and readiness to attack. A small dark dot artifact is in the upper right
+corner. The background is transparent. Suggested use: this is the most
+important sprite for a side-scrolling game -- the side-view should be the
+primary enemy sprite used during gameplay, as the game camera shows characters
+from the side. Use this as the base for walk/run/attack animation frames.
+Mirror horizontally for left-facing movement. At 999x940, scale to match
+other sprites.
+
+--------------------------------------------------------------------------------
+6. sanitizer-warrior-equipment-spread.png
+   Path: assets/images/enemies/sanitizer-warrior-equipment-spread.png
+   Dimensions: 1258 x 490 px
+--------------------------------------------------------------------------------
+A horizontal equipment layout showing the Sanitizer Warrior's three key
+pieces of equipment spread apart for clear visibility, arranged left to right
+across a wide frame. On the far left is the syringe/battering-ram weapon,
+shown at a diagonal angle pointing toward the upper left. The weapon's ribbed
+gray metal barrel, ring pommel, and small green/red indicator lights near the
+grip are all clearly visible. A thick black hose extends from the weapon's
+grip end. In the center is the warrior's spiked conical hat, shown from a
+slightly elevated angle. The hat is silver-gray with sharp spikes protruding
+from its circular brim. Beneath the hat, purple liquid or slime-like
+substance (the warrior's body material) drips and pools, suggesting the
+warrior has been defeated or disassembled. On the far right is the hand
+sanitizer bottle, rendered upright with its pump dispenser at the top. The
+label clearly reads "Hand sanitizer" in teal text, with the prohibition
+symbol (red circle with line through a green germ) in the center, and brown
+decorative bands. The thick black hose connects from the bottle back toward
+the weapon. The overall composition reads as an "inventory spread" or
+"defeated enemy drops" layout. The background is transparent. Suggested use:
+this image is ideal as a reference sheet or could be split into individual
+item sprites (weapon, hat, bottle). It could also be used as a death/defeat
+animation keyframe showing the warrior's equipment scattering, or as UI
+elements for an inventory or bestiary screen. The wide 1258x490 aspect ratio
+is suited for a horizontal banner or decomposition into three separate assets.
+
+
+================================================================================
+ITEMS (assets/images/items/)
+================================================================================
+
+--------------------------------------------------------------------------------
+7. jelly-powder-bag.png
+   Path: assets/images/items/jelly-powder-bag.png
+   Dimensions: 492 x 691 px
+--------------------------------------------------------------------------------
+A hand-drawn illustration of a bag of jelly powder, depicted in a charming,
+slightly rough illustrative style consistent with the game's handmade art
+direction. The bag is rendered in a muted olive/yellow-green color with dark
+hatching lines along the top fold and bottom edge to suggest a crinkled
+paper or foil packaging material. The bag has a rectangular white label in
+its center-lower area. On the white label, "Jelly Powder" is written in
+large, casual hand-drawn black lettering -- "Jelly" on the first line and
+"Powder" on the second. Above the white label area, there is a smaller
+gray-bordered product window showing a tiny oval dish with green granules
+or powder inside it, next to the text "*enlarged to show texture" in small
+green lettering -- a playful parody of real food packaging. At the very top
+of the bag, above the fold, the text "Eins and Ethans" is written in small
+dark cursive-style lettering, serving as a fictional brand name that
+references two of the team members (Eins and Ethan). The background is
+transparent. This item represents a collectible power-up in the game -- jelly
+powder is the substance that creates more jello, so collecting it likely
+heals or powers up the jello cube player character. Suggested use: collectible
+item sprite or pickup icon. At 492x691 (portrait orientation), scale down to
+approximately 32x45 or 48x67 for in-game item size. Could also be used at
+larger size for inventory screen or item-get popup displays.
+
+--------------------------------------------------------------------------------
+8. hand-sanitizer-front.png
+   Path: assets/images/items/hand-sanitizer-front.png
+   Dimensions: 396 x 975 px
+--------------------------------------------------------------------------------
+A tall, upright hand sanitizer pump bottle shown from the front, drawn in the
+same hand-illustrated style as the other game items. The bottle has a
+cylindrical gray/silver body with a flat dark-gray base. At the top sits a
+gray pump mechanism with a white rectangular nozzle angled to the right. The
+front label is the main feature: "Hand sanitizer" is written in large, bold
+teal/green hand-drawn text across the upper portion of the label. Below the
+text is a prominent red circle with a diagonal red line through it (the
+universal prohibition/no symbol), containing a dark green blob shape
+representing a germ -- communicating "kills germs." Below the prohibition
+symbol, the text "Germ B Gone" is written in smaller green lettering, serving
+as the product's fictional brand name. The label has a light blue-gray
+background. The overall color palette is cool grays and teals with the red
+prohibition symbol as a strong accent. The background is transparent. In the
+game's narrative, hand sanitizer is dangerous to the jello cube protagonist
+(it sanitizes/destroys gelatin). This item is likely used by enemies or
+functions as a hazard. Suggested use: item sprite for hand sanitizer drops,
+hazard indicator, or inventory icon. The tall 396x975 aspect ratio (roughly
+1:2.5) means it will need careful scaling to not appear too elongated at
+small sizes -- consider cropping or using at a size like 24x59 or 32x79 in
+game. Could also serve as the reference for the bottle on the Sanitizer
+Warrior's back.
+
+--------------------------------------------------------------------------------
+9. hand-sanitizer-back.png
+   Path: assets/images/items/hand-sanitizer-back.png
+   Dimensions: 384 x 938 px
+--------------------------------------------------------------------------------
+The same hand sanitizer pump bottle shown from the back/reverse side,
+revealing the product's "ingredients and directions" label. The bottle shape
+and proportions match the front view -- cylindrical gray/silver body, dark
+base, gray pump mechanism with white nozzle at the top. The back label is
+densely packed with tiny hand-drawn text and design elements that parody a
+real product's back panel. At the top of the label is a wavy blue/gray
+squiggle design element, followed by the text "Healthcare Advanced Hand
+Sanitizer Gel" in small lettering, with what appears to be a Spanish
+translation line below it ("Asesinados Antiseptico para Manos Gel"). Below
+that are two columns of tiny hand-drawn text blocks simulating Drug Facts,
+active ingredients, uses, warnings, and directions -- all rendered in a
+miniature scrawl that mimics the dense fine print found on real sanitizer
+bottles. Near the bottom of the label, there is a small gray rectangular
+area (possibly a barcode placeholder), a small box with "ES6" written in
+red, and a bottom line reading "1300 mL" and "93.5 US fl. oz" with
+additional small text. The meticulous detail of this back label demonstrates
+impressive observational drawing from the young artist. The background is
+transparent. Suggested use: this back view is primarily a reference/showcase
+piece demonstrating Andrew's artistic detail. In-game, the front view would
+be used for the item sprite. However, this could appear in a cutscene, item
+inspection screen, or bestiary entry where the player examines items closely.
+Dimensions (384x938) closely match the front view for consistency.
+
+--------------------------------------------------------------------------------
+10. dropped-items-in-puddle.png
+    Path: assets/images/items/dropped-items-in-puddle.png
+    Dimensions: 1012 x 246 px
+--------------------------------------------------------------------------------
+A wide, horizontally-oriented scene showing two items -- a hand sanitizer
+bottle and a jelly powder bag -- lying on the ground in a purple puddle, as
+if dropped or knocked over. On the left side, the hand sanitizer bottle lies
+on its side with the pump nozzle pointing downward toward the left, resting
+in the purple liquid. The bottle is shown from its back label side, with the
+wavy blue design and dense text panels visible. On the right side, the jelly
+powder bag sits partially upright, tilted at an angle as if it landed and
+came to rest leaning slightly. The bag's olive/yellow-green color, white
+label reading "Jelly Powder," and the "Eins and Ethans" brand text at the
+top are all visible. Both items sit in and on top of a pool of purple liquid
+that spreads across the bottom of the frame. The purple puddle has varied
+opacity -- darker, more saturated purple in the center beneath and between
+the items, and lighter, more translucent purple-pink at the edges, suggesting
+a spill spreading outward. The purple color likely represents the Sanitizer
+Warrior's body fluid or a mixture of sanitizer and jello. The background is
+transparent above the puddle. This image depicts a narrative moment -- perhaps
+the aftermath of defeating a Sanitizer Warrior, with its equipment and the
+player's jelly powder scattered on the ground. Suggested use: environmental
+storytelling sprite, level decoration, or cutscene element. Could be used as
+a collectible pickup scene where items appear on the ground for the player to
+grab. The wide 1012x246 aspect ratio (roughly 4:1) works well as a ground-
+level scene element. Could also be split into individual components if needed.
+
+
+================================================================================
+SUMMARY
+================================================================================
+
+Total images cataloged: 10
+
+  Player sprites:  2  (front view, three-quarter view)
+  Enemy sprites:   4  (front, rear, side views + equipment spread)
+  Item sprites:    4  (jelly powder bag, sanitizer front/back, dropped items)
+
+Color palette reference:
+  - Player (Jello Cube): Deep emerald green, translucent, bright green edge
+    highlights, white specular reflections
+  - Enemy (Sanitizer Warrior): Purple/violet skin, dark brown tunic, tan pants,
+    silver-gray metallic hat and weapon, gray sanitizer bottle with teal text
+    and red prohibition symbol, black hose/tube
+  - Jelly Powder Bag: Olive/yellow-green packaging, white label, black text,
+    green accent text
+  - Hand Sanitizer Bottle: Gray/silver body, teal/green label text, red
+    prohibition circle, dark green germ symbol, white pump nozzle
+
+Key hex color approximations for code:
+  - Jello green (body):        #1B5E20 (dark) to #4CAF50 (highlights)
+  - Jello edge highlights:     #66FF66
+  - Warrior skin purple:       #6A1B9A to #9C27B0
+  - Warrior tunic brown:       #5D4037
+  - Warrior pants tan:         #8D6E63
+  - Warrior hat/weapon gray:   #9E9E9E to #757575
+  - Sanitizer bottle gray:     #B0BEC5
+  - Sanitizer label teal:      #009688
+  - Prohibition red:           #F44336
+  - Jelly powder bag olive:    #9E9D24 to #827717
+  - Purple puddle:             #7B1FA2 to #CE93D8
+
+================================================================================
+END OF CATALOG
+================================================================================
