@@ -15,7 +15,7 @@ We are a team of young game designers building a real, playable video game on a 
 - **Nathan** (9) — Co-creator & Game Designer
 - **Mark** — Team Advisor (Ethan's dad)
 
-**Exhibition:** LASD Illuminate Inquiry Exhibition — **March 15, 2026**
+**Exhibition:** LASD Illuminate Inquiry Exhibition — **March 27, 2026** (4:00–7:00 PM, setup 3:30)
 
 **Our Mission:** Dream it, design it, build it, ship it. Show the world what kids + AI can create together.
 
@@ -85,8 +85,8 @@ Talk to Claude like a teammate. Use **Wispr Flow** — just hold the key and spe
 | 1. Dream | Define what game you're making | `docs/sessions/session-1-dream.md` |
 | 2. Design | Design every detail in depth | `docs/sessions/session-2-design.md` |
 | 3. Blueprint | Technical plan + controller test | `docs/sessions/session-3-blueprint.md` |
-| 4. Build | Claude builds, you playtest and direct | `docs/sessions/session-4-build.md` |
-| 5. Polish | Controllers, bugs, exhibition prep | `docs/sessions/session-5-polish.md` |
+| 4. Playtest | Team playtests, gathers Illuminate evidence | `docs/sessions/session-4-playtest.md` |
+| 5. Showcase | Display board, reflections, demo rehearsal | `docs/sessions/session-5-showcase.md` |
 
 ---
 

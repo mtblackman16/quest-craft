@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quest Craft — Session 1: Dream</title>
+<title>Quest Craft — Session 4: Playtest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Press+Start+2P&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
@@ -139,48 +139,6 @@
     line-height: 1.5;
   }
 
-  /* ── 3. Game Showcase ── */
-  .game-showcase {
-    text-align: center;
-    padding: 28px 0 24px;
-  }
-
-  .game-title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 28px;
-    color: var(--jello-green);
-    text-shadow:
-      0 0 8px rgba(125, 223, 100, 0.5),
-      0 0 24px rgba(125, 223, 100, 0.2),
-      0 0 48px rgba(125, 223, 100, 0.08);
-    letter-spacing: 0.15em;
-    line-height: 1.2;
-    margin-bottom: 18px;
-  }
-
-  .game-blurb {
-    position: relative;
-    font-style: italic;
-    color: var(--torch-glow);
-    font-size: 14px;
-    line-height: 1.6;
-    padding: 0 20px;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-
-  .game-blurb::before {
-    content: '\201C';
-    font-family: 'Cinzel Decorative', Georgia, serif;
-    font-size: 48px;
-    font-style: normal;
-    color: rgba(232, 168, 56, 0.3);
-    position: absolute;
-    top: -18px;
-    left: -2px;
-    line-height: 1;
-  }
-
   /* ── Section Headings (h2) with Ornamental Lines ── */
   h2 {
     font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
@@ -211,7 +169,7 @@
     background: linear-gradient(to left, transparent, rgba(232, 168, 56, 0.5));
   }
 
-  /* ── 4. Diamond Bullet List ── */
+  /* ── Diamond Bullet List ── */
   .quest-list {
     list-style: none;
     padding: 0;
@@ -239,7 +197,11 @@
     margin-top: 4px;
   }
 
-  /* ── 5. Skill Cards (Stacked) ── */
+  .quest-list li strong {
+    color: var(--torch-glow);
+  }
+
+  /* ── Skill Cards (Stacked) ── */
   .skill-card {
     background: rgba(45, 45, 68, 0.4);
     border-left: 3px solid var(--torchlight);
@@ -264,12 +226,7 @@
     line-height: 1.5;
   }
 
-  /* ── 6. Game Design Concepts — uses .quest-list ── */
-  .quest-list li strong {
-    color: var(--torch-glow);
-  }
-
-  /* ── 7. Illuminate Connection ── */
+  /* ── Illuminate Connection ── */
   .illuminate {
     background: var(--parchment);
     border: 1px solid #d4c4a0;
@@ -290,38 +247,57 @@
     font-style: italic;
   }
 
-  /* ── 8. Video Link CTA ── */
-  .video-cta {
-    display: block;
-    text-align: center;
-    background: rgba(232, 168, 56, 0.12);
-    border: 1.5px solid rgba(232, 168, 56, 0.35);
-    border-radius: 6px;
-    padding: 18px 20px;
-    margin: 28px 0;
-    text-decoration: none;
-    transition: background 0.2s ease;
+  /* ── Reflections Section ── */
+  .reflections {
+    background: rgba(45, 45, 68, 0.5);
+    border: 1px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 16px 0;
   }
 
-  .video-cta:hover {
-    background: rgba(232, 168, 56, 0.2);
-  }
-
-  .video-cta .label {
+  .reflections .kid {
     font-family: 'Source Sans 3', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
+    color: var(--torch-glow);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .reflections .kid:last-child {
+    margin-bottom: 0;
+  }
+
+  .reflections .kid strong {
     color: var(--torchlight);
+    font-weight: 600;
   }
 
-  .video-cta .caption {
+  /* ── Photo Section ── */
+  .photo-section {
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .photo-section img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 6px;
+    border: 2px solid var(--border-glow);
+    display: block;
+    margin: 0 auto;
+  }
+
+  .photo-section .photo-caption {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--dim-text);
-    margin-top: 6px;
+    font-style: italic;
+    margin-top: 10px;
+    line-height: 1.4;
   }
 
-  /* ── 9. Closing Quote ── */
+  /* ── Closing Quote ── */
   .closing-quote {
     position: relative;
     font-style: italic;
@@ -358,7 +334,7 @@
     line-height: 1;
   }
 
-  /* ── 10. Footer / Seal ── */
+  /* ── Footer / Seal ── */
   .ornament-divider {
     text-align: center;
     margin: 36px 0 20px;
@@ -386,6 +362,29 @@
     font-size: 12px;
     color: #b8aa96;
   }
+
+  /* ── Bug Counter ── */
+  .bug-counter {
+    text-align: center;
+    margin: 28px 0;
+  }
+
+  .bug-counter .number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 48px;
+    color: var(--jello-green);
+    text-shadow:
+      0 0 8px rgba(125, 223, 100, 0.5),
+      0 0 24px rgba(125, 223, 100, 0.2);
+    line-height: 1.2;
+  }
+
+  .bug-counter .label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--dim-text);
+    margin-top: 8px;
+  }
 </style>
 </head>
 <body>
@@ -395,9 +394,10 @@
      ═══════════════════════════════════════════════════════ -->
 <header class="title-block">
   <div class="program-name">Quest Craft</div>
-  <div class="session-number">Session 1</div>
-  <div class="session-subtitle">Dream &mdash; Designing a Video Game with AI</div>
-  <div class="meta">February 28, 2026 &nbsp;|&nbsp; Ethan, Eins &amp; Nathan</div>
+  <div class="session-number">Session 4</div>
+  <div class="session-subtitle">Playtest &mdash; The Bug Hunt</div>
+  <div class="meta">[DATE TBD] &nbsp;|&nbsp; Ethan, Eins, Nathan &amp; Andrew</div>
+  <div class="meta" style="margin-top: 4px; font-size: 12px; color: #8a7e6a;">The team becomes QA testers &mdash; their words change the code in real time</div>
 </header>
 
 <div class="divider"></div>
@@ -406,32 +406,43 @@
      2. THE HOOK
      ═══════════════════════════════════════════════════════ -->
 <div class="hook">
-  <div class="headline">Today, three kids designed an entire video game from scratch.</div>
-  <div class="supporting">No code. No templates. Just their ideas, their voices, and an AI engineering partner.</div>
+  <div class="headline">Today, four kids played their video game for the first time &mdash; and fixed it live with AI.</div>
+  <div class="supporting">They found bugs, described them out loud, watched Claude rewrite the code, and verified the fix. Over and over. The human+AI feedback loop, in action.</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     3. THE GAME SHOWCASE
+     PHOTO PLACEHOLDER — First playthrough
      ═══════════════════════════════════════════════════════ -->
-<section class="game-showcase">
-  <div class="game-title">SPLIT</div>
-  <div class="game-blurb">You're a jello cube. You're trapped. And the only way out is UP. Fight, split, and craft your way through a monster-filled castle &mdash; upgrading your skills floor by floor until you're strong enough to face what waits at the top. In Split, every piece of you matters.</div>
-</section>
+<!-- Replace with actual Session 4 photo after the session -->
+<!--
+<div class="photo-section">
+  <img src="images/team-photos/session-4-first-playthrough.jpg" alt="The team playing SPLIT for the first time on the big screen">
+  <div class="photo-caption">The first playthrough &mdash; the moment they saw their game come alive</div>
+</div>
+-->
 
 <div class="divider"></div>
 
 <!-- ═══════════════════════════════════════════════════════
-     4. WHAT THEY BUILT TODAY
+     BUG COUNTER
      ═══════════════════════════════════════════════════════ -->
-<h2>What They Built Today</h2>
+<div class="bug-counter">
+  <div class="number">??</div>
+  <div class="label">bugs found and squashed in one session</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     4. WHAT THEY DID TODAY
+     ═══════════════════════════════════════════════════════ -->
+<h2>What They Did Today</h2>
 <ul class="quest-list">
-  <li>Designed a complete game concept: characters, world, enemies, combat, items, crafting, and art direction</li>
-  <li>Invented original game mechanics &mdash; a jello cube that shoots pieces of itself, splits apart to dodge attacks, and stores items visibly inside its transparent body</li>
-  <li>Named the game, wrote the &ldquo;back of the box&rdquo; marketing copy, and prioritized features for a 2-week build</li>
-  <li>Created an artist brief for their teammate Andrew with a clear creative assignment</li>
-  <li>Saved everything to version control &mdash; three checkpoints committed and pushed to GitHub</li>
-  <li>Spawned parallel AI sub-agents to research, design, and build a styled web page &mdash; orchestrating multiple AI workers like a project manager</li>
-  <li>Watched the AI generate a fully playable game demo from their design &mdash; title screen, character physics, collectibles, and three combat mechanics (shoot, ground pound, split) &mdash; all in under 10 minutes</li>
+  <li><strong>Played the complete game for the first time</strong> &mdash; 15 floors, 5 bosses, sound, music, all built by Claude from their Session 2 designs. Their reaction when the title screen appeared: [capture this!]</li>
+  <li><strong>Ran a professional QA rotation</strong> &mdash; Player, Bug Caller, Feedback Lead, and Logger roles rotating every 10-15 minutes. Everyone played, everyone reported, everyone directed the AI.</li>
+  <li><strong>Fixed bugs in real time</strong> &mdash; described problems out loud, Claude changed the code, restarted the game, verified the fix. The full feedback loop, dozens of times.</li>
+  <li><strong>Tuned the game feel</strong> &mdash; adjusted jump height, gravity, speed, enemy difficulty, and ground pound radius until it felt right to <em>them</em>.</li>
+  <li><strong>Documented their process</strong> &mdash; filled in Experiment/Build Record sheets after every few fixes, creating real evidence of iterative development for the Illuminate exhibition.</li>
+  <li><strong>Watched AI play the game</strong> &mdash; saw the automated test harness control the jello cube, take screenshots, and log game state. Then watched Claude analyze the screenshots and identify visual issues.</li>
+  <li><strong>Set up an overnight AI testing loop</strong> &mdash; Claude will play, screenshot, analyze, and fix bugs autonomously while they sleep.</li>
 </ul>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -439,87 +450,61 @@
      ═══════════════════════════════════════════════════════ -->
 <h2>Skills Unlocked</h2>
 <div class="skill-card">
-  <div class="name">VS Code + Remote SSH</div>
-  <div class="detail">Connected laptops to a Raspberry Pi 5 server &mdash; the same remote development workflow used by professional engineering teams</div>
+  <div class="name">QA Testing &amp; Bug Reporting</div>
+  <div class="detail">Learned to describe bugs precisely: not &ldquo;it&rsquo;s broken&rdquo; but &ldquo;when I jump near the edge of a platform, I fall through it.&rdquo; Specificity is the difference between a bug that gets fixed and one that doesn&rsquo;t.</div>
 </div>
 <div class="skill-card">
-  <div class="name">Git &amp; GitHub</div>
-  <div class="detail">Learned commits as &ldquo;save points,&rdquo; wrote descriptive messages, pushed to a shared repo &mdash; version control fundamentals</div>
+  <div class="name">The Human+AI Feedback Loop</div>
+  <div class="detail">Experienced the core workflow of AI-augmented development: human identifies the problem, human describes it clearly, AI implements the fix, human verifies. Repeat. This is how software gets built in 2026.</div>
 </div>
 <div class="skill-card">
-  <div class="name">AI Prompting (Claude Code)</div>
-  <div class="detail">Directed an AI to understand, organize, and document their ideas &mdash; the #1 skill in modern software development</div>
+  <div class="name">Game Feel &amp; Tuning</div>
+  <div class="detail">Discovered that the difference between &ldquo;okay&rdquo; and &ldquo;great&rdquo; is tiny numerical changes. Jump power, gravity, speed &mdash; single numbers that transform the entire experience. Game design is about feel, not features.</div>
 </div>
 <div class="skill-card">
-  <div class="name">AI Sub-Agents &amp; Parallel Work</div>
-  <div class="detail">Learned how to spawn multiple AI &ldquo;sub-agents&rdquo; that work on different tasks simultaneously &mdash; one researching game themes, another designing page layouts, a third developing visual direction &mdash; then a team lead agent reviewing everything before delivery. This is how real AI-augmented engineering teams operate.</div>
+  <div class="name">Scientific Documentation</div>
+  <div class="detail">Filled in Experiment/Build Records &mdash; documenting what they tried, what happened, and what changed. The same iterative documentation scientists and engineers use.</div>
 </div>
 <div class="skill-card">
-  <div class="name">AI Models, Tokens &amp; Costs</div>
-  <div class="detail">Discussed the difference between AI models (Opus, Sonnet, Haiku) &mdash; how larger models are more capable but cost more, how &ldquo;tokens&rdquo; are the unit of AI thinking, and how to choose the right model for the job. They saw real token counts and understood that every AI request has a computational cost.</div>
-</div>
-<div class="skill-card">
-  <div class="name">Voice-to-Text (Wispr Flow)</div>
-  <div class="detail">Spoke naturally to communicate complex game ideas &mdash; learning that clear communication IS the skill, not typing</div>
-</div>
-<div class="skill-card">
-  <div class="name">Markdown &amp; Documentation</div>
-  <div class="detail">Saw how structured documents (PRDs, briefs) capture decisions &mdash; the same format used at every tech company</div>
-</div>
-<div class="skill-card">
-  <div class="name">Web Publishing (GitHub Pages)</div>
-  <div class="detail">Set up free web hosting through GitHub Pages &mdash; pushed HTML files to a repo and they&rsquo;re instantly live on the internet. The same workflow used to deploy real websites.</div>
-</div>
-<div class="skill-card">
-  <div class="name">Remote Server Access</div>
-  <div class="detail">Ran a game on a headless Raspberry Pi server and viewed it remotely through a browser using VNC &mdash; the same remote infrastructure concept behind cloud gaming and server management.</div>
-</div>
-<div class="skill-card">
-  <div class="name">Game Design Fundamentals</div>
-  <div class="detail">Core loops, dynamic tension, scope prioritization, cohesive design, contextual tutorials &mdash; real design principles</div>
+  <div class="name">Automated Testing &amp; AI Engineering</div>
+  <div class="detail">Saw the leap from manual QA to automated testing. The game plays itself, takes screenshots, logs state, and Claude analyzes the results. They didn&rsquo;t just test a game &mdash; they built a system that tests itself.</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     6. GAME DESIGN CONCEPTS
+     PHOTO PLACEHOLDER — Bug fix moment
      ═══════════════════════════════════════════════════════ -->
-<h2>Game Design Concepts</h2>
-<ul class="quest-list">
-  <li><strong>Cohesive design</strong> &mdash; every mechanic ties back to being made of jello (shooting costs body mass, crafting uses jello ingredients, inventory floats inside you)</li>
-  <li><strong>Dynamic tension</strong> &mdash; the game breathes between peaceful exploration and intense combat, controlled by light and music</li>
-  <li><strong>Scope management</strong> &mdash; dreamed big (full castle, all bosses, hard mode) then identified the 3 must-haves for a 2-week build</li>
-  <li><strong>Risk/reward tradeoffs</strong> &mdash; growing bigger gives more health but blocks passages; splitting gives access but risks losing pieces</li>
-</ul>
+<!-- Replace with actual Session 4 photo after the session -->
+<!--
+<div class="photo-section">
+  <img src="images/team-photos/session-4-bug-fix.jpg" alt="A kid talking to Claude through Wispr Flow while the code changes on screen">
+  <div class="photo-caption">The magic moment &mdash; speaking a bug report, watching the code change</div>
+</div>
+-->
 
-<h2>AI Engineering Concepts</h2>
-<ul class="quest-list">
-  <li><strong>Sub-agent orchestration</strong> &mdash; instead of asking one AI to do everything sequentially, they learned to spawn 3 specialized agents working in parallel: one for research, one for design, one for content &mdash; then a &ldquo;team lead&rdquo; agent to review and integrate the results. This mirrors how real engineering teams divide and conquer.</li>
-  <li><strong>Model selection</strong> &mdash; discussed when to use powerful models (Opus for complex reasoning and code generation) vs. faster/cheaper models (Haiku for quick lookups) &mdash; the same cost-performance tradeoff that professional AI engineers make daily.</li>
-  <li><strong>Token awareness</strong> &mdash; every interaction with an AI consumes &ldquo;tokens&rdquo; (the units of text the AI reads and writes). They saw real token counts after each operation and understood that AI isn&rsquo;t magic &mdash; it has a measurable computational cost.</li>
-  <li><strong>Iterative feedback loops</strong> &mdash; the first version of the parent summary page looked generic. Instead of accepting it, the team directed a complete redesign &mdash; specifying the visual theme, reviewing the output, and iterating until it matched their game&rsquo;s identity. This &ldquo;direct the AI, review, redirect&rdquo; cycle is the core skill of AI-augmented work.</li>
-  <li><strong>Context window management</strong> &mdash; AI models can only &ldquo;see&rdquo; a limited amount of text at once (the &ldquo;context window&rdquo;). During the session, the team hit this limit and learned how the AI compresses earlier conversation to keep working. They experienced firsthand why concise, well-structured prompts matter &mdash; the same constraint professional AI engineers navigate daily.</li>
-  <li><strong>AI memory systems</strong> &mdash; AI doesn&rsquo;t remember anything between sessions by default. To solve this, the team built a persistent memory system: structured files that the AI reads at startup to recall past decisions, architecture choices, and lessons learned. This prevents the AI from &ldquo;drifting&rdquo; or contradicting earlier work, and means Session 2 picks up exactly where Session 1 left off &mdash; no starting over.</li>
-</ul>
+<!-- ═══════════════════════════════════════════════════════
+     6. WHAT THEY SAID
+     ═══════════════════════════════════════════════════════ -->
+<h2>What They Said</h2>
+<div class="reflections">
+  <!-- Replace with actual quotes after Session 4 -->
+  <div class="kid"><strong>Eins:</strong> &ldquo;[Session 4 reflection TBD]&rdquo;</div>
+  <div class="kid"><strong>Ethan:</strong> &ldquo;[Session 4 reflection TBD]&rdquo;</div>
+  <div class="kid"><strong>Nathan:</strong> &ldquo;[Session 4 reflection TBD]&rdquo;</div>
+  <div class="kid"><strong>Andrew:</strong> &ldquo;[Session 4 reflection TBD]&rdquo;</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════
      7. ILLUMINATE CONNECTION
      ═══════════════════════════════════════════════════════ -->
 <div class="illuminate">
-  <strong>How This Maps to LASD Illuminate:</strong> The Illuminate Inquiry Exhibition (March 27) asks students to explore a driving question through research, creativity, and real-world application. Quest Craft answers: <em>&ldquo;What can kids create when they have professional tools and an AI partner?&rdquo;</em> The kids are learning collaboration, iterative design, technical communication, and computational thinking &mdash; not by studying these concepts, but by doing them to ship a real product.
+  <strong>How This Maps to LASD Illuminate:</strong> This session was pure <em>Phase 2</em> and <em>Phase 3</em> evidence. The kids didn&rsquo;t just play a game &mdash; they systematically tested it, documented what they found (Build Records), iterated on fixes in real time, and reflected on what they learned. The Experiment/Build Records they filled in are authentic artifacts of the inquiry process. And the automated testing loop? That&rsquo;s next-level: kids building systems that learn and improve autonomously. The Illuminate question &ldquo;How did you learn?&rdquo; has a vivid answer: by playing, breaking, describing, fixing, and repeating &mdash; with AI as their engineering partner.
 </div>
-
-<!-- ═══════════════════════════════════════════════════════
-     8. VIDEO LINK
-     ═══════════════════════════════════════════════════════ -->
-<a class="video-cta" href="https://www.loom.com/share/bd595802dd7e4b7e95e015d4f1e26c4f" target="_blank">
-  <div class="label">&#9654; Watch: The first playable moment of Split</div>
-  <div class="caption">Recorded live &mdash; the title screen and character demo generated from today's session</div>
-</a>
 
 <!-- ═══════════════════════════════════════════════════════
      9. CLOSING QUOTE
      ═══════════════════════════════════════════════════════ -->
 <div class="closing-quote">
-  This is just the spark. The seed. But right now, they're playing a game that didn't exist 3 hours ago. They designed it.
+  Your words change the code. That&rsquo;s not a metaphor &mdash; they literally spoke, Claude rewrote the game, and they saw it happen in real time. That&rsquo;s the skill of the future.
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -529,7 +514,7 @@
 
 <footer class="footer">
   <div class="credits">Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026</div>
-  <div class="next-session">Next session: Deep Design &mdash; characters, world, levels, art, sound, and controls</div>
+  <div class="next-session">Next session: Showcase &mdash; building the exhibition display board, deep reflections, and demo rehearsal</div>
 </footer>
 
 </body>
