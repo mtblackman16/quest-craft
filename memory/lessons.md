@@ -18,6 +18,26 @@
 
 ---
 
+## GitHub Pages Images Broken — raw.githubusercontent.com (Mar 8, 2026)
+**Problem:** All 4 images in `docs/parent-summaries/session-2-design.html` failed to load on GitHub Pages. The `<img>` tags used `https://raw.githubusercontent.com/...` URLs pointing to files in the `assets/` directory.
+**Root cause:** GitHub rate-limits `raw.githubusercontent.com`. When a page loads multiple images simultaneously from that domain, it can trigger HTTP 429 (Too Many Requests) errors, causing broken images. The URLs work individually (HTTP 200) but fail when loaded together in a browser.
+**Solution:** Copied the images into a subdirectory under `docs/` (which GitHub Pages serves directly) and changed all `<img src>` attributes to use relative paths:
+- `src="images/player/jello-cube-three-quarter.png"` instead of the raw GitHub URL
+- Images now served from `mtblackman16.github.io` domain with no rate limiting
+**File structure:**
+```
+docs/parent-summaries/
+  session-2-design.html
+  images/
+    player/jello-cube-three-quarter.png
+    enemies/sanitizer-warrior-front-view.png
+    team-photos/session-2-controller-mapping-2026-03-08.jpg
+    team-photos/session-2-beastmode-break-2026-03-08.jpg
+```
+**Rule for future HTML pages:** NEVER use `raw.githubusercontent.com` URLs for images in GitHub Pages HTML. Always copy images into the `docs/` tree and use relative paths. GitHub Pages serves files from `docs/` on the `github.io` domain with no rate limiting or CSP issues.
+
+---
+
 ### Template:
 
 ```
