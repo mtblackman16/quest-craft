@@ -1,118 +1,678 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Craft — Session 2: Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Press+Start+2P&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: #2d2d2d; line-height: 1.5; max-width: 680px; margin: 0 auto; padding: 30px 20px; font-size: 14px; }
-  .header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #7c3aed; }
-  .header h1 { font-size: 22px; color: #7c3aed; margin-bottom: 2px; }
-  .header .subtitle { font-size: 15px; color: #555; }
-  .header .date { font-size: 12px; color: #888; margin-top: 4px; }
-  .tagline { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; padding: 14px 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-size: 15px; line-height: 1.4; }
-  .tagline strong { font-size: 16px; }
-  h2 { font-size: 15px; color: #7c3aed; margin: 18px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e5e5e5; }
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-  .skill { background: #f8f8f8; border-radius: 6px; padding: 10px 12px; }
-  .skill .name { font-weight: 600; font-size: 13px; color: #333; }
-  .skill .detail { font-size: 12px; color: #666; margin-top: 2px; }
-  .highlight-list { list-style: none; padding: 0; }
-  .highlight-list li { padding: 5px 0 5px 20px; position: relative; font-size: 13px; }
-  .highlight-list li::before { content: "\2192"; position: absolute; left: 0; color: #7c3aed; font-weight: bold; }
-  .video-box { background: #f0f0f0; border-radius: 8px; padding: 16px; text-align: center; margin: 16px 0; }
-  .video-box a { color: #7c3aed; font-weight: 600; font-size: 14px; }
-  .video-box .caption { font-size: 12px; color: #888; margin-top: 4px; }
-  .illuminate { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
-  .illuminate strong { color: #92400e; }
-  .footer { text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid #e5e5e5; font-size: 11px; color: #aaa; }
-  .quote { font-style: italic; color: #555; text-align: center; margin: 12px 0; font-size: 13px; }
-  .reflections { background: #f8f8ff; border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
-  .reflections .kid { margin-bottom: 6px; }
-  .reflections .kid strong { color: #7c3aed; }
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Color Tokens ── */
+  :root {
+    --deep-stone: #1a1a2e;
+    --warm-stone: #2d2d44;
+    --torchlight: #e8a838;
+    --torch-glow: #f5e6c8;
+    --jello-green: #7ddf64;
+    --ember: #c44b2b;
+    --dim-text: #a89e8a;
+    --border-glow: rgba(232, 168, 56, 0.25);
+    --parchment: #f0e4cc;
+  }
+
+  /* ── Page Background with Vignette + Stone Noise ── */
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--torch-glow);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-size: 15px;
+    min-height: 100vh;
+    background-color: var(--deep-stone);
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 50% 0%, #2d2d44 0%, #1a1a2e 70%);
+  }
+
+  /* ── Torch Flicker Animation ── */
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.92; }
+  }
+
+  /* ── 1. Title Block ── */
+  .title-block {
+    text-align: center;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }
+
+  .title-block .program-name {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dim-text);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .title-block .session-number {
+    font-family: 'Cinzel Decorative', Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--torchlight);
+    line-height: 1.1;
+    animation: flicker 4s ease-in-out infinite;
+    margin-bottom: 8px;
+  }
+
+  .title-block .session-subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .title-block .meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--dim-text);
+    line-height: 1.4;
+  }
+
+  /* ── Fading Gradient Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(232, 168, 56, 0.5) 20%,
+      rgba(232, 168, 56, 0.5) 80%,
+      transparent 100%
+    );
+    margin: 0;
+  }
+
+  /* ── 2. The Hook ── */
+  .hook {
+    background: rgba(45, 45, 68, 0.6);
+    border: 1.5px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 22px 20px;
+    margin: 28px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hook::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(232, 168, 56, 0.08);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .hook .headline {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--torchlight);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .hook .supporting {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.5;
+  }
+
+  /* ── 3. Game Showcase ── */
+  .game-showcase {
+    text-align: center;
+    padding: 28px 0 24px;
+  }
+
+  .game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 28px;
+    color: var(--jello-green);
+    text-shadow:
+      0 0 8px rgba(125, 223, 100, 0.5),
+      0 0 24px rgba(125, 223, 100, 0.2),
+      0 0 48px rgba(125, 223, 100, 0.08);
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+
+  .game-blurb {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 20px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .game-blurb::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -18px;
+    left: -2px;
+    line-height: 1;
+  }
+
+  /* ── Section Headings (h2) with Ornamental Lines ── */
+  h2 {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--torchlight);
+    text-align: center;
+    margin: 40px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before,
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  h2::before {
+    background: linear-gradient(to right, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  h2::after {
+    background: linear-gradient(to left, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  /* ── 4. Diamond Bullet List ── */
+  .quest-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .quest-list li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--torch-glow);
+  }
+
+  .quest-list li::before {
+    content: '\25C6';
+    position: absolute;
+    left: 0;
+    color: var(--torchlight);
+    font-size: 10px;
+    top: 11px;
+  }
+
+  .quest-list li + li {
+    margin-top: 4px;
+  }
+
+  /* ── 5. Skill Cards (Stacked) ── */
+  .skill-card {
+    background: rgba(45, 45, 68, 0.4);
+    border-left: 3px solid var(--torchlight);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .skill-card .name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--torchlight);
+    line-height: 1.3;
+  }
+
+  .skill-card .detail {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #c4b8a0;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── 6. Game Design Concepts — uses .quest-list ── */
+  .quest-list li strong {
+    color: var(--torch-glow);
+  }
+
+  /* ── 7. Illuminate Connection ── */
+  .illuminate {
+    background: var(--parchment);
+    border: 1px solid #d4c4a0;
+    border-radius: 4px;
+    padding: 16px 18px;
+    color: #3a3020;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 24px;
+  }
+
+  .illuminate strong {
+    color: #6b4c1e;
+  }
+
+  .illuminate em {
+    font-style: italic;
+  }
+
+  /* ── 8. Video Link CTA ── */
+  .video-cta {
+    display: block;
+    text-align: center;
+    background: rgba(232, 168, 56, 0.12);
+    border: 1.5px solid rgba(232, 168, 56, 0.35);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 28px 0;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .video-cta:hover {
+    background: rgba(232, 168, 56, 0.2);
+  }
+
+  .video-cta .label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--torchlight);
+  }
+
+  .video-cta .caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: var(--dim-text);
+    margin-top: 6px;
+  }
+
+  /* ── 9. Closing Quote ── */
+  .closing-quote {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 8px 32px;
+    margin: 28px 0;
+  }
+
+  .closing-quote::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -12px;
+    left: 2px;
+    line-height: 1;
+  }
+
+  .closing-quote::after {
+    content: '\201D';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    bottom: -28px;
+    right: 2px;
+    line-height: 1;
+  }
+
+  /* ── 10. Footer / Seal ── */
+  .ornament-divider {
+    text-align: center;
+    margin: 36px 0 20px;
+    color: var(--torchlight);
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: var(--dim-text);
+    line-height: 1.4;
+    padding-bottom: 20px;
+  }
+
+  .footer .credits {
+    margin-bottom: 6px;
+  }
+
+  .footer .next-session {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #b8aa96;
+  }
+
+  /* ── 11. Reflections Section ── */
+  .reflections {
+    background: rgba(45, 45, 68, 0.5);
+    border: 1px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .reflections .kid {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--torch-glow);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .reflections .kid:last-child {
+    margin-bottom: 0;
+  }
+
+  .reflections .kid strong {
+    color: var(--torchlight);
+    font-weight: 600;
+  }
+
+  /* ── 12. Photo Section ── */
+  .photo-section {
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .photo-section img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 6px;
+    border: 2px solid var(--border-glow);
+    display: block;
+    margin: 0 auto;
+  }
+
+  .photo-section .photo-caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--dim-text);
+    font-style: italic;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* ── 13. Artwork Showcase ── */
+  .artwork-showcase {
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .artwork-showcase .art-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+    align-items: end;
+  }
+
+  .artwork-showcase .art-piece {
+    background: rgba(45, 45, 68, 0.5);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .artwork-showcase .art-piece img {
+    max-width: 100%;
+    max-height: 280px;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 12px rgba(125, 223, 100, 0.15));
+  }
+
+  .artwork-showcase .art-piece.enemy img {
+    filter: drop-shadow(0 0 12px rgba(150, 50, 200, 0.2));
+  }
+
+  .artwork-showcase .art-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: var(--dim-text);
+    margin-top: 10px;
+    line-height: 1.3;
+  }
+
+  .artwork-showcase .art-label strong {
+    color: var(--torchlight);
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .artwork-showcase .art-credit {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    color: var(--dim-text);
+    letter-spacing: 0.06em;
+    margin-top: 16px;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Quest Craft &mdash; Session 2 Recap</h1>
-  <div class="subtitle">The Deep Dive: Designing the Full Game</div>
-  <div class="date">March 8, 2026 &nbsp;|&nbsp; Ethan, Eins, Nathan &amp; Andrew</div>
+<!-- ═══════════════════════════════════════════════════════
+     1. TITLE BLOCK
+     ═══════════════════════════════════════════════════════ -->
+<header class="title-block">
+  <div class="program-name">Quest Craft</div>
+  <div class="session-number">Session 2</div>
+  <div class="session-subtitle">Design &mdash; The Deep Dive</div>
+  <div class="meta">March 8, 2026 &nbsp;|&nbsp; Ethan, Eins, Nathan &amp; Andrew</div>
+  <div class="meta" style="margin-top: 4px; font-size: 12px; color: #8a7e6a;">From Concept to Complete Game Design in One Session</div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     2. THE HOOK
+     ═══════════════════════════════════════════════════════ -->
+<div class="hook">
+  <div class="headline">Today, four kids designed every detail of their video game &mdash; and their artist&rsquo;s hand-drawn illustrations became real game assets.</div>
+  <div class="supporting">7 design documents. 15 castle floors. 3 boss fights. An art direction that shifted from pixel art to something far more ambitious.</div>
 </div>
 
-<div class="tagline">
-  <strong>The team designed an entire video game in one session.</strong><br>
-  15 castle floors, 3 bosses, 4 difficulty modes, a complete combat system, and a world buried under the desert &mdash; all from the kids' imaginations.
+<!-- ═══════════════════════════════════════════════════════
+     3. THE GAME SHOWCASE
+     ═══════════════════════════════════════════════════════ -->
+<section class="game-showcase">
+  <div class="game-title">SPLIT</div>
+  <div class="game-blurb">You&rsquo;re a jello cube trapped in an ancient castle buried beneath desert sand. Fight your way up 15 floors &mdash; shooting pieces of yourself, crafting health at cooking pots, and unlocking elemental powers &mdash; until you face the three bosses that stand between you and the rooftop. Every attack costs body mass. Every choice matters.</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     ANDREW'S ARTWORK SHOWCASE
+     ═══════════════════════════════════════════════════════ -->
+<h2>Andrew&rsquo;s Artwork</h2>
+<div class="artwork-showcase">
+  <div class="art-grid">
+    <div class="art-piece">
+      <img src="../../assets/images/player/jello-cube-three-quarter.png" alt="Hand-drawn jello cube character — translucent green with glossy highlights">
+      <div class="art-label"><strong>The Jello Cube</strong>Your player character &mdash; translucent, jiggly, and determined to escape</div>
+    </div>
+    <div class="art-piece enemy">
+      <img src="../../assets/images/enemies/sanitizer-warrior-front-view.png" alt="Hand-drawn Sanitizer Warrior enemy — purple creature with spiked hat, syringe weapon, and hand sanitizer backpack">
+      <div class="art-label"><strong>The Sanitizer Warrior</strong>A purple-skinned enemy with spiked hat, syringe weapon, and sanitizer backpack</div>
+    </div>
+  </div>
+  <div class="art-credit">Original illustrations by Andrew (11) &mdash; Artist &amp; Visual Designer</div>
 </div>
 
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     4. WHAT THEY BUILT TODAY
+     ═══════════════════════════════════════════════════════ -->
 <h2>What They Built Today</h2>
-<ul class="highlight-list">
-  <li><strong>7 complete design documents</strong> &mdash; Characters, Story/World, Gameplay Mechanics, Levels, Art Style, Sound/Music, and Controls. Every aspect of the game is now documented.</li>
-  <li><strong>A 15-floor castle</strong> with distinct zones: exploration floors, parkour speed floors with crumbling platforms and lasers, a deadly slow-paced gauntlet, and an epic 3-phase final boss.</li>
-  <li><strong>3 unique enemies and 3 bosses</strong> &mdash; each with distinct attack patterns, weaknesses, and a "dodge, learn, punish" design philosophy inspired by Hollow Knight and Dead Cells.</li>
-  <li><strong>A mass-based combat system</strong> where your health IS your ammo &mdash; every attack costs body mass, creating constant risk/reward decisions. Plus a cooking system where you craft health from jello powder + water at cooking pots.</li>
-  <li><strong>"Earthquake Mode"</strong> &mdash; an extreme difficulty where the castle collapses around you, platforms never respawn, and beating it unlocks a secret ending teasing a sequel.</li>
+<ul class="quest-list">
+  <li><strong>7 complete design documents</strong> &mdash; Characters, Story/World, Gameplay, Levels, Art Style, Sound/Music, Controls. Every aspect of Split is now documented and ready to build.</li>
+  <li><strong>Andrew&rsquo;s original artwork processed into game assets</strong> &mdash; his hand-drawn illustrations of the jello cube player, Sanitizer Warrior enemy, and game items were analyzed by AI, split into individual sprites, and organized into the game&rsquo;s asset pipeline. The team shifted their entire art direction from pixel art to Andrew&rsquo;s richer, more realistic illustration style.</li>
+  <li><strong>A 15-floor castle with distinct zones</strong> &mdash; dark exploration floors, a parkour speed zone with crumbling platforms and lasers (floors 9&ndash;11), a deadly slow-paced gauntlet (floors 12&ndash;14), and an epic 3-phase final boss on the rooftop.</li>
+  <li><strong>A mass-based combat system where health IS ammo</strong> &mdash; every Jello Shot costs body mass, creating constant risk/reward tension. Plus cooking pots where you craft health from jello powder + water.</li>
+  <li><strong>3 unique enemies and 3 bosses</strong>, each with distinct attack patterns and a &ldquo;dodge, learn, punish&rdquo; philosophy inspired by Hollow Knight and Dead Cells.</li>
+  <li><strong>&ldquo;Earthquake Mode&rdquo;</strong> &mdash; an extreme difficulty where the castle crumbles around you, platforms never respawn, and completing it unlocks a secret ending.</li>
+  <li><strong>Full Nintendo Pro Controller mapping</strong> &mdash; every button assigned to a game action, decided by the team together.</li>
 </ul>
 
-<h2>Skills Practiced</h2>
-<div class="skills-grid">
-  <div class="skill">
-    <div class="name">Game Design</div>
-    <div class="detail">Designed combat mechanics, enemy behaviors, boss fights, difficulty curves, and level progression from scratch</div>
-  </div>
-  <div class="skill">
-    <div class="name">Systems Thinking</div>
-    <div class="detail">Created interconnected systems: mass = health = ammo, cooking for healing, elemental pills from shrines, environmental hazards</div>
-  </div>
-  <div class="skill">
-    <div class="name">Collaborative Decision-Making</div>
-    <div class="detail">Every design choice was discussed as a team &mdash; Nathan noted "everybody's ideas are very important to the project being successful"</div>
-  </div>
-  <div class="skill">
-    <div class="name">Creative Storytelling</div>
-    <div class="detail">Designed environmental storytelling &mdash; no text dumps, players discover the castle's history by exploring</div>
-  </div>
-  <div class="skill">
-    <div class="name">Technical Literacy</div>
-    <div class="detail">Mapped every game action to specific controller buttons, understanding hardware-software connections</div>
-  </div>
-  <div class="skill">
-    <div class="name">Version Control</div>
-    <div class="detail">Learned that committing and pushing saves work &mdash; Ethan and Andrew both highlighted this as a key lesson</div>
-  </div>
+<!-- ═══════════════════════════════════════════════════════
+     5. SKILLS UNLOCKED
+     ═══════════════════════════════════════════════════════ -->
+<h2>Skills Unlocked</h2>
+<div class="skill-card">
+  <div class="name">Game Design</div>
+  <div class="detail">Designed combat mechanics, enemy behaviors, boss fights, difficulty curves, and 15-floor level progression from scratch</div>
+</div>
+<div class="skill-card">
+  <div class="name">Systems Thinking</div>
+  <div class="detail">Created interconnected systems: mass = health = ammo, cooking for healing, elemental pills from shrines, environmental sun/drying hazards</div>
+</div>
+<div class="skill-card">
+  <div class="name">AI-Assisted Art Pipeline</div>
+  <div class="detail">Took hand-drawn artwork, uploaded it, and used AI to analyze, split multi-image files into individual sprites, organize into folders, and generate a detailed asset catalog. Physical art became digital game assets.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Collaborative Decision-Making</div>
+  <div class="detail">4 kids with different strengths (artist, designers) making consensus decisions. Nathan noted &ldquo;everybody&rsquo;s ideas are very important to the project being successful&rdquo;</div>
+</div>
+<div class="skill-card">
+  <div class="name">Hardware Integration</div>
+  <div class="detail">Mapped every game action to specific Pro Controller buttons, understanding how physical input devices connect to game software</div>
+</div>
+<div class="skill-card">
+  <div class="name">Creative Storytelling</div>
+  <div class="detail">Designed environmental storytelling with no text dumps &mdash; players discover the castle&rsquo;s history through exploration, light, and atmosphere</div>
+</div>
+<div class="skill-card">
+  <div class="name">Version Control</div>
+  <div class="detail">Committed and pushed work to GitHub. Both Ethan and Andrew highlighted this as a key lesson.</div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════
+     PHOTO: CONTROLLER MAPPING
+     ═══════════════════════════════════════════════════════ -->
+<div class="photo-section">
+  <img src="../../assets/team-photos/session-2-controller-mapping-2026-03-08.jpg" alt="Four kids gathered around a table with a Nintendo Pro Controller and a printed worksheet, mapping game controls">
+  <div class="photo-caption">The team mapping every controller button to a game action &mdash; the moment software design meets hardware</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     6. GAME DESIGN CONCEPTS
+     ═══════════════════════════════════════════════════════ -->
+<h2>Game Design Concepts</h2>
+<ul class="quest-list">
+  <li><strong>Interconnected risk/reward</strong> &mdash; your body mass is simultaneously your health, your ammo supply, and your size (which affects what passages you can fit through)</li>
+  <li><strong>Difficulty curve architecture</strong> &mdash; 15 floors that progress from tutorial to exploration to parkour to gauntlet to final boss, each zone introducing new mechanics</li>
+  <li><strong>Environmental storytelling</strong> &mdash; ancient castle buried under desert sand, no dialogue, history discovered through exploration</li>
+  <li><strong>Boss fight design</strong> &mdash; each boss has multiple phases with distinct mechanics, inspired by Hollow Knight&rsquo;s Radiance fight</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════
+     7. ILLUMINATE CONNECTION
+     ═══════════════════════════════════════════════════════ -->
 <div class="illuminate">
-  <strong>Illuminate Connection:</strong> Today was pure design thinking in action. The team took a vague concept ("jello cube in a castle") and systematically broke it down into characters, mechanics, levels, art direction, sound, and controls &mdash; exactly the kind of structured creative problem-solving that Illuminate showcases. Every design document they wrote today becomes part of their exhibition story: "Here's HOW we designed a game."
+  <strong>How This Maps to LASD Illuminate:</strong> Today demonstrated design thinking at its finest. The team took a concept they brainstormed two weeks ago and systematically decomposed it into 7 designable components &mdash; characters, world, gameplay, levels, art, sound, and controls. They experienced the full arc from <em>&ldquo;what if?&rdquo;</em> to <em>&ldquo;here&rsquo;s exactly how it works.&rdquo;</em> Andrew&rsquo;s integration was a highlight: his hand-drawn artwork was processed by AI into game-ready assets in real time, showing how physical creativity and digital tools amplify each other. Every design document they wrote today becomes part of their exhibition story: <em>&ldquo;Here&rsquo;s HOW we designed a game.&rdquo;</em>
 </div>
 
-<div class="video-box">
-  <a href="LOOM_LINK_HERE">Watch: Session 2 Design Sprint</a>
+<!-- ═══════════════════════════════════════════════════════
+     8. VIDEO LINK
+     ═══════════════════════════════════════════════════════ -->
+<a class="video-cta" href="LOOM_LINK_HERE" target="_blank">
+  <div class="label">&#9654; Watch: Session 2 &mdash; The Design Sprint</div>
   <div class="caption">Mark: replace this link with the Loom recording</div>
-</div>
+</a>
 
+<!-- ═══════════════════════════════════════════════════════
+     9. WHAT THEY SAID — REFLECTIONS
+     ═══════════════════════════════════════════════════════ -->
 <h2>What They Said</h2>
 <div class="reflections">
-  <div class="kid"><strong>Eins:</strong> "This process would be a lot more fun than I thought it would be."</div>
-  <div class="kid"><strong>Ethan:</strong> "I learned to commit and push or else it won't save!"</div>
-  <div class="kid"><strong>Nathan:</strong> "I learned that everybody's ideas are very important to the project being successful."</div>
-  <div class="kid"><strong>Andrew:</strong> "I learned the importance of committing and pushing for this project."</div>
+  <div class="kid"><strong>Eins:</strong> &ldquo;This process would be a lot more fun than I thought it would be.&rdquo;</div>
+  <div class="kid"><strong>Ethan:</strong> &ldquo;I learned to commit and push or else it won&rsquo;t save!&rdquo;</div>
+  <div class="kid"><strong>Nathan:</strong> &ldquo;I learned that everybody&rsquo;s ideas are very important to the project being successful.&rdquo;</div>
+  <div class="kid"><strong>Andrew:</strong> &ldquo;I learned the importance of committing and pushing for this project.&rdquo;</div>
 </div>
 
 <h2>What Excites Them Most</h2>
 <div class="reflections">
-  <div class="kid"><strong>Eins:</strong> "People trying to grind on our game but failing miserably."</div>
-  <div class="kid"><strong>Ethan:</strong> "Beating the bosses in Earthquake Mode."</div>
-  <div class="kid"><strong>Nathan:</strong> "Seeing how the game has changed from when we first played it to now."</div>
-  <div class="kid"><strong>Andrew:</strong> "Seeing how the graphics in the game turn out."</div>
+  <div class="kid"><strong>Eins:</strong> &ldquo;People trying to grind on our game but failing miserably.&rdquo;</div>
+  <div class="kid"><strong>Ethan:</strong> &ldquo;Beating the bosses in Earthquake Mode.&rdquo;</div>
+  <div class="kid"><strong>Nathan:</strong> &ldquo;Seeing how the game has changed from when we first played it to now.&rdquo;</div>
+  <div class="kid"><strong>Andrew:</strong> &ldquo;Seeing how the graphics in the game turn out.&rdquo;</div>
 </div>
 
-<p class="quote">"The hardest decision was how to make the levels and the overall design of the levels." &mdash; The whole team</p>
-
-<div class="footer">
-  Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026<br>
-  Next session: Blueprint &mdash; turning today's designs into a technical build plan, plus designing the inventory system
+<!-- ═══════════════════════════════════════════════════════
+     10. CLOSING QUOTE
+     ═══════════════════════════════════════════════════════ -->
+<div class="closing-quote">
+  The hardest decision was how to make the levels and the overall design of the levels. &mdash; The whole team
 </div>
+
+<!-- ═══════════════════════════════════════════════════════
+     11. BONUS PHOTO — HARD CODING DESERVES HARD PLAY
+     ═══════════════════════════════════════════════════════ -->
+<h2>Hard Coding Deserves Hard Play</h2>
+<div class="photo-section">
+  <img src="../../assets/team-photos/session-2-beastmode-break-2026-03-08.jpg" alt="Kids taking a break — boxing and playing, full of energy">
+  <div class="photo-caption">Recharging between design sprints. Hard coding deserves hard play.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     12. FOOTER / SEAL
+     ═══════════════════════════════════════════════════════ -->
+<div class="ornament-divider">&#9670; &#9670; &#9670;</div>
+
+<footer class="footer">
+  <div class="credits">Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026</div>
+  <div class="next-session">Next session: Blueprint &mdash; turning today&rsquo;s designs into a technical build plan and starting to code the real game</div>
+</footer>
 
 </body>
 </html>
