@@ -20,7 +20,7 @@
 
 ## Project Status
 
-**Current Phase:** Session 2 — Design (Blocks 1-2 complete, Design Sprint next)
+**Current Phase:** Session 2 — Design — COMPLETE
 **Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
 **Core Word:** Survival
@@ -65,9 +65,9 @@
 
 **Premise:** You are a jello cube trapped in a castle dungeon in the desert. Fight and puzzle your way UP through floors to the rooftop final boss.
 
-**Core Mechanics:** 2D platformer (run, jump, fight) + hidden puzzles (levers, pressure plates) + jello crafting (powder + water + heat = grow/heal) + splitting into fourths + size-based passage restrictions + BotW-style stealth
+**Core Mechanics:** 2D platformer (run, jump, fight) + jello crafting (powder + water + cooking pots = heal) + splitting into pieces (switch control, reveals secrets) + mass = health = ammo
 
-**Combat:** Jello shot (costs body mass), ground pound (stun), jello dodge (liquid briefly, confuses enemies), ancient shield artifact (light energy shield). Items stored visibly inside transparent body.
+**Combat:** Jelly Shot (costs body mass), Ground Pound (airborne, higher fall = more damage), Perfect Dodge (ZR, brief slow-mo, confuses dumb enemies). Items stored visibly inside transparent body.
 
 **Enemies:** Small Sanitizer Bottles (basic patrol, zone control, pairs), Sanitizer Warriors (mid-range tactical, dodge-and-punish), Jelly Archers (dark blue jelly sniper, glass cannon, sanitizer-tipped arrows)
 
@@ -75,11 +75,13 @@
 
 **Items:** Jello Powder (healing ingredient), Simmered Water (rare, heat resistance), Elemental Pills (Fire 75s, Water 75s, Ice 60s, Electricity 90s, Attack Up 60s), Captain's Hat (cosmetic, Earthquake Mode only)
 
-**World:** Castle interior — stone walls, vines, torches, creeping gloom. Chests, barrels, hidden barrel shops. Glowing door = next floor up. Desert outside (title screen only).
+**World:** Ancient castle buried under desert sand. 15 floors, dark-to-light color progression. Jello Cube falls through a well, climbs to escape. Environmental storytelling — no dialogue. Unknown substance mutated into sanitizer creatures.
 
-**Tutorial:** Start in jail cell, contextual teaching like Zelda.
+**Tutorial:** Fall through well → pipe → storage room. First enemy teaches controls.
 
-**Controls (Keyboard):** Arrows=move/jump, SPACE=jello shot, Z=split, Down(air)=ground pound, ESC=pause
+**Controls (Pro Controller):** A=jump, B=jelly shot, X=eat jello, Y=interact, ZL=split/combine toggle, ZR=perfect dodge, L Bumper=switch split piece, Plus=pause, Minus=inventory. Dead Cells weighty feel.
+
+**Difficulty:** Easy/Normal/Hard/Earthquake Mode. Hard+ adds ~25% enemy damage. Earthquake Mode: timed, no checkpoints, platforms never respawn, secret ending.
 
 **Exhibition Top 3:** (1) Core movement + all attacks, (2) Crafting at cooking pots, (3) Enemies to fight
 
@@ -118,44 +120,30 @@ D-pad = Hat 0 (tuple, NOT buttons)
 ```
 NOTE: Online references are WRONG for this setup — always use this verified mapping.
 
-## Session 2 Progress (March 8) — IN PROGRESS
+## Session 2 (March 8) — COMPLETE
 
 ### Block 1: Feedback & Welcome — COMPLETE
-- Spark demo played on Pi with Pro Controller
-- Every kid had a turn, feedback captured
+- Spark demo played on Pi with Pro Controller, every kid had a turn
 
 ### Block 2: Photo-to-Sprite Workshop — COMPLETE
-- Andrew's artwork uploaded (7 originals now in `assets/images/andrew-originals/`)
-- Claude analyzed all artwork, split into individual assets, applied transparent backgrounds
-- **10 final processed images** organized into folders:
+- Andrew's artwork: 10 processed images in `assets/images/` (player/, enemies/, items/)
 
-**Player (2):**
-- `assets/images/player/jello-cube-front.png` — Front view, translucent emerald green cube (724x722)
-- `assets/images/player/jello-cube-three-quarter.png` — 3/4 perspective, shows depth (917x800)
+### Block 3: Design Sprint — COMPLETE
+All 7 design topics completed, all PRDs written:
+- Characters: Jello Cube moveset, 3 enemies, 3 bosses, banana slug guide
+- Story/World: Castle buried under desert, well opening, environmental storytelling
+- Gameplay: Mass system, cooking, 5 pills, 8 shrines, 4 difficulty modes
+- Levels: 15 floors, parkour zone (9-11), gauntlet (12-14), 3-phase final boss
+- Art Style: Dead Cells cutscene hybrid, subtle pixel texture on Andrew's illustrations
+- Sound: Hollow Knight style (Dirtmouth/City of Tears), realistic foley SFX
+- Controls: Full Pro Controller mapping, ZL=split toggle, ZR=perfect dodge, Dead Cells weight
 
-**Enemies (4):**
-- `assets/images/enemies/sanitizer-warrior-front-view.png` — Purple warrior, front (1195x1011)
-- `assets/images/enemies/sanitizer-warrior-rear-view.png` — Rear view showing backpack bottle (999x940)
-- `assets/images/enemies/sanitizer-warrior-side-view.png` — Side profile, primary gameplay sprite (999x940)
-- `assets/images/enemies/sanitizer-warrior-equipment-spread.png` — Weapon, hat, bottle spread (1258x490)
+### Block 4: Showcase — COMPLETE
+- Learning reflections from all 4 team members
+- Parent summary generated
 
-**Items (4):**
-- `assets/images/items/jelly-powder-bag.png` — "Eins and Ethans" brand jelly powder (492x691)
-- `assets/images/items/hand-sanitizer-front.png` — "Germ B Gone" sanitizer bottle (396x975)
-- `assets/images/items/hand-sanitizer-back.png` — Back label with detailed fine print (384x938)
-- `assets/images/items/dropped-items-in-puddle.png` — Sanitizer + powder in purple puddle (1012x246)
-
-**Asset catalog:** `asset-catalog.txt` — Full natural-language descriptions + hex color references
-
-### Art Direction Shift
-Andrew's art is NOT pixel art. It's detailed, rich hand-drawn illustrations with realistic shading, translucent surfaces, and fine detail. The team is shifting AWAY from "Dead Cells pixel art" toward Andrew's higher-resolution illustration style. This is a major creative upgrade that changes the game's visual identity.
-
-### Remaining Session 2 Priorities (in order):
-1. **Design Sprint** — Characters, Art Style, Controls, Gameplay (minimum 4 topics via /design)
-2. **Level Expansion** — Design multiple castle floors beyond the single demo scene
-3. **Higher Resolution Art** — Integrate Andrew's illustrations into the game, replace placeholder rectangles
-4. **Music** — Find or create background music for full audio by end of day
-5. **Showcase & Wrap** — Learning reflections, git commit, parent summary
+### Session 3 TODO:
+- Design the inventory screen (Minus button)
 
 ---
 
@@ -164,13 +152,13 @@ Andrew's art is NOT pixel art. It's detailed, rich hand-drawn illustrations with
 | Document | Status |
 |----------|--------|
 | 00-game-concept | Dream Complete |
-| 01-characters | **In Progress** — Player, 3 enemies, 3 bosses, banana slug designed |
-| 02-story-world | Not Started |
-| 03-gameplay | **In Progress** — Mass system, cooking, pills, difficulty, platforms designed |
-| 04-levels | **In Progress** — 15-floor structure, zones, color progression, bosses placed |
-| 05-art-style | Not Started |
-| 06-sound | Not Started |
-| 07-controls | Not Started |
+| 01-characters | **Complete** |
+| 02-story-world | **Complete** |
+| 03-gameplay | **Complete** |
+| 04-levels | **Complete** |
+| 05-art-style | **Complete** (includes sound/music direction) |
+| 06-sound | **Complete** (adaptive music system) |
+| 07-controls | **Complete** |
 
 ---
 
