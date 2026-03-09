@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | In Progress |
+| **Status** | Complete |
 | **Author** | Team (Ethan, Eins, Andrew, Nathan) |
 | **Date** | 2026-03-08 |
 | **Reviewed by** | — |
@@ -42,7 +42,8 @@ The castle gets lighter as you climb — a visual story of rising out of darknes
 - This means every playthrough feels different — major replay value
 
 ### Transitions Between Floors
-- TBD — stairs, doors, elevators, or portals (needs design)
+- **Normal floors:** Elevator platform carries you up to the next floor
+- **Boss floors:** A tube sucks you up and carries you to the boss — feels tense and dramatic, no turning back
 
 ---
 
@@ -59,7 +60,7 @@ The castle gets lighter as you climb — a visual story of rising out of darknes
 - Shrines with puzzles/parkour for pills and upgrades
 - Mix of combat rooms, exploration rooms, and puzzle rooms
 
-**Boss 1: The Big Bottle** (early floor — TBD)
+**Boss 1: The Big Bottle** (Floor 4)
 - Tutorial boss, oversized Small Sanitizer Bottle
 - Teaches dodge, attack, and pattern reading
 
@@ -162,15 +163,18 @@ The castle gets lighter as you climb — a visual story of rising out of darknes
 
 ---
 
-## Open Questions
+## Decided
+
+- [x] Floor transitions: elevator platforms (normal) / tubes (boss floors)
+- [x] 3 bosses: Big Bottle (Floor 4), The Cleanser (Floor 8-10), The Last Guard (Floor 15)
+- [x] No additional bosses
+
+## Open Questions (Resolve During Build)
 
 - [ ] Detailed room-by-room design for floors 1–8
-- [ ] How do you transition between floors? (Stairs? Doors? Elevators?)
 - [ ] Exact shrine placement across 15 floors
 - [ ] How many rooms per floor?
 - [ ] What fixed vs randomized elements per floor?
 - [ ] Are there any secret/bonus floors?
 - [ ] Specific enemy placement per floor
-- [ ] Boss placement: exactly which floors?
-- [ ] Are there more bosses between Big Bottle and The Cleanser?
 - [ ] Laser types on parkour floors (constant? sweeping? timed?)

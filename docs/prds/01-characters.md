@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | In Progress |
+| **Status** | Complete |
 | **Author** | Team (Ethan, Eins, Andrew, Nathan) |
 | **Date** | 2026-03-08 |
 | **Reviewed by** | — |
@@ -116,7 +116,7 @@ Items are stored visibly inside the transparent jello body (decided Session 1).
 
 ## Bosses
 
-### Boss 1: The Big Bottle (Floor TBD — early)
+### Boss 1: The Big Bottle (Floor 4)
 
 **Appearance:** Oversized version of the Small Sanitizer Bottle.
 
@@ -125,16 +125,9 @@ Items are stored visibly inside the transparent jello body (decided Session 1).
 - Use basic attacks on a big target
 - Read patterns (watch → learn → punish loop)
 
-**How to Beat:** TBD — needs further design.
+**How to Beat:** Details to be tuned during build — core pattern is dodge sanitizer, find opening, attack.
 
 **Reward:** TBD (likely health/mass upgrade).
-
-**Open Questions:**
-- [ ] How does it attack differently from the small version?
-- [ ] What's the weak spot?
-- [ ] How many hits to defeat?
-- [ ] What floor is it on?
-- [ ] Final name?
 
 ---
 
@@ -219,11 +212,14 @@ Items are stored visibly inside the transparent jello body (decided Session 1).
 
 ---
 
-## Open Questions
+## Decided
 
-- [ ] Are there more enemy types for mid/late castle floors?
-- [ ] More bosses between The Big Bottle and The Cleanser?
-- [ ] Can the Jello Cube interact with the Banana Slug?
-- [ ] Does the Jelly Archer flee when approached?
-- [ ] Full details for The Big Bottle boss fight
-- [ ] Jelly Archer positioning and water pill interaction
+- [x] 3 bosses total — Big Bottle (Floor 4), The Cleanser (Floor 8-10), The Last Guard (Floor 15)
+- [x] No additional bosses needed
+- [x] Enemies: Small Sanitizer Bottle, Sanitizer Warrior, Jelly Archer (3 types total)
+
+## Open Questions (Resolve During Build)
+
+- [ ] Jelly Archer: does it flee when approached? Water pill interaction? Positioning?
+- [ ] Big Bottle: exact attack patterns and hit count
+- [ ] Banana Slug: can the Jello Cube interact with it?
