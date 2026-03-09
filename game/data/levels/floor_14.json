@@ -1,0 +1,137 @@
+{
+  "floor": 14,
+  "name": "Gauntlet End",
+  "transition": "elevator",
+  "rooms": [
+    {
+      "width": 4096,
+      "height": 720,
+      "background": "gauntlet",
+      "platforms": [
+        {"type": "solid", "x": 0, "y": 520, "w": 4096, "h": 200},
+
+        {"type": "solid", "x": 80, "y": 440, "w": 140, "h": 16},
+        {"type": "solid", "x": 280, "y": 380, "w": 120, "h": 16},
+        {"type": "solid", "x": 460, "y": 320, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 640, "y": 420, "w": 180, "h": 80},
+        {"type": "solid", "x": 640, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 900, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 1100, "y": 340, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 1300, "y": 430, "w": 160, "h": 16},
+        {"type": "solid", "x": 1520, "y": 370, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 1700, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 1700, "y": 340, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 1980, "y": 400, "w": 120, "h": 16},
+        {"type": "solid", "x": 2160, "y": 350, "w": 140, "h": 16},
+
+        {"type": "solid", "x": 2380, "y": 420, "w": 160, "h": 16},
+        {"type": "solid", "x": 2600, "y": 370, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 2800, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 2800, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 3060, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 3260, "y": 350, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 3460, "y": 420, "w": 160, "h": 16},
+        {"type": "solid", "x": 3680, "y": 370, "w": 120, "h": 16},
+        {"type": "solid", "x": 3860, "y": 320, "w": 236, "h": 16}
+      ],
+      "enemies": [
+        {
+          "type": "sanitizer_warrior",
+          "x": 350,
+          "y": 480,
+          "patrol": [[240, 480], [500, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 1000,
+          "y": 480,
+          "patrol": [[880, 480], [1150, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 1800,
+          "y": 480,
+          "patrol": [[1680, 480], [1950, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 2500,
+          "y": 480,
+          "patrol": [[2380, 480], [2650, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 3400,
+          "y": 480,
+          "patrol": [[3260, 480], [3520, 480]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 680,
+          "y": 308,
+          "patrol": [[640, 308], [780, 308]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 1340,
+          "y": 398,
+          "patrol": [[1300, 398], [1460, 398]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 2020,
+          "y": 368,
+          "patrol": [[1980, 368], [2100, 368]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 3100,
+          "y": 368,
+          "patrol": [[3060, 368], [3200, 368]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 600,
+          "y": 480,
+          "patrol": [[500, 480], [720, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 1600,
+          "y": 480,
+          "patrol": [[1480, 480], [1720, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 2900,
+          "y": 480,
+          "patrol": [[2800, 480], [3040, 480]]
+        }
+      ],
+      "interactables": [
+        {"type": "cooking_pot", "x": 1740, "y": 308},
+        {"type": "water_source", "x": 2840, "y": 308},
+        {"type": "sun_zone", "x": 500, "y": 320, "w": 200, "h": 200},
+        {"type": "sun_zone", "x": 3200, "y": 320, "w": 200, "h": 200}
+      ],
+      "transitions": [
+        {
+          "type": "elevator",
+          "x": 3980,
+          "y": 170,
+          "w": 80,
+          "h": 150,
+          "target_floor": 15
+        }
+      ]
+    }
+  ]
+}

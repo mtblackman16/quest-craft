@@ -1,0 +1,82 @@
+{
+  "floor": 8,
+  "name": "Transition Zone",
+  "transition": "tube",
+  "rooms": [
+    {
+      "width": 2560,
+      "height": 720,
+      "background": "transition",
+      "platforms": [
+        {"type": "solid", "x": 0, "y": 500, "w": 2560, "h": 220},
+
+        {"type": "solid", "x": 80, "y": 420, "w": 140, "h": 16},
+        {"type": "solid", "x": 280, "y": 370, "w": 120, "h": 16},
+        {"type": "solid", "x": 460, "y": 320, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 620, "y": 430, "w": 200, "h": 80},
+        {"type": "solid", "x": 620, "y": 350, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 900, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 1100, "y": 350, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 1300, "y": 420, "w": 160, "h": 16},
+        {"type": "solid", "x": 1520, "y": 370, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 1700, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 1700, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 1960, "y": 400, "w": 120, "h": 16},
+        {"type": "solid", "x": 2140, "y": 350, "w": 140, "h": 16},
+        {"type": "solid", "x": 2340, "y": 300, "w": 220, "h": 16}
+      ],
+      "enemies": [
+        {
+          "type": "sanitizer_warrior",
+          "x": 400,
+          "y": 460,
+          "patrol": [[300, 460], [550, 460]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 1000,
+          "y": 460,
+          "patrol": [[880, 460], [1150, 460]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 1600,
+          "y": 460,
+          "patrol": [[1460, 460], [1720, 460]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 2100,
+          "y": 460,
+          "patrol": [[1960, 460], [2200, 460]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 1140,
+          "y": 318,
+          "patrol": [[1100, 318], [1220, 318]]
+        }
+      ],
+      "interactables": [
+        {"type": "cooking_pot", "x": 660, "y": 308},
+        {"type": "water_source", "x": 1340, "y": 388},
+        {"type": "shrine", "x": 2000, "y": 368}
+      ],
+      "transitions": [
+        {
+          "type": "tube",
+          "x": 2440,
+          "y": 150,
+          "w": 80,
+          "h": 150,
+          "target_floor": 9
+        }
+      ]
+    }
+  ]
+}

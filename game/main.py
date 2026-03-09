@@ -22,6 +22,21 @@ from game.engine.settings import (
 from game.engine.camera import Camera
 from game.entities.player import JelloCube, JelloProjectile
 
+# Boss imports
+try:
+    from game.entities.bosses import Boss, BigBottle, TheCleanser, TheLastGuard, Gracie, MamaSloth
+    BOSSES_AVAILABLE = True
+except ImportError:
+    BOSSES_AVAILABLE = False
+    Boss = None
+
+# Secrets import
+try:
+    from game.systems.secrets import SecretsManager
+    SECRETS_AVAILABLE = True
+except ImportError:
+    SECRETS_AVAILABLE = False
+
 
 class Game:
     """Main game class — owns the state machine and all systems."""
@@ -48,6 +63,13 @@ class Game:
         self._first_death_triggered = False
         self._first_kill_triggered = False
         self._first_split_triggered = False
+        self._first_boss_triggered = False
+
+        # Opening cinematic tracker
+        self._opening_shown = False
+
+        # Active boss reference (only one boss at a time)
+        self._boss = None
 
         # Controller
         self.joystick = None
@@ -76,6 +98,7 @@ class Game:
         self.hud = None
         self.narrator = None
         self.crafting = None
+        self.secrets = None
 
         # Cached background surface (avoid per-line gradient each frame)
         self._bg_cache_floor = -1
@@ -147,6 +170,13 @@ class Game:
         except Exception:
             self.crafting = None
 
+        if SECRETS_AVAILABLE:
+            try:
+                self.secrets = SecretsManager()
+                self.secrets.subscribe(self.event_bus)
+            except Exception:
+                self.secrets = None
+
     def _spawn_enemies_from_data(self, enemy_configs):
         """Create enemy instances from level data configs."""
         from game.entities.enemies import SmallSanitizerBottle, SanitizerWarrior, JellyArcher
@@ -198,6 +228,8 @@ class Game:
         self.enemy_projectiles = []
         self.hazards = []
 
+        self._boss = None
+
         if self.level_manager:
             try:
                 self.level_manager.load_floor(floor_num)
@@ -209,6 +241,27 @@ class Game:
                 self._setup_fallback_level()
         else:
             self._setup_fallback_level()
+
+        # Spawn boss on boss floors
+        if BOSSES_AVAILABLE:
+            level_w = self._get_level_width()
+            arena_r = max(1180, level_w - 100)
+            boss = None
+            if floor_num == 4:
+                boss = BigBottle(level_w // 2, 400, arena_left=100, arena_right=arena_r)
+            elif floor_num == 8:
+                boss = TheCleanser(level_w // 2, 400, arena_left=100, arena_right=arena_r)
+            elif floor_num == 15:
+                boss = TheLastGuard(level_w // 2, 400, arena_left=100, arena_right=arena_r)
+            if boss:
+                self._boss = boss
+                self.enemies.append(boss)
+                if self.music:
+                    self.music.set_zone(MusicZone.BOSS)
+                    self.music.play_stinger('boss_entrance')
+                if not self._first_boss_triggered:
+                    self._first_boss_triggered = True
+                    self.event_bus.emit(GameEvent.FIRST_BOSS_ENCOUNTER)
 
         # Camera bounds
         level_w = self._get_level_width()
@@ -304,6 +357,15 @@ class Game:
         # Update level manager with new difficulty
         if self.level_manager:
             self.level_manager._difficulty = self.difficulty
+
+        # Play opening cinematic on first run
+        if not self._opening_shown:
+            self._opening_shown = True
+            try:
+                from game.ui.opening import run_opening
+                run_opening(self.screen, self.clock, self.joystick)
+            except Exception:
+                pass
 
         self.state = GameState.GAMEPLAY
         self._start_gameplay()
@@ -423,13 +485,13 @@ class Game:
                     self.player_projectiles.remove(proj)
 
             # ── Update enemies + collect their projectiles ──
+            from game.entities.enemies import SmallSanitizerBottle, SanitizerWarrior, JellyArcher
             for enemy in self.enemies[:]:
                 if not enemy.alive:
                     continue
                 enemy.update(self.player)
 
                 # Collect enemy-spawned projectiles/hazards
-                from game.entities.enemies import SmallSanitizerBottle, SanitizerWarrior, JellyArcher
                 if isinstance(enemy, SmallSanitizerBottle):
                     if enemy.should_spawn_trail():
                         self.hazards.append(enemy.spawn_trail())
@@ -449,6 +511,53 @@ class Game:
                         arrow = enemy.consume_pending_arrow(self.player)
                         if arrow:
                             self.enemy_projectiles.append(arrow)
+
+                # Collect boss-specific projectiles
+                if BOSSES_AVAILABLE and isinstance(enemy, Boss):
+                    if hasattr(enemy, 'consume_pending_trails'):
+                        for trail in enemy.consume_pending_trails():
+                            self.hazards.append(trail)
+                    if hasattr(enemy, 'consume_pending_projectiles'):
+                        result = enemy.consume_pending_projectiles()
+                        if isinstance(result, tuple):
+                            # TheCleanser returns (globs, puddles)
+                            globs, puddles = result
+                            self.enemy_projectiles.extend(globs)
+                            self.hazards.extend(puddles)
+                        elif isinstance(result, list):
+                            self.enemy_projectiles.extend(result)
+                    if hasattr(enemy, 'consume_pending_arrows'):
+                        for arrow in enemy.consume_pending_arrows():
+                            self.enemy_projectiles.append(arrow)
+                    # Gracie spawns minion enemies ("I'm Telling Mom!")
+                    if hasattr(enemy, 'consume_spawn_enemies'):
+                        for spawn_cfg in enemy.consume_spawn_enemies():
+                            minions = self._spawn_enemies_from_data([spawn_cfg])
+                            self.enemies.extend(minions)
+
+            # ── Boss special effects (MamaSloth spray cone, freeze) ──
+            if BOSSES_AVAILABLE and self._boss and self._boss.alive:
+                if hasattr(self._boss, 'player_freeze_request') and self._boss.player_freeze_request:
+                    self._boss.player_freeze_request = False
+                    # Freeze player for 2 seconds (120 frames)
+                    if self.player and hasattr(self.player, 'freeze_timer'):
+                        self.player.freeze_timer = 120
+                if hasattr(self._boss, 'active_spray_cone') and self._boss.active_spray_cone:
+                    cx, cy, angle, half_arc, spray_range, damage = self._boss.active_spray_cone
+                    # Check if player is in the cone
+                    if self.player:
+                        px = self.player.x + self.player.w / 2
+                        py = self.player.y + self.player.h / 2
+                        dx = px - cx
+                        dy = py - cy
+                        dist = math.hypot(dx, dy)
+                        if dist < spray_range:
+                            player_angle = math.atan2(dy, dx)
+                            angle_diff = abs(player_angle - angle)
+                            if angle_diff > math.pi:
+                                angle_diff = 2 * math.pi - angle_diff
+                            if angle_diff < half_arc:
+                                self.player.take_damage(damage, self.difficulty)
 
             # ── Update enemy projectiles ──
             for proj in self.enemy_projectiles[:]:
@@ -533,6 +642,27 @@ class Game:
                                 dmg, is_player_damage=True
                             )
 
+            # Check boss defeat
+            if self._boss and not self._boss.alive:
+                boss_type = getattr(self._boss, 'boss_type', None)
+                self.event_bus.emit(GameEvent.BOSS_DEFEATED,
+                                    boss_type=boss_type)
+                if self.sfx:
+                    self.sfx.play('enemy_death', self._boss.x)
+                if self.vfx:
+                    cx = self._boss.x + self._boss.w / 2
+                    cy = self._boss.y + self._boss.h / 2
+                    self.vfx.burst('death', cx, cy)
+                    self.camera.shake(10)
+
+                # The Last Guard defeated → credits
+                if BOSSES_AVAILABLE and isinstance(self._boss, TheLastGuard):
+                    self._boss = None
+                    self.state = GameState.CREDITS
+                    break
+
+                self._boss = None
+
             # Remove dead enemies
             self.enemies = [e for e in self.enemies if e.alive]
 
@@ -562,6 +692,11 @@ class Game:
             # ── Crafting ──
             if self.crafting:
                 self.crafting.update()
+
+            # ── Secrets ──
+            if self.secrets:
+                self.secrets.update(self.player, self.current_floor,
+                                    self.frame_count)
 
             # ── Music combat layers ──
             if self.music:
@@ -645,6 +780,14 @@ class Game:
         # VFX (on top of everything in world space)
         if self.vfx:
             self.vfx.draw(self.screen, cam_offset)
+
+        # Secrets (wall splats, glitch effect, golden border)
+        if self.secrets:
+            self.secrets.draw(self.screen, cam_offset)
+
+        # Boss health bar (screen-space)
+        if self._boss and self._boss.alive:
+            self._boss.draw_boss_health_bar(self.screen)
 
         # HUD (screen-space, no camera offset)
         if self.hud and self.player:
@@ -734,7 +877,7 @@ class Game:
         elif key == KEY_PAUSE:
             self.state = GameState.PAUSE
         elif key == KEY_INVENTORY:
-            pass  # TODO
+            self._open_inventory()
         elif key in (pygame.K_DOWN, pygame.K_s):
             self.player.start_ground_pound()
 
@@ -760,7 +903,7 @@ class Game:
         elif button == CTRL_PLUS:
             self.state = GameState.PAUSE
         elif button == CTRL_MINUS:
-            pass  # TODO: inventory
+            self._open_inventory()
 
     def _do_interact(self):
         """Context-sensitive interact."""
@@ -775,6 +918,17 @@ class Game:
                         self.sfx.play('collect', self.player.x)
                     break
         self.player.interact()
+
+    def _open_inventory(self):
+        """Open inventory screen (pauses gameplay)."""
+        if not self.player:
+            return
+        try:
+            from game.ui.inventory import run_inventory
+            run_inventory(self.screen, self.clock, self.player,
+                          self.crafting, self.joystick)
+        except Exception:
+            pass  # graceful fallback — no inventory screen available
 
     # ── Screen transitions ──
 

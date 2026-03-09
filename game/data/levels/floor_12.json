@@ -1,0 +1,111 @@
+{
+  "floor": 12,
+  "name": "Gauntlet Start",
+  "transition": "elevator",
+  "rooms": [
+    {
+      "width": 3840,
+      "height": 720,
+      "background": "gauntlet",
+      "platforms": [
+        {"type": "solid", "x": 0, "y": 520, "w": 3840, "h": 200},
+
+        {"type": "solid", "x": 80, "y": 440, "w": 160, "h": 16},
+        {"type": "solid", "x": 300, "y": 380, "w": 120, "h": 16},
+        {"type": "solid", "x": 480, "y": 320, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 660, "y": 420, "w": 200, "h": 80},
+        {"type": "solid", "x": 660, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 940, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 1140, "y": 350, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 1340, "y": 430, "w": 160, "h": 16},
+        {"type": "solid", "x": 1560, "y": 370, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 1740, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 1740, "y": 340, "w": 100, "h": 16},
+
+        {"type": "solid", "x": 2020, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 2220, "y": 350, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 2420, "y": 430, "w": 160, "h": 16},
+        {"type": "solid", "x": 2640, "y": 380, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 2840, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 2840, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 3100, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 3300, "y": 350, "w": 120, "h": 16},
+        {"type": "solid", "x": 3500, "y": 400, "w": 160, "h": 16},
+        {"type": "solid", "x": 3700, "y": 340, "w": 140, "h": 16}
+      ],
+      "enemies": [
+        {
+          "type": "sanitizer_warrior",
+          "x": 500,
+          "y": 480,
+          "patrol": [[380, 480], [650, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 1500,
+          "y": 480,
+          "patrol": [[1340, 480], [1650, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 2500,
+          "y": 480,
+          "patrol": [[2420, 480], [2650, 480]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 980,
+          "y": 368,
+          "patrol": [[940, 368], [1080, 368]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 2060,
+          "y": 368,
+          "patrol": [[2020, 368], [2160, 368]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 800,
+          "y": 480,
+          "patrol": [[700, 480], [920, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 1900,
+          "y": 480,
+          "patrol": [[1800, 480], [2000, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 3200,
+          "y": 480,
+          "patrol": [[3100, 480], [3350, 480]]
+        }
+      ],
+      "interactables": [
+        {"type": "sun_zone", "x": 1100, "y": 320, "w": 200, "h": 200},
+        {"type": "sun_zone", "x": 2800, "y": 320, "w": 200, "h": 200},
+        {"type": "cooking_pot", "x": 700, "y": 308},
+        {"type": "water_source", "x": 1780, "y": 308}
+      ],
+      "transitions": [
+        {
+          "type": "elevator",
+          "x": 3740,
+          "y": 190,
+          "w": 80,
+          "h": 150,
+          "target_floor": 13
+        }
+      ]
+    }
+  ]
+}
