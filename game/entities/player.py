@@ -132,6 +132,9 @@ class JelloCube:
         # Invulnerability frames after taking damage
         self.invuln_timer = 0
 
+        # Freeze (MamaSloth Mom Look)
+        self.freeze_timer = 0
+
     def update(self, keys, platforms, joystick=None):
         """Main update — called once per frame."""
         self.pending_events = []
@@ -150,50 +153,54 @@ class JelloCube:
             self.pill_timer -= 1
             if self.pill_timer <= 0:
                 self.active_pill = None
+        if self.freeze_timer > 0:
+            self.freeze_timer -= 1
 
         # ── Movement ──
+        frozen = self.freeze_timer > 0
         if not self.ground_pounding:
             self.vx = 0
             moved = False
 
-            # Keyboard
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                self.vx = -self.speed * self.speed_multiplier
-                self.facing = -1
-                moved = True
-            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                self.vx = self.speed * self.speed_multiplier
-                self.facing = 1
-                moved = True
+            if not frozen:
+                # Keyboard
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    self.vx = -self.speed * self.speed_multiplier
+                    self.facing = -1
+                    moved = True
+                if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                    self.vx = self.speed * self.speed_multiplier
+                    self.facing = 1
+                    moved = True
 
-            # Controller left stick
-            if joystick:
-                try:
-                    axis_x = joystick.get_axis(AXIS_LX)
-                    if axis_x < -STICK_DEADZONE:
-                        self.vx = -self.speed * self.speed_multiplier * min(1.0, abs(axis_x))
-                        self.facing = -1
-                        moved = True
-                    elif axis_x > STICK_DEADZONE:
-                        self.vx = self.speed * self.speed_multiplier * min(1.0, abs(axis_x))
-                        self.facing = 1
-                        moved = True
-                    # D-pad movement
-                    hat = joystick.get_hat(0)
-                    if hat[0] == -1:
-                        self.vx = -self.speed * self.speed_multiplier
-                        self.facing = -1
-                        moved = True
-                    elif hat[0] == 1:
-                        self.vx = self.speed * self.speed_multiplier
-                        self.facing = 1
-                        moved = True
-                    # Right stick facing (without moving)
-                    rx = joystick.get_axis(AXIS_RX)
-                    if abs(rx) > STICK_DEADZONE:
-                        self.facing = 1 if rx > 0 else -1
-                except Exception:
-                    pass
+                # Controller left stick
+                if joystick:
+                    try:
+                        axis_x = joystick.get_axis(AXIS_LX)
+                        if axis_x < -STICK_DEADZONE:
+                            self.vx = -self.speed * self.speed_multiplier * min(1.0, abs(axis_x))
+                            self.facing = -1
+                            moved = True
+                        elif axis_x > STICK_DEADZONE:
+                            self.vx = self.speed * self.speed_multiplier * min(1.0, abs(axis_x))
+                            self.facing = 1
+                            moved = True
+                        # D-pad movement
+                        hat = joystick.get_hat(0)
+                        if hat[0] == -1:
+                            self.vx = -self.speed * self.speed_multiplier
+                            self.facing = -1
+                            moved = True
+                        elif hat[0] == 1:
+                            self.vx = self.speed * self.speed_multiplier
+                            self.facing = 1
+                            moved = True
+                        # Right stick facing (without moving)
+                        rx = joystick.get_axis(AXIS_RX)
+                        if abs(rx) > STICK_DEADZONE:
+                            self.facing = 1 if rx > 0 else -1
+                    except Exception:
+                        pass
 
             # Idle tracking
             if moved or not self.on_ground:
@@ -267,6 +274,8 @@ class JelloCube:
 
     def jump(self):
         """Jump — only when on ground and not ground pounding."""
+        if self.freeze_timer > 0:
+            return False
         if self.on_ground and not self.ground_pounding:
             self.vy = self.jump_power
             self.on_ground = False
@@ -277,6 +286,8 @@ class JelloCube:
 
     def shoot(self):
         """Fire a jello shot. Costs health/mass. Returns JelloProjectile or None."""
+        if self.freeze_timer > 0:
+            return None
         if self.health <= JELLY_SHOT_COST + 5:  # don't suicide
             return None
         self.health -= JELLY_SHOT_COST
@@ -289,6 +300,8 @@ class JelloCube:
 
     def start_ground_pound(self):
         """Initiate ground pound — only while airborne."""
+        if self.freeze_timer > 0:
+            return False
         if not self.on_ground and not self.ground_pounding:
             self.ground_pounding = True
             self.vy = GROUND_POUND_SPEED
@@ -298,6 +311,8 @@ class JelloCube:
 
     def perfect_dodge(self):
         """Start a perfect dodge — brief invulnerability."""
+        if self.freeze_timer > 0:
+            return False
         if self.dodge_cooldown > 0:
             return False
         self.dodge_timer = PERFECT_DODGE_FRAMES
@@ -499,6 +514,13 @@ class JelloCube:
             else:
                 pupil_y = eye_y + (1 if not self.on_ground and self.vy > 0 else 0)
             pygame.draw.circle(surf, (20, 20, 40), (int(pupil_x), int(pupil_y)), pupil_size)
+
+        # Freeze overlay
+        if self.freeze_timer > 0:
+            ice = pygame.Surface((max(1, draw_w + 4), max(1, draw_h + 4)), pygame.SRCALPHA)
+            alpha = min(120, 60 + self.freeze_timer)
+            pygame.draw.rect(ice, (150, 220, 255, alpha), (0, 0, draw_w + 4, draw_h + 4), border_radius=8)
+            surf.blit(ice, (draw_x - 2 + int(jiggle_x), draw_y - 2))
 
         # Water indicator
         if self.has_water:

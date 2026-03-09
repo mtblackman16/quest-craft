@@ -7,6 +7,9 @@ import pygame
 import sys
 import os
 import math
+import argparse
+import json
+import time as _time
 
 # Ensure game package is importable
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -41,11 +44,25 @@ except ImportError:
 class Game:
     """Main game class — owns the state machine and all systems."""
 
-    def __init__(self):
+    def __init__(self, test_mode=False, test_floor=1, test_duration=30):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         pygame.display.set_caption("SPLIT")
         self.clock = pygame.time.Clock()
+
+        # Test mode (automated playtesting)
+        self.test_mode = test_mode
+        self.test_start_floor = test_floor
+        self.test_duration = test_duration  # seconds per floor
+        self._test_ai_tick = 0  # frame counter for AI decisions
+        self._test_run_dir = None  # set by harness
+        self._test_log_file = None  # JSONL file handle
+        self._test_floor_start = 0  # time.time() when floor started
+        self._test_last_screenshot = 0  # time of last screenshot
+        self._test_screenshot_count = 0
+        self._test_max_floor = 15  # stop after this floor
+        self._test_prev_pos = None  # for stuck detection
+        self._test_stuck_count = 0
 
         # Event bus
         self.event_bus = EventBus()
@@ -111,6 +128,31 @@ class Game:
                 self.joystick.init()
             except Exception:
                 self.joystick = None
+
+    def _show_reconnect_overlay(self):
+        """Show 'Reconnect Controller' overlay, blocking until reconnected or keyboard dismiss."""
+        font = pygame.font.Font(None, 48)
+        small = pygame.font.Font(None, 28)
+        overlay = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 160))
+        msg = font.render("Controller Disconnected", True, (255, 200, 80))
+        hint = small.render("Reconnect controller or press SPACE to continue with keyboard", True, (200, 200, 200))
+        overlay.blit(msg, (SCREEN_W // 2 - msg.get_width() // 2, SCREEN_H // 2 - 40))
+        overlay.blit(hint, (SCREEN_W // 2 - hint.get_width() // 2, SCREEN_H // 2 + 20))
+
+        waiting = True
+        while waiting:
+            self.clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self._quit()
+                if event.type == pygame.JOYDEVICEADDED:
+                    self._init_controller()
+                    waiting = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    waiting = False
+            self.screen.blit(overlay, (0, 0))
+            pygame.display.flip()
 
     def _init_systems(self):
         """Initialize all game systems. Called once at startup."""
@@ -226,6 +268,10 @@ class Game:
         self.enemy_projectiles = []
         self.hazards = []
 
+        # Reset floor timer for test mode
+        if self.test_mode:
+            self._test_floor_start = _time.time()
+
         self._boss = None
 
         if self.level_manager:
@@ -320,6 +366,24 @@ class Game:
             return self.level_manager.get_room_height()
         return SCREEN_H
 
+    def get_state_snapshot(self):
+        """Return dict of current game state for test logging."""
+        return {
+            'timestamp': _time.time(),
+            'frame': self.frame_count,
+            'floor': self.current_floor,
+            'state': self.state.value if hasattr(self.state, 'value') else str(self.state),
+            'player_x': round(self.player.x, 1) if self.player else None,
+            'player_y': round(self.player.y, 1) if self.player else None,
+            'player_health': self.player.health if self.player else None,
+            'enemies_alive': len([e for e in self.enemies if e.alive]),
+            'fps': int(self.clock.get_fps()),
+        }
+
+    def capture_screenshot(self, path):
+        """Save current screen to a PNG file."""
+        pygame.image.save(self.screen, path)
+
     def run(self):
         """Main loop."""
         self._init_systems()
@@ -339,18 +403,31 @@ class Game:
                 self.state = GameState.TITLE
 
     def _run_title(self):
-        """Title screen."""
-        try:
-            from game.ui.title_screen import run_title_screen
-            result = run_title_screen(self.screen, self.clock, self.joystick)
-            if result is None:
-                self._quit()
-            self.difficulty = result
-        except Exception:
-            result = self._fallback_title()
-            if result is None:
-                self._quit()
-            self.difficulty = result
+        """Title screen. Loops on attract timeout; quits only on window close."""
+        if self.test_mode:
+            # Auto-select Normal difficulty in test mode
+            self.difficulty = Difficulty.NORMAL
+            if self.level_manager:
+                self.level_manager._difficulty = self.difficulty
+            self.state = GameState.GAMEPLAY
+            self._start_gameplay()
+            # Override starting floor if requested
+            if self.test_start_floor > 1:
+                self.player.x = 100
+                self.player.y = 400
+                self._load_floor(self.test_start_floor)
+            return
+
+        while True:
+            try:
+                from game.ui.title_screen import run_title_screen
+                result = run_title_screen(self.screen, self.clock, self.joystick)
+            except Exception:
+                result = self._fallback_title()
+            if result is not None:
+                break
+            # Attract timeout — loop title screen again
+        self.difficulty = result
 
         # Update level manager with new difficulty
         if self.level_manager:
@@ -399,6 +476,10 @@ class Game:
                         self.player.start_ground_pound()
                 if event.type == pygame.JOYDEVICEADDED:
                     self._init_controller()
+                if event.type == pygame.JOYDEVICEREMOVED:
+                    self.joystick = None
+                    self._show_reconnect_overlay()
+                    self._init_controller()
 
             # Analog stick ground pound (edge detection)
             if self.joystick and self.player:
@@ -420,7 +501,14 @@ class Game:
 
             # ── Update player ──
             keys = pygame.key.get_pressed()
-            self.player.update(keys, self.platforms, self.joystick)
+
+            # Test mode: AI drives input instead of human
+            if self.test_mode:
+                self._test_ai_tick += 1
+                keys = self._test_ai_get_keys()
+                self._test_ai_actions()
+
+            self.player.update(keys, self.platforms, self.joystick if not self.test_mode else None)
 
             # Process player events
             for evt in self.player.pending_events:
@@ -538,7 +626,7 @@ class Game:
                 if hasattr(self._boss, 'player_freeze_request') and self._boss.player_freeze_request:
                     self._boss.player_freeze_request = False
                     # Freeze player for 2 seconds (120 frames)
-                    if self.player and hasattr(self.player, 'freeze_timer'):
+                    if self.player:
                         self.player.freeze_timer = 120
                 if hasattr(self._boss, 'active_spray_cone') and self._boss.active_spray_cone:
                     cx, cy, angle, half_arc, spray_range, damage = self._boss.active_spray_cone
@@ -711,6 +799,139 @@ class Game:
             cam_offset = self.camera.get_offset()
             self._draw_gameplay(cam_offset)
             pygame.display.flip()
+
+            # ── Test mode: screenshots, logging, floor auto-advance ──
+            if self.test_mode and self._test_run_dir:
+                self._test_capture_and_log()
+
+    # ── Test mode helpers ──
+
+    def _test_capture_and_log(self):
+        """Screenshot capture, state logging, and floor auto-advance for test mode."""
+        now = _time.time()
+        floor_dir = os.path.join(self._test_run_dir, f'floor_{self.current_floor:02d}')
+        os.makedirs(floor_dir, exist_ok=True)
+
+        # Screenshot every ~2 seconds
+        if now - self._test_last_screenshot >= 2.0:
+            shot_name = f'frame_{self.frame_count:06d}.png'
+            self.capture_screenshot(os.path.join(floor_dir, shot_name))
+            self._test_screenshot_count += 1
+            self._test_last_screenshot = now
+
+        # State log every 30 frames (~0.5s)
+        if self._test_log_file and self.frame_count % 30 == 0:
+            snapshot = self.get_state_snapshot()
+            self._test_log_file.write(json.dumps(snapshot) + '\n')
+            self._test_log_file.flush()
+
+        # Stuck detection every 60 frames (~1s)
+        if self.player and self.frame_count % 60 == 0:
+            cur = (round(self.player.x, 0), round(self.player.y, 0))
+            if cur == self._test_prev_pos:
+                self._test_stuck_count += 1
+                if self._test_stuck_count >= 5:
+                    self.capture_screenshot(
+                        os.path.join(floor_dir, f'stuck_{self.frame_count:06d}.png'))
+                    self._test_screenshot_count += 1
+                    # Unstick: jump and reverse
+                    self.player.jump()
+                    self.player.facing *= -1
+                    self._test_stuck_count = 0
+            else:
+                self._test_stuck_count = 0
+            self._test_prev_pos = cur
+
+        # Floor auto-advance after duration expires
+        if now - self._test_floor_start >= self.test_duration:
+            next_floor = self.current_floor + 1
+            if next_floor > self._test_max_floor:
+                # Done — take final screenshot and quit
+                self.capture_screenshot(os.path.join(floor_dir, 'end.png'))
+                self._test_screenshot_count += 1
+                self._quit()
+            else:
+                # Take end-of-floor screenshot, advance
+                self.capture_screenshot(os.path.join(floor_dir, 'end.png'))
+                self._test_screenshot_count += 1
+                self.player.x = 100
+                self.player.y = 400
+                self.player.vx = 0
+                self.player.vy = 0
+                self._load_floor(next_floor)
+                self._test_floor_start = now
+
+    def _test_ai_get_keys(self):
+        """Return a fake key state dict for AI-driven movement."""
+        class FakeKeys:
+            """Mimics pygame.key.get_pressed() with AI-chosen keys."""
+            def __init__(self):
+                self._pressed = set()
+            def __getitem__(self, key):
+                return key in self._pressed
+
+        keys = FakeKeys()
+
+        if not self.player:
+            return keys
+
+        # Check if there's a door/transition to walk toward
+        target_x = None
+        if self.level_manager:
+            transitions = self.level_manager.get_transitions()
+            if transitions:
+                # Walk toward nearest transition
+                nearest = min(transitions, key=lambda t: abs(t['x'] - self.player.x))
+                target_x = nearest['x']
+
+        if target_x is not None:
+            # Walk toward the transition zone
+            if self.player.x < target_x - 20:
+                keys._pressed.add(pygame.K_RIGHT)
+            elif self.player.x > target_x + 20:
+                keys._pressed.add(pygame.K_LEFT)
+            else:
+                # On top of transition — interact to trigger it
+                keys._pressed.add(pygame.K_RIGHT)
+        else:
+            # No transitions — default walk right, bounce at edges
+            level_w = self._get_level_width()
+            if self.player.x > level_w - 100:
+                keys._pressed.add(pygame.K_LEFT)
+            elif self.player.x < 10:
+                keys._pressed.add(pygame.K_RIGHT)
+            else:
+                keys._pressed.add(pygame.K_RIGHT)
+
+        return keys
+
+    def _test_ai_actions(self):
+        """Trigger discrete actions (jump, shoot, interact) on schedule."""
+        if not self.player:
+            return
+
+        tick = self._test_ai_tick
+
+        # Jump every ~45 frames, or when near a wall edge
+        if tick % 45 == 0:
+            self.player.jump()
+
+        # Shoot when enemies are within 250px horizontally
+        if tick % 15 == 0:
+            for e in self.enemies:
+                if e.alive and abs(e.x - self.player.x) < 250:
+                    proj = self.player.shoot()
+                    if proj:
+                        self.player_projectiles.append(proj)
+                    break
+
+        # Try interact every ~60 frames (doors, pickups)
+        if tick % 60 == 0:
+            self._do_interact()
+
+        # Ground pound occasionally when airborne
+        if tick % 120 == 0 and not self.player.on_ground:
+            self.player.start_ground_pound()
 
     def _check_floor_transitions(self):
         """Check if player reached an elevator/transition to next floor."""
@@ -931,6 +1152,16 @@ class Game:
     # ── Screen transitions ──
 
     def _run_death(self):
+        if self.test_mode:
+            # Auto-retry in test mode
+            self.state = GameState.GAMEPLAY
+            self._start_gameplay()
+            if self.test_start_floor > 1:
+                self.player.x = 100
+                self.player.y = 400
+                self._load_floor(self.test_start_floor)
+            return
+
         try:
             from game.ui.death_screen import run_death_screen
             result = run_death_screen(self.screen, self.clock, self.run_count, self.joystick)
@@ -1084,7 +1315,20 @@ class FallbackPlatform:
 
 
 def main():
-    game = Game()
+    parser = argparse.ArgumentParser(description="SPLIT — A Jello Cube Adventure")
+    parser.add_argument('--test-mode', action='store_true',
+                        help='Run in automated test mode (AI plays the game)')
+    parser.add_argument('--floor', type=int, default=1,
+                        help='Starting floor in test mode (default: 1)')
+    parser.add_argument('--duration', type=int, default=30,
+                        help='Seconds per floor in test mode (default: 30)')
+    args, _ = parser.parse_known_args()
+
+    game = Game(
+        test_mode=args.test_mode,
+        test_floor=args.floor,
+        test_duration=args.duration,
+    )
     game.run()
 
 

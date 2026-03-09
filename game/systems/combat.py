@@ -49,30 +49,38 @@ class CombatSystem:
             List of event dicts suitable for VFX / sound triggers.
         """
         events = []
+        active_pill = getattr(player, 'active_pill', None)
 
         player_projs = projectiles.get('player', [])
         enemy_projs = projectiles.get('enemy', [])
         hazards = projectiles.get('hazards', [])
 
         # ── 1. Player projectiles → enemies ──
-        events += self._player_vs_enemies(player_projs, enemies)
+        events += self._player_vs_enemies(player, player_projs, enemies, active_pill)
 
         # ── 2. Enemy projectiles → player ──
-        events += self._enemy_projs_vs_player(player, enemy_projs, difficulty)
+        events += self._enemy_projs_vs_player(player, enemy_projs, difficulty, active_pill)
 
         # ── 3. Hazards → player ──
-        events += self._hazards_vs_player(player, hazards, difficulty)
+        events += self._hazards_vs_player(player, hazards, difficulty, active_pill)
 
         # ── 4. Ground pound → enemies in radius ──
-        events += self._ground_pound_vs_enemies(player, enemies)
+        events += self._ground_pound_vs_enemies(player, enemies, active_pill)
 
         return events
 
     # ── Internal collision methods ──
 
-    def _player_vs_enemies(self, player_projs, enemies):
+    def _player_vs_enemies(self, player, player_projs, enemies, active_pill=None):
         """Check each player projectile against each alive enemy."""
         events = []
+        # Pill damage multiplier
+        pill_mult = 1.0
+        if active_pill == 'fire':
+            pill_mult = 1.5
+        elif active_pill == 'attack_up':
+            pill_mult = 2.0
+
         for proj in player_projs:
             if not proj.alive:
                 continue
@@ -87,12 +95,21 @@ class CombatSystem:
 
                     # Warriors have armor — jelly shots only deal 2 damage
                     if enemy.enemy_type == EnemyType.SANITIZER_WARRIOR:
-                        damage = WARRIOR_JELLY_DAMAGE
+                        damage = int(WARRIOR_JELLY_DAMAGE * pill_mult)
                     else:
-                        damage = JELLY_SHOT_DAMAGE
+                        damage = int(JELLY_SHOT_DAMAGE * pill_mult)
 
                     killed = enemy.take_damage(damage)
                     proj.alive = False
+
+                    # Electricity pill: stun enemy briefly
+                    if active_pill == 'electricity' and hasattr(enemy, 'stun_timer'):
+                        enemy.stun_timer = 30  # 0.5 sec stun
+
+                    # Water pill: heal player on kill
+                    if active_pill == 'water' and killed and player:
+                        heal = 5
+                        player.health = min(player.max_health, player.health + heal)
 
                     # Build event
                     evt = {
@@ -132,7 +149,7 @@ class CombatSystem:
 
         return events
 
-    def _enemy_projs_vs_player(self, player, enemy_projs, difficulty):
+    def _enemy_projs_vs_player(self, player, enemy_projs, difficulty, active_pill=None):
         """Check enemy projectiles against the player."""
         events = []
         if not hasattr(player, 'alive') or (hasattr(player, 'health') and player.health <= 0):
@@ -140,13 +157,16 @@ class CombatSystem:
 
         player_rect = player.get_rect()
         dmg_mult = DIFFICULTY_SETTINGS[difficulty]['damage_multiplier']
+        # Ice pill: 50% incoming damage reduction
+        if active_pill == 'ice':
+            dmg_mult *= 0.5
 
         for proj in enemy_projs:
             if not proj.alive:
                 continue
             if player_rect.colliderect(proj.get_rect()):
                 raw_damage = proj.damage
-                scaled_damage = int(raw_damage * dmg_mult)
+                scaled_damage = max(1, int(raw_damage * dmg_mult))
                 actual = player.take_damage(scaled_damage, difficulty)
                 proj.alive = False
 
@@ -162,7 +182,7 @@ class CombatSystem:
 
         return events
 
-    def _hazards_vs_player(self, player, hazards, difficulty):
+    def _hazards_vs_player(self, player, hazards, difficulty, active_pill=None):
         """Check ground hazards (trails, puddles) against the player."""
         events = []
         if not hasattr(player, 'alive') or (hasattr(player, 'health') and player.health <= 0):
@@ -170,13 +190,16 @@ class CombatSystem:
 
         player_rect = player.get_rect()
         dmg_mult = DIFFICULTY_SETTINGS[difficulty]['damage_multiplier']
+        # Ice pill: 50% incoming damage reduction
+        if active_pill == 'ice':
+            dmg_mult *= 0.5
 
         for hazard in hazards:
             if not hazard.alive:
                 continue
             if player_rect.colliderect(hazard.get_rect()):
                 raw_damage = hazard.damage
-                scaled_damage = int(raw_damage * dmg_mult)
+                scaled_damage = max(1, int(raw_damage * dmg_mult))
                 actual = player.take_damage(scaled_damage, difficulty)
 
                 if actual > 0:
@@ -191,7 +214,7 @@ class CombatSystem:
 
         return events
 
-    def _ground_pound_vs_enemies(self, player, enemies):
+    def _ground_pound_vs_enemies(self, player, enemies, active_pill=None):
         """If the player just landed a ground pound, damage nearby enemies."""
         events = []
         if not getattr(player, 'just_landed_pound', False):
@@ -199,6 +222,13 @@ class CombatSystem:
 
         pound_cx = player.x + player.w / 2
         pound_cy = player.y + player.h  # bottom of player = impact point
+
+        # Pill damage multiplier for ground pound
+        pill_mult = 1.0
+        if active_pill == 'fire':
+            pill_mult = 1.5
+        elif active_pill == 'attack_up':
+            pill_mult = 2.0
 
         for enemy in enemies:
             if not enemy.alive:
@@ -211,9 +241,13 @@ class CombatSystem:
                 # Ground pound damage scales inversely with distance
                 base_damage = 25
                 scale = 1.0 - (dist / GROUND_POUND_RADIUS) * 0.5  # 100%-50%
-                damage = int(base_damage * scale)
+                damage = int(base_damage * scale * pill_mult)
 
                 killed = enemy.take_damage(damage)
+
+                # Electricity pill: stun enemy
+                if active_pill == 'electricity' and hasattr(enemy, 'stun_timer'):
+                    enemy.stun_timer = 30
 
                 evt = {
                     'event': GameEvent.ENEMY_HIT,

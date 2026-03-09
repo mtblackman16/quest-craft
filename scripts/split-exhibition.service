@@ -1,0 +1,20 @@
+[Unit]
+Description=SPLIT Game — Exhibition Kiosk
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+User=mark
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DISPLAY=:0
+Environment=SDL_AUDIODRIVER=alsa
+Environment=AUDIODEV=plughw:0
+WorkingDirectory=/home/mark/quest-craft
+ExecStart=/bin/bash /home/mark/quest-craft/scripts/exhibition.sh
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

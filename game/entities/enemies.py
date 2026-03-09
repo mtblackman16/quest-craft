@@ -256,9 +256,16 @@ class Enemy:
         # Frame counter for per-enemy timing
         self.frame_count = 0
 
+        # Stun timer (electricity pill effect)
+        self.stun_timer = 0
+
     def update(self, player):
         """Run the state machine. Subclasses override specific states."""
         self.frame_count += 1
+
+        if self.stun_timer > 0:
+            self.stun_timer -= 1
+            return  # stunned by electricity — skip all logic
 
         if self.hit_timer > 0:
             self.hit_timer -= 1

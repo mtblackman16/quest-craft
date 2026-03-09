@@ -32,6 +32,7 @@ Desktop.ini
 
 # Logs
 *.log
+playtest_logs/
 
 # Local-only secrets (never pushed)
 docs/onboarding/local-credentials.md
