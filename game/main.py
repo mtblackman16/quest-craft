@@ -43,9 +43,7 @@ class Game:
 
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode(
-            (SCREEN_W, SCREEN_H), pygame.SCALED | pygame.FULLSCREEN
-        )
+        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         pygame.display.set_caption("SPLIT")
         self.clock = pygame.time.Clock()
 
