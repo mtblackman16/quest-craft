@@ -1,0 +1,86 @@
+{
+  "floor": 2,
+  "name": "Deeper Storage",
+  "transition": "elevator",
+  "rooms": [
+    {
+      "width": 3200,
+      "height": 720,
+      "background": "storage_deep",
+      "platforms": [
+        {"type": "solid", "x": 0, "y": 520, "w": 3200, "h": 200},
+
+        {"type": "solid", "x": 80, "y": 440, "w": 120, "h": 16},
+        {"type": "solid", "x": 260, "y": 390, "w": 100, "h": 16},
+        {"type": "solid", "x": 420, "y": 340, "w": 140, "h": 16},
+
+        {"type": "moving", "x": 620, "y": 380, "w": 100, "h": 16,
+         "path": [[620, 380], [820, 380]], "speed": 1.5},
+
+        {"type": "solid", "x": 900, "y": 440, "w": 180, "h": 16},
+        {"type": "solid", "x": 960, "y": 360, "w": 60, "h": 16},
+
+        {"type": "solid", "x": 1150, "y": 400, "w": 200, "h": 16},
+
+        {"type": "moving", "x": 1420, "y": 350, "w": 90, "h": 16,
+         "path": [[1420, 350], [1420, 250]], "speed": 1.0},
+
+        {"type": "solid", "x": 1600, "y": 420, "w": 160, "h": 16},
+        {"type": "solid", "x": 1600, "y": 340, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 1840, "y": 460, "w": 120, "h": 16},
+
+        {"type": "moving", "x": 2020, "y": 400, "w": 100, "h": 16,
+         "path": [[2020, 400], [2200, 400]], "speed": 1.2},
+
+        {"type": "solid", "x": 2300, "y": 440, "w": 200, "h": 80},
+        {"type": "solid", "x": 2300, "y": 360, "w": 80, "h": 16},
+
+        {"type": "solid", "x": 2580, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 2780, "y": 360, "w": 120, "h": 16},
+        {"type": "solid", "x": 2960, "y": 320, "w": 240, "h": 16}
+      ],
+      "enemies": [
+        {
+          "type": "sanitizer_bottle",
+          "x": 500,
+          "y": 480,
+          "patrol": [[400, 480], [700, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 1200,
+          "y": 480,
+          "patrol": [[1150, 480], [1350, 480]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 1900,
+          "y": 480,
+          "patrol": [[1800, 480], [2000, 480]]
+        },
+        {
+          "type": "sanitizer_warrior",
+          "x": 2400,
+          "y": 400,
+          "patrol": [[2300, 400], [2500, 400]]
+        }
+      ],
+      "interactables": [
+        {"type": "water_source", "x": 960, "y": 310},
+        {"type": "cooking_pot", "x": 1190, "y": 372},
+        {"type": "chest", "x": 2340, "y": 328}
+      ],
+      "transitions": [
+        {
+          "type": "elevator",
+          "x": 3080,
+          "y": 170,
+          "w": 80,
+          "h": 150,
+          "target_floor": 3
+        }
+      ]
+    }
+  ]
+}

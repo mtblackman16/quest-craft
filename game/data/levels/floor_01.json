@@ -1,0 +1,63 @@
+{
+  "floor": 1,
+  "name": "Storage Rooms",
+  "transition": "elevator",
+  "rooms": [
+    {
+      "width": 2560,
+      "height": 720,
+      "background": "storage",
+      "platforms": [
+        {"type": "solid", "x": 0, "y": 500, "w": 2560, "h": 220},
+
+        {"type": "solid", "x": 80, "y": 420, "w": 100, "h": 16},
+        {"type": "solid", "x": 240, "y": 380, "w": 80, "h": 16},
+        {"type": "solid", "x": 380, "y": 340, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 560, "y": 400, "w": 200, "h": 16},
+
+        {"type": "solid", "x": 850, "y": 440, "w": 100, "h": 16},
+        {"type": "solid", "x": 1000, "y": 380, "w": 140, "h": 16},
+
+        {"type": "solid", "x": 1220, "y": 420, "w": 160, "h": 80},
+        {"type": "solid", "x": 1220, "y": 340, "w": 60, "h": 16},
+
+        {"type": "solid", "x": 1480, "y": 400, "w": 100, "h": 16},
+        {"type": "solid", "x": 1640, "y": 360, "w": 120, "h": 16},
+
+        {"type": "solid", "x": 1840, "y": 440, "w": 200, "h": 16},
+
+        {"type": "solid", "x": 2100, "y": 400, "w": 140, "h": 16},
+        {"type": "solid", "x": 2300, "y": 350, "w": 260, "h": 16}
+      ],
+      "enemies": [
+        {
+          "type": "sanitizer_bottle",
+          "x": 650,
+          "y": 460,
+          "patrol": [[560, 460], [760, 460]]
+        },
+        {
+          "type": "sanitizer_bottle",
+          "x": 1500,
+          "y": 460,
+          "patrol": [[1400, 460], [1600, 460]]
+        }
+      ],
+      "interactables": [
+        {"type": "chest", "x": 1050, "y": 348},
+        {"type": "water_source", "x": 420, "y": 290}
+      ],
+      "transitions": [
+        {
+          "type": "elevator",
+          "x": 2440,
+          "y": 200,
+          "w": 80,
+          "h": 150,
+          "target_floor": 2
+        }
+      ]
+    }
+  ]
+}
