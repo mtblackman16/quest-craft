@@ -61,8 +61,8 @@ class Platform:
     def draw(self, surf, camera_offset):
         """Default draw — subclasses override for visuals."""
         ox, oy = camera_offset
-        screen_x = self.x - ox
-        screen_y = self.y - oy
+        screen_x = self.x + ox
+        screen_y = self.y + oy
 
         # Off-screen culling: skip if completely outside the viewport
         if (screen_x + self.w < 0 or screen_x > SCREEN_W
@@ -119,8 +119,8 @@ class SolidPlatform(Platform):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
 
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
@@ -188,8 +188,8 @@ class MovingPlatform(Platform):
     # ── draw ──
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
 
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
@@ -282,8 +282,8 @@ class CrumblingPlatform(Platform):
             return  # invisible when broken
 
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
 
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
@@ -378,8 +378,8 @@ class ElevatorPlatform(Platform):
     # ── draw ──
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
 
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):

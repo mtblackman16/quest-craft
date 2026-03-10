@@ -615,6 +615,9 @@ class Game:
                     self.state = GameState.DEATH
                     break
 
+            # Clear processed events so they don't re-trigger next frame
+            self.player.pending_events.clear()
+
             if self.state != GameState.GAMEPLAY:
                 # Draw one final frame with death VFX
                 cam_offset = self.camera.get_offset()

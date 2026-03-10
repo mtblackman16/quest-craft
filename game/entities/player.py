@@ -144,7 +144,8 @@ class JelloCube:
 
     def update(self, keys, platforms, joystick=None, room_width=0, room_height=0):
         """Main update — called once per frame."""
-        self.pending_events = []
+        # NOTE: pending_events is NOT cleared here — the game loop clears it
+        # after processing, so input-generated events (jump, shoot) survive.
         self.just_landed_pound = False
 
         # Tick timers

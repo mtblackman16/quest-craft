@@ -358,7 +358,7 @@ class SmallSanitizerBottle(Enemy):
     """
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=30, h=48,
+        super().__init__(x, y, w=45, h=72,
                          health=SMALL_BOTTLE_HP,
                          enemy_type=EnemyType.SANITIZER_BOTTLE)
         self.patrol_speed = 0.8
@@ -450,7 +450,7 @@ class SanitizerWarrior(Enemy):
     """
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=60, h=80,
+        super().__init__(x, y, w=90, h=120,
                          health=SANITIZER_WARRIOR_HP,
                          enemy_type=EnemyType.SANITIZER_WARRIOR)
         self.patrol_speed = 1.0
@@ -584,7 +584,7 @@ class JellyArcher(Enemy):
     """Jelly archer — 20 HP glass cannon. Stays far, fires SanitizerArrows."""
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=36, h=48,
+        super().__init__(x, y, w=54, h=72,
                          health=JELLY_ARCHER_HP,
                          enemy_type=EnemyType.JELLY_ARCHER)
         self.patrol_speed = 1.2

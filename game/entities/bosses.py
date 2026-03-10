@@ -232,7 +232,7 @@ class BigBottle(Boss):
     """Giant sanitizer bottle boss. 2 phases with spread and charge attacks."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=120, h=160,
+        super().__init__(x, y, w=150, h=200,
                          health=BIG_BOTTLE_HP,
                          boss_type=BossType.BIG_BOTTLE)
         self.boss_name = "THE BIG BOTTLE"
@@ -442,7 +442,7 @@ class TheCleanser(Boss):
     Must be struck from above with a jelly shot, then ground pounded."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=100, h=130,
+        super().__init__(x, y, w=125, h=162,
                          health=CLEANSER_HP,
                          boss_type=BossType.CLEANSER)
         self.boss_name = "THE CLEANSER"
@@ -695,7 +695,7 @@ class TheLastGuard(Boss):
     Radiance-level difficulty."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=90, h=110,
+        super().__init__(x, y, w=112, h=138,
                          health=LAST_GUARD_HP,
                          boss_type=BossType.LAST_GUARD)
         self.boss_name = "THE LAST GUARD"
@@ -1099,7 +1099,7 @@ class Gracie(Boss):
     """Secret boss. Playful, fast, mimics player. 2 phases."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=72, h=88,
+        super().__init__(x, y, w=90, h=110,
                          health=GRACIE_HP,
                          boss_type=BossType.GRACIE)
         self.boss_name = "GRACIE"
@@ -1507,7 +1507,7 @@ class MamaSloth(Boss):
     Heals in phase 3. The Mama Bear of the Sanitizer world."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=100, h=120,
+        super().__init__(x, y, w=125, h=150,
                          health=MAMA_SLOTH_HP,
                          boss_type=BossType.MAMA_SLOTH)
         self.boss_name = "MAMA SLOTH"

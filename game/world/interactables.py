@@ -52,8 +52,8 @@ class Interactable:
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
@@ -134,8 +134,8 @@ class CookingPot(Interactable):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
@@ -215,8 +215,8 @@ class WaterSource(Interactable):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
@@ -272,8 +272,8 @@ class Chest(Interactable):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
@@ -327,8 +327,8 @@ class Door(Interactable):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
@@ -373,8 +373,8 @@ class Shrine(Interactable):
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
-        sx = self.x - ox
-        sy = self.y - oy
+        sx = self.x + ox
+        sy = self.y + oy
         if (sx + self.w < 0 or sx > SCREEN_W
                 or sy + self.h < 0 or sy > SCREEN_H):
             return

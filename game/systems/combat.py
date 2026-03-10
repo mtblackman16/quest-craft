@@ -8,7 +8,7 @@ import pygame
 from game.engine.settings import (
     GameEvent, Difficulty, EnemyType,
     DIFFICULTY_SETTINGS, HARD_DAMAGE_MULTIPLIER,
-    GROUND_POUND_SPEED,
+    GROUND_POUND_SPEED, ENEMY_CONTACT_DAMAGE,
 )
 from game.entities.enemies import (
     SanitizerTrail, SanitizerGlob, SanitizerPuddle, SanitizerArrow,
@@ -66,6 +66,9 @@ class CombatSystem:
 
         # ── 4. Ground pound → enemies in radius ──
         events += self._ground_pound_vs_enemies(player, enemies, active_pill)
+
+        # ── 5. Enemy body contact → player ──
+        events += self._enemy_contact_vs_player(player, enemies, difficulty, active_pill)
 
         return events
 
@@ -270,5 +273,34 @@ class CombatSystem:
                     }
                     events.append(kill_evt)
                     self.event_bus.emit(GameEvent.ENEMY_DIED, x=ecx, y=ecy)
+
+        return events
+
+    def _enemy_contact_vs_player(self, player, enemies, difficulty, active_pill=None):
+        """Check enemy bodies touching the player for contact damage."""
+        events = []
+        if not hasattr(player, 'health') or player.health <= 0:
+            return events
+
+        player_rect = player.get_rect()
+        dmg_mult = DIFFICULTY_SETTINGS[difficulty]['damage_multiplier']
+        if active_pill == 'ice':
+            dmg_mult *= 0.5
+
+        for enemy in enemies:
+            if not enemy.alive:
+                continue
+            if player_rect.colliderect(enemy.get_rect()):
+                scaled = max(1, int(ENEMY_CONTACT_DAMAGE * dmg_mult))
+                actual = player.take_damage(scaled, difficulty)
+                if actual > 0:
+                    events.append({
+                        'event': GameEvent.PLAYER_HIT,
+                        'x': player.x + player.w / 2,
+                        'y': player.y + player.h / 2,
+                        'damage': actual,
+                        'source': 'contact',
+                    })
+                    break  # only take contact damage from one enemy per frame
 
         return events
