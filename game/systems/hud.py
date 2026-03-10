@@ -84,6 +84,11 @@ class HUD:
 
         self._split_phase = 0  # for pulsing alpha
 
+        # ── Cached health bar ──
+        self._health_cache_val = -1
+        self._health_cache_max = -1
+        self._health_cache_surf = None
+
         # ── Damage numbers ──
         self._damage_numbers: list[DamageNumber] = []
 
@@ -122,7 +127,9 @@ class HUD:
         return HEALTH_RED
 
     def _draw_health_bar(self, surf, health, max_health, frame_count):
-        """Jello health bar with sine wobble and damage jiggle."""
+        """Jello health bar with damage jiggle (cached when health unchanged)."""
+        health_int = int(health)
+        max_int = int(max_health)
         ratio = max(0.0, min(1.0, health / max(max_health, 1)))
         color = self._health_color(ratio)
 
@@ -141,34 +148,27 @@ class HUD:
         bx += jiggle_ox
         by += jiggle_oy
 
-        # Background (dark)
-        bg_rect = pygame.Rect(bx - 1, by - 1, self._bar_w + 2, self._bar_h + 2)
-        pygame.draw.rect(surf, (30, 30, 30), bg_rect)
+        # Rebuild cached bar surface only when health value changes
+        if health_int != self._health_cache_val or max_int != self._health_cache_max:
+            self._health_cache_val = health_int
+            self._health_cache_max = max_int
+            bar_w = self._bar_w + 2
+            bar_h = self._bar_h + 2
+            self._health_cache_surf = pygame.Surface((bar_w, bar_h), pygame.SRCALPHA)
+            # Background
+            pygame.draw.rect(self._health_cache_surf, (30, 30, 30), (0, 0, bar_w, bar_h))
+            # Fill
+            fill_w = int(self._bar_w * ratio)
+            if fill_w > 0:
+                pygame.draw.rect(self._health_cache_surf, color, (1, 1, fill_w, self._bar_h))
+            # Border
+            pygame.draw.rect(self._health_cache_surf, WHITE, (0, 0, bar_w, bar_h), 1)
 
-        # Filled portion with sine wobble on trailing edge
-        fill_w = int(self._bar_w * ratio)
-        if fill_w > 0:
-            bar_surf = pygame.Surface((fill_w, self._bar_h), pygame.SRCALPHA)
-            bar_surf.fill(color)
-
-            # Sine wobble on the right edge (jelly feel)
-            wobble_amp = 2
-            for row in range(self._bar_h):
-                offset = math.sin(frame_count * 0.1 + row * 0.5) * wobble_amp
-                # Shift the rightmost pixels with a tiny wobble
-                edge_x = fill_w - 1 + int(offset)
-                edge_x = max(0, min(fill_w - 1, edge_x))
-                bar_surf.set_at((edge_x, row), (*color, 200))
-
-            surf.blit(bar_surf, (bx, by))
-
-        # Border
-        border_rect = pygame.Rect(bx - 1, by - 1, self._bar_w + 2, self._bar_h + 2)
-        pygame.draw.rect(surf, WHITE, border_rect, 1)
+        surf.blit(self._health_cache_surf, (bx - 1, by - 1))
 
         # HP text
         hp_text = self._font_hud.render(
-            f"HP: {int(health)}/{int(max_health)}", True, WHITE
+            f"HP: {health_int}/{max_int}", True, WHITE
         )
         surf.blit(hp_text, (bx + self._bar_w + 8, by - 2))
 

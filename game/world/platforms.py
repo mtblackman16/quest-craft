@@ -81,6 +81,41 @@ class SolidPlatform(Platform):
 
     def __init__(self, x, y, w, h):
         super().__init__(x, y, w, h, PlatformType.SOLID)
+        self._cached_surf = None
+        self._cached_floor = -1
+
+    def _build_cache(self):
+        """Pre-render the platform to a cached surface."""
+        deep, warm, floor_c, accent = self._palette()
+        self._cached_surf = pygame.Surface((self.w, self.h), pygame.SRCALPHA)
+        s = self._cached_surf
+
+        # Main body — dark stone
+        pygame.draw.rect(s, deep, (0, 0, self.w, self.h))
+
+        # Top-edge highlight
+        pygame.draw.rect(s, warm, (0, 0, self.w, min(2, self.h)))
+
+        # Moss patches
+        moss_color = (45, 80, 40)
+        rng = random.Random(int(self.x * 7 + self.y * 13))
+        moss_count = max(1, self.w // 80)
+        for _ in range(moss_count):
+            mx = rng.randint(0, max(0, self.w - 12))
+            mw = rng.randint(6, 14)
+            pygame.draw.rect(s, moss_color, (mx, 0, mw, 2))
+
+        # Stone-block lines
+        if self.h >= 8:
+            groove_color = (max(deep[0] - 8, 0),
+                            max(deep[1] - 8, 0),
+                            max(deep[2] - 8, 0))
+            start_x = TILE_SIZE - (int(self.x) % TILE_SIZE)
+            gx = start_x
+            while gx < self.w:
+                pygame.draw.line(s, groove_color, (gx, 2), (gx, self.h - 1))
+                gx += TILE_SIZE
+        self._cached_floor = self.floor_num
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
@@ -91,38 +126,10 @@ class SolidPlatform(Platform):
                 or sy + self.h < 0 or sy > SCREEN_H):
             return
 
-        deep, warm, floor_c, accent = self._palette()
+        if self._cached_surf is None or self._cached_floor != self.floor_num:
+            self._build_cache()
 
-        # Main body — dark stone
-        body = pygame.Rect(int(sx), int(sy), self.w, self.h)
-        pygame.draw.rect(surf, deep, body)
-
-        # Top-edge highlight — lighter warm stone, 2 px tall
-        highlight = pygame.Rect(int(sx), int(sy), self.w, min(2, self.h))
-        pygame.draw.rect(surf, warm, highlight)
-
-        # Slight moss patches on the top edge (small green rectangles)
-        moss_color = (45, 80, 40)
-        rng = random.Random(int(self.x * 7 + self.y * 13))   # deterministic
-        moss_count = max(1, self.w // 80)
-        for _ in range(moss_count):
-            mx = int(sx) + rng.randint(0, max(0, self.w - 12))
-            mw = rng.randint(6, 14)
-            pygame.draw.rect(surf, moss_color,
-                             pygame.Rect(mx, int(sy), mw, 2))
-
-        # Stone-block lines (subtle vertical grooves every ~TILE_SIZE)
-        if self.h >= 8:
-            groove_color = (max(deep[0] - 8, 0),
-                            max(deep[1] - 8, 0),
-                            max(deep[2] - 8, 0))
-            start_x = TILE_SIZE - (int(self.x) % TILE_SIZE)
-            gx = start_x
-            while gx < self.w:
-                pygame.draw.line(surf, groove_color,
-                                 (int(sx) + gx, int(sy) + 2),
-                                 (int(sx) + gx, int(sy) + self.h - 1))
-                gx += TILE_SIZE
+        surf.blit(self._cached_surf, (int(sx), int(sy)))
 
 
 # ──────────────────────────────────────────────

@@ -283,16 +283,12 @@ class Shockwave:
         if alpha <= 0:
             return
 
-        # Elliptical ring: wider than tall
+        # Elliptical ring: wider than tall (draw directly, no temp surface)
         rx = r
         ry = max(int(r * 0.5), 1)
         ring_width = max(int(3 * t), 1)
-
-        ring_surf = pygame.Surface((rx * 2 + 4, ry * 2 + 4), pygame.SRCALPHA)
-        color = (*TORCH_AMBER, alpha)
-        rect = pygame.Rect(2, 2, rx * 2, ry * 2)
-        pygame.draw.ellipse(ring_surf, color, rect, ring_width)
-        surf.blit(ring_surf, (sx - rx - 2, sy - ry - 2))
+        rect = pygame.Rect(sx - rx, sy - ry, rx * 2, ry * 2)
+        pygame.draw.ellipse(surf, TORCH_AMBER, rect, ring_width)
 
 
 # ---------------------------------------------------------------------------
@@ -323,11 +319,14 @@ class VFXManager:
 
         # -- darkness overlay -----------------------------------------------
         self._dark_surf: pygame.Surface | None = None
-        self._dark_w = SCREEN_W // 2
-        self._dark_h = SCREEN_H // 2
+        self._dark_w = SCREEN_W
+        self._dark_h = SCREEN_H
         self._torch_positions: list[tuple[float, float]] = []
         self._torch_gradient: pygame.Surface | None = None
-        self._torch_radius = 90  # half-res pixels
+        self._torch_radius = 180  # full-res pixels
+
+        # -- pre-allocated screen flash surface --------------------------------
+        self._flash_surface = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
 
         # -- fog layers -----------------------------------------------------
         self._fog_layers: list[dict] = []
@@ -383,7 +382,8 @@ class VFXManager:
         self._torch_positions = list(positions)
 
     def _draw_darkness(self, surf, camera_offset):
-        """Draw a darkness overlay with radial cutouts at torch positions."""
+        """Draw a darkness overlay with radial cutouts at torch positions.
+        Renders at full resolution to avoid expensive scaling."""
         if not self._torch_positions:
             return
 
@@ -392,20 +392,15 @@ class VFXManager:
         dark.fill((0, 0, 0, 180))
 
         ox, oy = camera_offset
-        half_scale = 0.5  # darkness is half-res
-
         grad = self._torch_gradient
         tr = self._torch_radius
 
         for tx, ty in self._torch_positions:
-            # Convert world -> half-res screen
-            hx = int((tx + ox) * half_scale) - tr
-            hy = int((ty + oy) * half_scale) - tr
+            hx = int(tx + ox) - tr
+            hy = int(ty + oy) - tr
             dark.blit(grad, (hx, hy), special_flags=pygame.BLEND_RGBA_MIN)
 
-        # Scale up and draw
-        scaled = pygame.transform.scale(dark, (SCREEN_W, SCREEN_H))
-        surf.blit(scaled, (0, 0))
+        surf.blit(dark, (0, 0))
 
     # -----------------------------------------------------------------------
     # Fog
@@ -572,6 +567,5 @@ class VFXManager:
         if self._flash_timer > 0:
             t = self._flash_timer / self._flash_max
             alpha = int(120 * t)
-            flash_surf = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
-            flash_surf.fill((*self._flash_color[:3], alpha))
-            surf.blit(flash_surf, (0, 0))
+            self._flash_surface.fill((*self._flash_color[:3], alpha))
+            surf.blit(self._flash_surface, (0, 0))

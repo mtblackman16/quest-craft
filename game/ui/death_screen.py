@@ -74,9 +74,18 @@ def run_death_screen(screen, clock, run_count, joystick=None):
     font_prompt = pygame.font.Font(None, FONT_PROMPT)
     font_small = pygame.font.Font(None, FONT_SMALL)
 
-    # Pre-render background: dark red tint
+    # Pre-render background: dark red tint + dropped items art
     bg = pygame.Surface((SCREEN_W, SCREEN_H))
     bg.fill((25, 8, 8))
+    # Try to load dropped-items-in-puddle art
+    try:
+        from game.engine.sprites import load_sprite
+        puddle_art = load_sprite('items/dropped-items-in-puddle.png', SCREEN_W // 2, SCREEN_H // 2)
+        if puddle_art:
+            puddle_art.set_alpha(80)
+            bg.blit(puddle_art, (SCREEN_W // 4, SCREEN_H // 4))
+    except Exception:
+        pass
     # Subtle red gradient overlay
     overlay = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
     for row in range(SCREEN_H):

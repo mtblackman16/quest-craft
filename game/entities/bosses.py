@@ -18,6 +18,7 @@ from game.entities.enemies import (
     Enemy, EnemyState,
     SanitizerTrail, SanitizerGlob, SanitizerPuddle, SanitizerArrow,
 )
+from game.engine.sprites import load_sprite, load_portrait, flip_h
 
 
 # ── Boss States (extends EnemyState where needed) ──
@@ -231,7 +232,7 @@ class BigBottle(Boss):
     """Giant sanitizer bottle boss. 2 phases with spread and charge attacks."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=72, h=90,
+        super().__init__(x, y, w=120, h=160,
                          health=BIG_BOTTLE_HP,
                          boss_type=BossType.BIG_BOTTLE)
         self.boss_name = "THE BIG BOTTLE"
@@ -239,6 +240,10 @@ class BigBottle(Boss):
         self.phase_thresholds = [0.5]  # phase 2 at 50%
         self.color = (100, 180, 220)
         self.arena_bounds = (arena_left, arena_right)
+
+        # Sprite (oversized hand sanitizer bottle!)
+        self._sprite = load_sprite('items/hand-sanitizer-front.png', 120, 160)
+        self._sprite_flipped = flip_h(self._sprite) if self._sprite else None
 
         # Movement
         self.patrol_speed = 1.2
@@ -375,85 +380,57 @@ class BigBottle(Boss):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
-        # Phase 2 red tint
-        if self.phase >= 2:
-            base_color = (
-                min(255, self.color[0] + 60),
-                max(0, self.color[1] - 40),
-                max(0, self.color[2] - 40),
-            )
-        else:
-            base_color = self.color
-
-        # Hit flash
-        color = (255, 255, 255) if self.hit_timer > 0 else base_color
-        cap_color = (255, 255, 255) if self.hit_timer > 0 else (200, 200, 210)
-        label_color = (255, 255, 255) if self.hit_timer > 0 else (60, 140, 180)
-
-        # Charging glow
+        # Charging shake
         if self.charge_state == "telegraph":
-            # Shake effect
-            bx += random.randint(-2, 2)
-            by += random.randint(-2, 2)
-            # Flash red overlay
-            if self.frame_count % 6 < 3:
-                color = (220, 60, 60)
-        elif self.charge_state == "dash":
-            # Glow outline
-            glow_surf = pygame.Surface((self.w + 12, self.h + 12), pygame.SRCALPHA)
-            pygame.draw.rect(glow_surf, (255, 200, 100, 80),
-                             (0, 0, self.w + 12, self.h + 12), border_radius=8)
-            surf.blit(glow_surf, (bx - 6, by - 6))
+            bx += random.randint(-3, 3)
+            by += random.randint(-3, 3)
 
-        # Bottle body (large) — scaled from SmallSanitizerBottle
-        body_rect = (bx + 6, by + 24, self.w - 12, self.h - 24)
-        pygame.draw.rect(surf, color, body_rect, border_radius=12)
-
-        # Neck
-        neck_rect = (bx + 18, by + 9, self.w - 36, 24)
-        pygame.draw.rect(surf, color, neck_rect, border_radius=9)
-
-        # Cap
-        cap_rect = (bx + 21, by, self.w - 42, 15)
-        pygame.draw.rect(surf, cap_color, cap_rect, border_radius=6)
-
-        # Label stripe
-        label_h = 24
-        label_y = by + 42
-        pygame.draw.rect(surf, label_color,
-                         (bx + 12, label_y, self.w - 24, label_h), border_radius=6)
-
-        # Outline
-        pygame.draw.rect(surf, (60, 120, 160),
-                         (bx + 6, by + 24, self.w - 12, self.h - 24),
-                         2, border_radius=12)
-
-        # Eyes (angry in phase 2)
-        eye_y = by + 34
-        eye_left_x = bx + 20
-        eye_right_x = bx + self.w - 30
-        if self.phase >= 2:
-            # Angry slits
-            pygame.draw.line(surf, (40, 20, 20),
-                             (eye_left_x, eye_y - 2),
-                             (eye_left_x + 10, eye_y + 2), 3)
-            pygame.draw.line(surf, (40, 20, 20),
-                             (eye_right_x, eye_y - 2),
-                             (eye_right_x + 10, eye_y + 2), 3)
+        if self._sprite:
+            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            # Hit flash: white tint
+            if self.hit_timer > 0:
+                flash = sprite.copy()
+                flash.fill((255, 255, 255, 180), special_flags=pygame.BLEND_RGBA_MAX)
+                surf.blit(flash, (bx, by))
+            elif self.phase >= 2:
+                # Phase 2: red tint overlay
+                tinted = sprite.copy()
+                tint = pygame.Surface(tinted.get_size(), pygame.SRCALPHA)
+                tint.fill((120, 0, 0, 50))
+                tinted.blit(tint, (0, 0))
+                surf.blit(tinted, (bx, by))
+            else:
+                surf.blit(sprite, (bx, by))
+            # Angry eyes in phase 2
+            if self.phase >= 2:
+                eye_y = by + 50
+                for ex_off in [30, self.w - 45]:
+                    pygame.draw.line(surf, (220, 40, 40),
+                                     (bx + ex_off, eye_y - 3),
+                                     (bx + ex_off + 16, eye_y + 3), 3)
+            # Tiny legs
+            leg_y = by + self.h - 12
+            pygame.draw.rect(surf, self.color, (bx + 25, leg_y, 14, 12))
+            pygame.draw.rect(surf, self.color, (bx + self.w - 39, leg_y, 14, 12))
         else:
-            # Neutral eyes
-            pygame.draw.circle(surf, (40, 20, 20), (eye_left_x + 5, eye_y), 4)
-            pygame.draw.circle(surf, (40, 20, 20), (eye_right_x + 5, eye_y), 4)
+            # Programmatic fallback
+            color = (255, 255, 255) if self.hit_timer > 0 else self.color
+            body_rect = (bx + 10, by + 40, self.w - 20, self.h - 40)
+            pygame.draw.rect(surf, color, body_rect, border_radius=16)
+            neck_rect = (bx + 30, by + 15, self.w - 60, 40)
+            pygame.draw.rect(surf, color, neck_rect, border_radius=12)
+            cap_rect = (bx + 35, by, self.w - 70, 25)
+            pygame.draw.rect(surf, (200, 200, 210), cap_rect, border_radius=8)
+            pygame.draw.rect(surf, (60, 120, 160), body_rect, 2, border_radius=16)
 
-        # Vulnerable state indicator
+        # Vulnerable state dizzy stars
         if self.charge_state == "vulnerable":
-            # Dizzy stars
             t = self.frame_count * 0.1
             for i in range(3):
                 angle = t + i * (2 * math.pi / 3)
-                sx = bx + self.w // 2 + int(math.cos(angle) * 20)
-                sy = by - 10 + int(math.sin(angle) * 6)
-                pygame.draw.circle(surf, (255, 255, 100), (sx, sy), 3)
+                sx = bx + self.w // 2 + int(math.cos(angle) * 30)
+                sy = by - 15 + int(math.sin(angle) * 8)
+                pygame.draw.circle(surf, (255, 255, 100), (sx, sy), 5)
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -465,7 +442,7 @@ class TheCleanser(Boss):
     Must be struck from above with a jelly shot, then ground pounded."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=48, h=56,
+        super().__init__(x, y, w=100, h=130,
                          health=CLEANSER_HP,
                          boss_type=BossType.CLEANSER)
         self.boss_name = "THE CLEANSER"
@@ -473,6 +450,10 @@ class TheCleanser(Boss):
         self.phase_thresholds = [0.8, 0.6, 0.4, 0.2]
         self.color = (160, 130, 100)
         self.arena_bounds = (arena_left, arena_right)
+
+        # Sprite (warrior art, scaled up)
+        self._sprite = load_sprite('enemies/sanitizer-warrior-front-view.png', 100, 130)
+        self._sprite_flipped = flip_h(self._sprite) if self._sprite else None
 
         # Movement
         self.patrol_speed = 1.5
@@ -648,97 +629,45 @@ class TheCleanser(Boss):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
-        color = (255, 255, 255) if self.hit_timer > 0 else self.color
-        helmet_blue = (60, 120, 220)
-
-        # Legs
-        leg_y = by + self.h - 14
-        pygame.draw.rect(surf, color, (bx + 6, leg_y, 10, 14))
-        pygame.draw.rect(surf, color, (bx + self.w - 16, leg_y, 10, 14))
-
-        # Body (torso)
-        body_rect = (bx + 4, by + 16, self.w - 8, self.h - 28)
-        pygame.draw.rect(surf, color, body_rect, border_radius=4)
-
-        # Backpack flask
-        back_x = bx - 8 if self.facing == 1 else bx + self.w
-        pygame.draw.rect(surf, SANITIZER_BLUE,
-                         (back_x, by + 18, 10, 20), border_radius=3)
-        pygame.draw.rect(surf, (60, 100, 150),
-                         (back_x, by + 18, 10, 20), 1, border_radius=3)
-
-        # Arms
-        arm_y = by + 20
-        if self.swing_active:
-            # Swinging weapon arm
-            swing_angle = math.sin(self.swing_frame * 0.3) * 0.5
-            arm_end_x = bx + self.w // 2 + self.facing * 30
-            arm_end_y = arm_y + int(swing_angle * 20)
-            pygame.draw.line(surf, color,
-                             (bx + self.w // 2, arm_y),
-                             (arm_end_x, arm_end_y), 6)
-            # Weapon at end
-            pygame.draw.circle(surf, (180, 160, 140), (arm_end_x, arm_end_y), 6)
+        if self._sprite:
+            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            if self.hit_timer > 0:
+                flash = sprite.copy()
+                flash.fill((255, 255, 255, 180), special_flags=pygame.BLEND_RGBA_MAX)
+                surf.blit(flash, (bx, by))
+            else:
+                surf.blit(sprite, (bx, by))
+            # Blue flame glow above helmet
+            if self.has_helmet:
+                flame_cx = bx + self.w // 2
+                flame_base_y = by + 4
+                num_pts = 7
+                flame_pts = []
+                for i in range(num_pts):
+                    fx = flame_cx - 20 + (40 * i / (num_pts - 1))
+                    flicker = math.sin(self.frame_count * 0.15 + i * 0.8) * 5
+                    fy = flame_base_y - 16 - abs(i - num_pts // 2) * 3 + flicker
+                    flame_pts.append((int(fx), int(fy)))
+                flame_pts.append((flame_cx + 20, flame_base_y))
+                flame_pts.append((flame_cx - 20, flame_base_y))
+                if len(flame_pts) >= 3:
+                    pygame.draw.polygon(surf, (60, 140, 255), flame_pts)
         else:
-            pygame.draw.rect(surf, color, (bx - 4, arm_y, 8, 16), border_radius=3)
-            pygame.draw.rect(surf, color,
-                             (bx + self.w - 4, arm_y, 8, 16), border_radius=3)
-
-        # Head
-        head_rect = (bx + 6, by + 4, self.w - 12, 16)
-        pygame.draw.rect(surf, color, head_rect, border_radius=5)
-
-        # Helmet with blue flame
-        if self.has_helmet:
-            # Helmet base
-            pygame.draw.rect(surf, (80, 80, 100),
-                             (bx + 4, by + 2, self.w - 8, 10), border_radius=4)
-            # Blue flame
-            flame_points = []
-            flame_cx = bx + self.w // 2
-            flame_base_y = by + 2
-            num_points = 7
-            for i in range(num_points):
-                fx = flame_cx - 10 + (20 * i / (num_points - 1))
-                # Flickering flame height
-                flicker = math.sin(self.frame_count * 0.15 + i * 0.8) * 3
-                fy = flame_base_y - 8 - abs(i - num_points // 2) * 1.5 + flicker
-                flame_points.append((int(fx), int(fy)))
-            flame_points.append((flame_cx + 10, flame_base_y))
-            flame_points.append((flame_cx - 10, flame_base_y))
-            if len(flame_points) >= 3:
-                flame_surf = pygame.Surface((self.w + 20, 30), pygame.SRCALPHA)
-                offset_points = [(p[0] - (bx - 10), p[1] - (by - 20))
-                                 for p in flame_points]
-                # Clamp points to valid range
-                valid_points = [(max(0, min(self.w + 19, px)),
-                                 max(0, min(29, py)))
-                                for px, py in offset_points]
-                if len(valid_points) >= 3:
-                    pygame.draw.polygon(flame_surf,
-                                        (60, 140, 255, 160), valid_points)
-                    surf.blit(flame_surf, (bx - 10, by - 20))
-
-        # Eyes
-        eye_y = by + 10
-        for ex_off in [12, self.w - 18]:
-            pygame.draw.line(surf, (40, 20, 20),
-                             (bx + ex_off, eye_y),
-                             (bx + ex_off + 6, eye_y), 2)
-
-        # Metallic outline
-        pygame.draw.rect(surf, (100, 80, 60), body_rect, 1, border_radius=4)
+            # Programmatic fallback
+            color = (255, 255, 255) if self.hit_timer > 0 else self.color
+            body_rect = (bx + 8, by + 30, self.w - 16, self.h - 50)
+            pygame.draw.rect(surf, color, body_rect, border_radius=6)
+            head_rect = (bx + 15, by + 8, self.w - 30, 28)
+            pygame.draw.rect(surf, color, head_rect, border_radius=8)
 
         # Stunned state visual
         if self.boss_state == BossState.STUNNED:
-            # On one knee
-            # Stars spinning above head
             t = self.frame_count * 0.12
             for i in range(4):
                 angle = t + i * (math.pi / 2)
-                sx = bx + self.w // 2 + int(math.cos(angle) * 18)
-                sy = by - 8 + int(math.sin(angle) * 5)
-                pygame.draw.circle(surf, (255, 255, 100), (sx, sy), 3)
+                sx = bx + self.w // 2 + int(math.cos(angle) * 30)
+                sy = by - 12 + int(math.sin(angle) * 8)
+                pygame.draw.circle(surf, (255, 255, 100), (sx, sy), 5)
 
             # Dropped weapon on ground
             wx = bx + self.facing * 30
@@ -766,7 +695,7 @@ class TheLastGuard(Boss):
     Radiance-level difficulty."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=56, h=72,
+        super().__init__(x, y, w=90, h=110,
                          health=LAST_GUARD_HP,
                          boss_type=BossType.LAST_GUARD)
         self.boss_name = "THE LAST GUARD"
@@ -1170,7 +1099,7 @@ class Gracie(Boss):
     """Secret boss. Playful, fast, mimics player. 2 phases."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=36, h=44,
+        super().__init__(x, y, w=72, h=88,
                          health=GRACIE_HP,
                          boss_type=BossType.GRACIE)
         self.boss_name = "GRACIE"
@@ -1178,6 +1107,10 @@ class Gracie(Boss):
         self.phase_thresholds = [0.5]
         self.color = (255, 180, 200)
         self.arena_bounds = (arena_left, arena_right)
+
+        # Photo portraits
+        self._portrait_happy = load_portrait('bosses/gracie-happy-face.jpg', 80)
+        self._portrait_battle = load_portrait('bosses/gracie-battle-face.jpg', 80)
 
         # Movement
         self.speed = 4.0
@@ -1415,6 +1348,11 @@ class Gracie(Boss):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
+        # Draw portrait in top-left corner during fight
+        portrait = self._portrait_battle if self.phase >= 2 else self._portrait_happy
+        if portrait:
+            surf.blit(portrait, (10, 10))
+
         # Phase color
         if self.phase >= 2:
             base_color = (
@@ -1427,7 +1365,7 @@ class Gracie(Boss):
 
         color = (255, 255, 255) if self.hit_timer > 0 else base_color
 
-        # Round body
+        # Round body (scaled up for visibility)
         body_cx = bx + self.w // 2
         body_cy = by + self.h // 2 + 4
         body_rx = self.w // 2
@@ -1569,7 +1507,7 @@ class MamaSloth(Boss):
     Heals in phase 3. The Mama Bear of the Sanitizer world."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=64, h=72,
+        super().__init__(x, y, w=100, h=120,
                          health=MAMA_SLOTH_HP,
                          boss_type=BossType.MAMA_SLOTH)
         self.boss_name = "MAMA SLOTH"
@@ -1577,6 +1515,9 @@ class MamaSloth(Boss):
         self.phase_thresholds = [0.6, 0.3]
         self.color = (160, 140, 120)
         self.arena_bounds = (arena_left, arena_right)
+
+        # Photo portrait
+        self._portrait = load_portrait('bosses/mama-sloth-reference.jpg', 80)
 
         # Movement
         self.speed = 1.5
@@ -1817,13 +1758,17 @@ class MamaSloth(Boss):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
+        # Draw portrait in top-left during fight
+        if self._portrait:
+            surf.blit(self._portrait, (10, 10))
+
         color = (255, 255, 255) if self.hit_timer > 0 else self.color
         dark = (max(0, color[0] - 30), max(0, color[1] - 30),
                 max(0, color[2] - 30))
 
-        # Large sturdy body
-        body_rect = (bx + 4, by + 16, self.w - 8, self.h - 24)
-        pygame.draw.rect(surf, color, body_rect, border_radius=8)
+        # Large sturdy body (scaled up for 85" TV)
+        body_rect = (bx + 8, by + 24, self.w - 16, self.h - 36)
+        pygame.draw.rect(surf, color, body_rect, border_radius=12)
 
         # Legs (thick)
         pygame.draw.rect(surf, dark,

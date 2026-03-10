@@ -31,6 +31,7 @@ from game.engine.settings import (
     AXIS_LY,
     STICK_DEADZONE,
 )
+from game.engine.sprites import load_sprite
 
 
 # ---------------------------------------------------------------------------
@@ -308,9 +309,9 @@ def run_title_screen(screen, clock, joystick=None):
                 stick_held_frames = 0
             last_stick_dir = stick_dir
 
-        # -- spawn particles -------------------------------------------------
-        # Dust motes (amber, float upward)
-        if frame % 4 == 0:
+        # -- spawn particles (reduced count for Pi 5 performance) ------------
+        # Dust motes (amber, float upward) — every 8 frames instead of 4
+        if frame % 8 == 0:
             mx = random.uniform(0, SCREEN_W)
             my = random.uniform(SCREEN_H * 0.3, SCREEN_H)
             motes.append(_Mote(
@@ -321,8 +322,8 @@ def run_title_screen(screen, clock, joystick=None):
                 vx=random.uniform(-0.2, 0.2),
                 vy=random.uniform(-0.6, -0.2),
             ))
-        # Green jello particles from bottom
-        if frame % 6 == 0:
+        # Green jello particles from bottom — every 12 frames instead of 6
+        if frame % 12 == 0:
             mx = random.uniform(SCREEN_W * 0.3, SCREEN_W * 0.7)
             motes.append(_Mote(
                 mx, SCREEN_H + 5,
@@ -358,13 +359,12 @@ def run_title_screen(screen, clock, joystick=None):
         )
         screen.blit(glow_surf, (SCREEN_W // 2 - glow_radius, 20 - glow_radius // 2))
 
-        # Particles
+        # Particles (simple circles, no per-particle surface allocation)
         for m in motes:
-            if m.alpha <= 0:
+            if m.alpha <= 0 or m.size <= 0:
                 continue
-            ps = pygame.Surface((m.size * 2, m.size * 2), pygame.SRCALPHA)
-            pygame.draw.circle(ps, (*m.color[:3], m.alpha), (m.size, m.size), m.size)
-            screen.blit(ps, (int(m.x) - m.size, int(m.y) - m.size))
+            pygame.draw.circle(screen, m.color[:3],
+                               (int(m.x), int(m.y)), m.size)
 
         # Vignette
         screen.blit(vignette, (0, 0))
@@ -389,8 +389,18 @@ def run_title_screen(screen, clock, joystick=None):
         sw = subtitle_surf.get_width()
         screen.blit(subtitle_surf, (SCREEN_W // 2 - sw // 2, 220))
 
-        # Jello cube preview
-        _draw_jello_cube(screen, SCREEN_W // 2, 310, frame, frame * 0.06)
+        # Jello cube preview — use Andrew's 3/4 view if available
+        _title_sprite = load_sprite('player/jello-cube-three-quarter.png', 120, 120)
+        if _title_sprite:
+            # Squish animation applied to sprite
+            squish = math.sin(frame * 0.06) * 0.08
+            sw = int(120 * (1.0 + squish))
+            sh = int(120 * (1.0 - squish))
+            bob = math.sin(frame * 0.04) * 4
+            scaled = pygame.transform.scale(_title_sprite, (sw, sh))
+            screen.blit(scaled, (SCREEN_W // 2 - sw // 2, int(310 - sh // 2 + bob)))
+        else:
+            _draw_jello_cube(screen, SCREEN_W // 2, 310, frame, frame * 0.06)
 
         # Difficulty menu
         if show_menu:

@@ -11,12 +11,12 @@ FPS = 60
 TILE_SIZE = 32
 
 # ── Physics ──
-GRAVITY = 0.6
+GRAVITY = 0.8
 MAX_FALL_SPEED = 15
 GROUND_POUND_SPEED = 20
-PLAYER_SPEED = 4.5
-PLAYER_JUMP_POWER = -12
-PLAYER_BASE_SIZE = 40
+PLAYER_SPEED = 5.0
+PLAYER_JUMP_POWER = -14
+PLAYER_BASE_SIZE = 64
 
 # ── Gameplay Values ──
 PLAYER_MAX_HEALTH = 100
@@ -172,6 +172,10 @@ class EventBus:
     def emit(self, event, **kwargs):
         for cb in self._listeners.get(event, []):
             cb(**kwargs)
+
+    def clear(self):
+        """Remove all listeners (call between playthroughs to prevent accumulation)."""
+        self._listeners.clear()
 
 
 # ── Controller Mapping ──

@@ -15,6 +15,7 @@ from game.engine.settings import (
     KEY_JUMP, KEY_SHOOT, KEY_EAT, KEY_INTERACT, KEY_SPLIT, KEY_DODGE, KEY_SWITCH_SPLIT,
     GameEvent, Difficulty,
 )
+from game.engine.sprites import load_sprite, flip_h
 
 
 class JelloProjectile:
@@ -81,6 +82,7 @@ class JelloCube:
         self.vx = 0.0
         self.vy = 0.0
         self.on_ground = False
+        self._ground_frames = 0  # coyote time: frames since last on_ground
         self.speed = PLAYER_SPEED
         self.jump_power = PLAYER_JUMP_POWER
         self.facing = 1  # 1=right, -1=left
@@ -135,7 +137,12 @@ class JelloCube:
         # Freeze (MamaSloth Mom Look)
         self.freeze_timer = 0
 
-    def update(self, keys, platforms, joystick=None):
+        # Sprite (loaded lazily on first draw)
+        self._sprite = None
+        self._sprite_flipped = None
+        self._sprite_loaded = False
+
+    def update(self, keys, platforms, joystick=None, room_width=0, room_height=0):
         """Main update — called once per frame."""
         self.pending_events = []
         self.just_landed_pound = False
@@ -219,38 +226,68 @@ class JelloCube:
             if self.vy > MAX_FALL_SPEED:
                 self.vy = MAX_FALL_SPEED
 
-        # ── Apply velocity ──
+        # ── Move X, then resolve horizontal collisions ──
         self.x += self.vx
-        self.y += self.vy
-
-        # ── Platform collisions ──
-        self.on_ground = False
+        player_rect = self.get_rect()
         for plat in platforms:
             pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(*plat)
-            player_rect = self.get_rect()
-            # Landing on top
-            if (player_rect.right > pr.left and player_rect.left < pr.right and
-                    player_rect.bottom > pr.top and player_rect.bottom < pr.bottom + 12 and
-                    self.vy >= 0):
-                self.y = pr.top - self.h
-                if self.ground_pounding:
-                    self.squish = 0.6
-                    self.just_landed_pound = True
-                    self.ground_pounding = False
-                    self.pending_events.append(GameEvent.PLAYER_GROUND_POUND)
-                elif self.vy > 4:
-                    self.squish = 0.4
-                    self.pending_events.append(GameEvent.PLAYER_LAND)
-                self.vy = 0
-                self.on_ground = True
-                # Notify moving platform
-                if hasattr(plat, 'carry_vx'):
-                    self.x += plat.carry_vx
-                break
+            if pr.width == 0 or pr.height == 0:
+                continue
+            if player_rect.colliderect(pr):
+                if self.vx > 0:
+                    # Moving right — push left out of platform
+                    self.x = pr.left - self.w
+                elif self.vx < 0:
+                    # Moving left — push right out of platform
+                    self.x = pr.right
+                self.vx = 0
+                player_rect = self.get_rect()
 
-        # ── Screen bounds (left edge) ──
+        # ── Move Y, then resolve vertical collisions ──
+        self.y += self.vy
+        self.on_ground = False
+        self._ground_frames += 1
+        player_rect = self.get_rect()
+        for plat in platforms:
+            pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(*plat)
+            if pr.width == 0 or pr.height == 0:
+                continue
+            if player_rect.colliderect(pr):
+                if self.vy >= 0:
+                    # Falling — land on top
+                    self.y = pr.top - self.h
+                    if self.ground_pounding:
+                        self.squish = 0.6
+                        self.just_landed_pound = True
+                        self.ground_pounding = False
+                        self.pending_events.append(GameEvent.PLAYER_GROUND_POUND)
+                    elif self.vy > 4:
+                        self.squish = 0.4
+                        self.pending_events.append(GameEvent.PLAYER_LAND)
+                    self.vy = 0
+                    self.on_ground = True
+                    self._ground_frames = 0
+                    # Moving platform carry (both axes)
+                    if hasattr(plat, 'carry_vx'):
+                        self.x += plat.carry_vx
+                    if hasattr(plat, 'carry_vy'):
+                        self.y += plat.carry_vy
+                else:
+                    # Rising — bonk head on bottom
+                    self.y = pr.bottom
+                    self.vy = 0
+                player_rect = self.get_rect()
+
+        # ── Room boundary clamping ──
         if self.x < 0:
             self.x = 0
+        if room_width > 0 and self.x > room_width - self.w:
+            self.x = room_width - self.w
+        if self.y < 0:
+            self.y = 0
+        # Fall death: fell off the bottom of the level
+        if room_height > 0 and self.y > room_height + 200:
+            self.pending_events.append(GameEvent.PLAYER_DIED)
 
         # ── Squish spring animation ──
         self.squish_v += (-self.squish) * 0.3
@@ -273,12 +310,14 @@ class JelloCube:
             self.trail.pop(0)
 
     def jump(self):
-        """Jump — only when on ground and not ground pounding."""
+        """Jump — allowed when on ground (or within 4 frames of leaving ground = coyote time)."""
         if self.freeze_timer > 0:
             return False
-        if self.on_ground and not self.ground_pounding:
+        can_jump = (self.on_ground or self._ground_frames <= 4) and not self.ground_pounding
+        if can_jump:
             self.vy = self.jump_power
             self.on_ground = False
+            self._ground_frames = 99  # consume coyote time
             self.squish = -0.3
             self.pending_events.append(GameEvent.PLAYER_JUMP)
             return True
@@ -432,20 +471,30 @@ class JelloCube:
     def get_center(self):
         return (self.x + self.w / 2, self.y + self.h / 2)
 
+    def _load_sprites(self):
+        """Load sprite images (called once on first draw)."""
+        self._sprite_loaded = True
+        base = load_sprite('player/jello-cube-front.png', self.base_w, self.base_h)
+        if base:
+            self._sprite = base
+            self._sprite_flipped = flip_h(base)
+
     def draw(self, surf, camera_offset=(0, 0)):
         ox, oy = camera_offset
 
-        # Trail glow
+        # Lazy-load sprites
+        if not self._sprite_loaded:
+            self._load_sprites()
+
+        # Trail glow (simple circles, no per-particle surface allocation)
         now = pygame.time.get_ticks()
         for tx, ty, t in self.trail:
             age = (now - t) / 400.0
             if age < 1:
-                alpha = int(60 * (1 - age))
                 s = int(6 * (1 - age))
                 if s > 0:
-                    ts = pygame.Surface((s * 2, s * 2), pygame.SRCALPHA)
-                    pygame.draw.circle(ts, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], alpha), (s, s), s)
-                    surf.blit(ts, (int(tx + ox) - s, int(ty + oy) - s))
+                    pygame.draw.circle(surf, JELLO_GREEN_DIM,
+                                       (int(tx + ox), int(ty + oy)), s)
 
         # Squished dimensions
         sq = self.squish
@@ -462,43 +511,60 @@ class JelloCube:
             return  # blink
 
         # Glow underneath
-        glow = pygame.Surface((draw_w + 30, draw_h + 30), pygame.SRCALPHA)
-        pygame.draw.ellipse(glow, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], 25),
-                            (0, 0, draw_w + 30, draw_h + 30))
-        surf.blit(glow, (draw_x - 15 + int(jiggle_x), draw_y - 15))
+        pygame.draw.ellipse(surf, JELLO_GREEN_DIM,
+                            (draw_x - 8 + int(jiggle_x), draw_y - 8,
+                             draw_w + 16, draw_h + 16))
 
-        # Body
-        body_color = JELLO_GREEN
-        if self.active_pill:
-            pill_colors = {
-                'fire': (255, 100, 50),
-                'water': (80, 160, 255),
-                'ice': (150, 220, 255),
-                'electricity': (255, 255, 100),
-                'attack_up': (255, 80, 80),
-            }
-            if self.active_pill in pill_colors:
-                pc = pill_colors[self.active_pill]
-                # Blend with jello green
-                body_color = (
-                    (JELLO_GREEN[0] + pc[0]) // 2,
-                    (JELLO_GREEN[1] + pc[1]) // 2,
-                    (JELLO_GREEN[2] + pc[2]) // 2,
-                )
+        # ── Sprite or programmatic body ──
+        if self._sprite and draw_w > 0 and draw_h > 0:
+            # Use Andrew's art
+            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            # Scale for squish + health-based size
+            scaled = pygame.transform.scale(sprite, (max(1, draw_w), max(1, draw_h)))
+            # Pill color tint
+            if self.active_pill:
+                pill_colors = {
+                    'fire': (255, 100, 50),
+                    'water': (80, 160, 255),
+                    'ice': (150, 220, 255),
+                    'electricity': (255, 255, 100),
+                    'attack_up': (255, 80, 80),
+                }
+                if self.active_pill in pill_colors:
+                    tint = pygame.Surface(scaled.get_size(), pygame.SRCALPHA)
+                    tint.fill((*pill_colors[self.active_pill], 60))
+                    scaled = scaled.copy()
+                    scaled.blit(tint, (0, 0))
+            surf.blit(scaled, (draw_x + int(jiggle_x), draw_y))
+        else:
+            # Programmatic fallback body
+            body_color = JELLO_GREEN
+            if self.active_pill:
+                pill_colors = {
+                    'fire': (255, 100, 50),
+                    'water': (80, 160, 255),
+                    'ice': (150, 220, 255),
+                    'electricity': (255, 255, 100),
+                    'attack_up': (255, 80, 80),
+                }
+                if self.active_pill in pill_colors:
+                    pc = pill_colors[self.active_pill]
+                    body_color = (
+                        (JELLO_GREEN[0] + pc[0]) // 2,
+                        (JELLO_GREEN[1] + pc[1]) // 2,
+                        (JELLO_GREEN[2] + pc[2]) // 2,
+                    )
+            body = pygame.Surface((max(1, draw_w), max(1, draw_h)), pygame.SRCALPHA)
+            pygame.draw.rect(body, (*body_color, 140), (0, 0, draw_w, draw_h), border_radius=6)
+            if draw_w > 8 and draw_h > 4:
+                pygame.draw.rect(body, (180, 240, 160, 60),
+                                 (4, 4, max(1, draw_w - 8), max(1, draw_h // 2 - 4)), border_radius=4)
+            pygame.draw.rect(body, (*body_color, 200), (0, 0, draw_w, draw_h), 2, border_radius=6)
+            surf.blit(body, (draw_x + int(jiggle_x), draw_y))
 
-        body = pygame.Surface((max(1, draw_w), max(1, draw_h)), pygame.SRCALPHA)
-        pygame.draw.rect(body, (*body_color, 140), (0, 0, draw_w, draw_h), border_radius=6)
-        # Inner highlight
-        if draw_w > 8 and draw_h > 4:
-            pygame.draw.rect(body, (180, 240, 160, 60),
-                             (4, 4, max(1, draw_w - 8), max(1, draw_h // 2 - 4)), border_radius=4)
-        # Edge
-        pygame.draw.rect(body, (*body_color, 200), (0, 0, draw_w, draw_h), 2, border_radius=6)
-        surf.blit(body, (draw_x + int(jiggle_x), draw_y))
-
-        # Eyes
-        eye_size = max(3, int(5 * (self.w / self.base_w)))
-        pupil_size = max(2, int(3 * (self.w / self.base_w)))
+        # Eyes (drawn on top of sprite or body)
+        eye_size = max(4, int(6 * (self.w / self.base_w)))
+        pupil_size = max(2, int(4 * (self.w / self.base_w)))
         eye_y = draw_y + draw_h * 0.35
         eye_spread = draw_w * 0.22
         cx = draw_x + draw_w / 2 + jiggle_x
@@ -510,7 +576,7 @@ class JelloCube:
             if self.ground_pounding:
                 pupil_y = eye_y + 3
             elif self.dodge_invulnerable:
-                pupil_y = eye_y  # focused look
+                pupil_y = eye_y
             else:
                 pupil_y = eye_y + (1 if not self.on_ground and self.vy > 0 else 0)
             pygame.draw.circle(surf, (20, 20, 40), (int(pupil_x), int(pupil_y)), pupil_size)
@@ -524,19 +590,19 @@ class JelloCube:
 
         # Water indicator
         if self.has_water:
-            water_surf = pygame.Surface((draw_w - 4, draw_h // 3), pygame.SRCALPHA)
-            pygame.draw.rect(water_surf, (100, 180, 255, 60), (0, 0, draw_w - 4, draw_h // 3), border_radius=3)
-            surf.blit(water_surf, (draw_x + 2 + int(jiggle_x), draw_y + draw_h * 0.5))
+            pygame.draw.rect(surf, (100, 180, 255),
+                             (draw_x + 2 + int(jiggle_x), int(draw_y + draw_h * 0.5),
+                              draw_w - 4, draw_h // 3), border_radius=3)
 
         # Split ghost pieces
         if self.is_split:
             t = pygame.time.get_ticks()
             piece_w = self.w
             piece_h = self.h
+            body_color = JELLO_GREEN
             for i, (pox, poy, phase) in enumerate(self.split_pieces):
                 orbit_x = self.x + ox + self.w / 2 + pox + math.sin(t * 0.004 + phase) * 12
                 orbit_y = self.y + oy + poy + math.cos(t * 0.005 + phase) * 8
-                # Highlight active piece
                 alpha = 120 if i == self.active_split_piece - 1 else 80
                 ghost = pygame.Surface((piece_w, piece_h), pygame.SRCALPHA)
                 pygame.draw.rect(ghost, (*body_color, alpha),
@@ -544,7 +610,6 @@ class JelloCube:
                 pygame.draw.rect(ghost, (*body_color, alpha + 40),
                                  (0, 0, piece_w, piece_h), 1, border_radius=4)
                 surf.blit(ghost, (int(orbit_x - piece_w / 2), int(orbit_y - piece_h / 2)))
-                # Tiny eyes
                 for eo in [-3, 3]:
                     pygame.draw.circle(surf, (255, 255, 255), (int(orbit_x + eo), int(orbit_y - 2)), 2)
                     pygame.draw.circle(surf, (20, 20, 40), (int(orbit_x + eo), int(orbit_y - 2)), 1)

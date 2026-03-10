@@ -12,6 +12,7 @@ from game.engine.settings import (
     GRAVITY, SANITIZER_BLUE, SANITIZER_TRAIL, SANITIZER_PUDDLE,
     EnemyType, GameEvent,
 )
+from game.engine.sprites import load_sprite, flip_h
 
 
 # ── Enemy States ──
@@ -35,8 +36,8 @@ class SanitizerTrail:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.w = 16
-        self.h = 6
+        self.w = 24
+        self.h = 10
         self.damage = BOTTLE_TRAIL_DAMAGE
         self.lifetime = 300
         self.max_lifetime = 300
@@ -69,8 +70,8 @@ class SanitizerGlob:
     def __init__(self, x, y, target_x, target_y, ground_y):
         self.x = float(x)
         self.y = float(y)
-        self.w = 10
-        self.h = 10
+        self.w = 16
+        self.h = 16
         self.damage = WARRIOR_GLOB_DAMAGE
         self.alive = True
         self.ground_y = ground_y
@@ -117,12 +118,12 @@ class SanitizerGlob:
             ts = pygame.Surface((s * 2, s * 2), pygame.SRCALPHA)
             pygame.draw.circle(ts, (100, 180, 220, alpha), (s, s), s)
             surf.blit(ts, (int(tx + ox) - s, int(ty + oy) - s))
-        # Main glob
+        # Main glob (bigger for TV visibility)
         pygame.draw.circle(surf, SANITIZER_BLUE,
-                           (int(self.x + ox), int(self.y + oy)), 5)
+                           (int(self.x + ox), int(self.y + oy)), 8)
         # Highlight
         pygame.draw.circle(surf, (180, 220, 240),
-                           (int(self.x + ox) - 1, int(self.y + oy) - 2), 2)
+                           (int(self.x + ox) - 2, int(self.y + oy) - 3), 3)
 
     def get_rect(self):
         return pygame.Rect(int(self.x - self.w // 2), int(self.y - self.h // 2),
@@ -137,8 +138,8 @@ class SanitizerPuddle:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.w = 24
-        self.h = 8
+        self.w = 32
+        self.h = 12
         self.damage = BOTTLE_TRAIL_DAMAGE
         self.lifetime = 240
         self.max_lifetime = 240
@@ -175,8 +176,8 @@ class SanitizerArrow:
     def __init__(self, x, y, target_x, target_y):
         self.x = float(x)
         self.y = float(y)
-        self.w = 14
-        self.h = 4
+        self.w = 20
+        self.h = 8
         self.damage = ARCHER_ARROW_DAMAGE
         self.speed = 7.0
         self.lifetime = 120  # 2 seconds max
@@ -208,16 +209,16 @@ class SanitizerArrow:
         cy = int(self.y + oy)
 
         # Arrow body — a rotated thin rectangle
-        length = 14
+        length = 20
         tip_x = cx + int(math.cos(self.angle) * length / 2)
         tip_y = cy + int(math.sin(self.angle) * length / 2)
         tail_x = cx - int(math.cos(self.angle) * length / 2)
         tail_y = cy - int(math.sin(self.angle) * length / 2)
 
         # Shaft
-        pygame.draw.line(surf, (60, 80, 140), (tail_x, tail_y), (tip_x, tip_y), 3)
+        pygame.draw.line(surf, (60, 80, 140), (tail_x, tail_y), (tip_x, tip_y), 4)
         # Tip (brighter)
-        pygame.draw.line(surf, (120, 160, 220), (cx, cy), (tip_x, tip_y), 2)
+        pygame.draw.line(surf, (120, 160, 220), (cx, cy), (tip_x, tip_y), 3)
 
     def get_rect(self):
         return pygame.Rect(int(self.x - self.w // 2), int(self.y - self.h // 2),
@@ -304,6 +305,12 @@ class Enemy:
             self.y += (dy / dist) * self.patrol_speed
             self.facing = 1 if dx > 0 else -1
 
+        # Clamp to stay in bounds (0 to a reasonable max)
+        if self.x < 0:
+            self.x = 0
+        if self.y < 0:
+            self.y = 0
+
     def _do_chase(self, player):
         """Move toward the player. Subclasses may override."""
         dx = player.x - self.x
@@ -351,7 +358,7 @@ class SmallSanitizerBottle(Enemy):
     """
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=24, h=30,
+        super().__init__(x, y, w=30, h=48,
                          health=SMALL_BOTTLE_HP,
                          enemy_type=EnemyType.SANITIZER_BOTTLE)
         self.patrol_speed = 0.8
@@ -366,6 +373,10 @@ class SmallSanitizerBottle(Enemy):
         # Trail spawning
         self.trail_timer = 0
         self.trail_interval = 30  # frames between trail drops
+
+        # Sprite
+        self._sprite = load_sprite('items/hand-sanitizer-front.png', 30, 40)
+        self._sprite_flipped = flip_h(self._sprite) if self._sprite else None
 
     def update(self, player):
         super().update(player)
@@ -395,31 +406,28 @@ class SmallSanitizerBottle(Enemy):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
-        # Hit flash
-        color = (255, 255, 255) if self.hit_timer > 0 else self.color
-        cap_color = (255, 255, 255) if self.hit_timer > 0 else (200, 200, 210)
-        label_color = (255, 255, 255) if self.hit_timer > 0 else (60, 140, 180)
-
-        # Bottle body — rectangle with rounded bottom
-        body_rect = (bx + 2, by + 8, self.w - 4, self.h - 8)
-        pygame.draw.rect(surf, color, body_rect, border_radius=4)
-
-        # Rounded top / neck
-        neck_rect = (bx + 6, by + 3, self.w - 12, 8)
-        pygame.draw.rect(surf, color, neck_rect, border_radius=3)
-
-        # Cap
-        cap_rect = (bx + 7, by, self.w - 14, 5)
-        pygame.draw.rect(surf, cap_color, cap_rect, border_radius=2)
-
-        # Label stripe
-        if self.w > 12:
-            pygame.draw.rect(surf, label_color,
-                             (bx + 4, by + 14, self.w - 8, 8), border_radius=2)
-
-        # Outline
-        pygame.draw.rect(surf, (60, 120, 160),
-                         (bx + 2, by + 8, self.w - 4, self.h - 8), 1, border_radius=4)
+        if self._sprite:
+            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            if self.hit_timer > 0:
+                # White flash
+                flash = sprite.copy()
+                flash.fill((255, 255, 255, 180), special_flags=pygame.BLEND_RGBA_MAX)
+                surf.blit(flash, (bx, by + 8))
+            else:
+                surf.blit(sprite, (bx, by + 8))
+            # Tiny legs underneath
+            leg_y = by + self.h - 6
+            pygame.draw.rect(surf, (100, 180, 220), (bx + 6, leg_y, 5, 6))
+            pygame.draw.rect(surf, (100, 180, 220), (bx + self.w - 11, leg_y, 5, 6))
+        else:
+            # Programmatic fallback
+            color = (255, 255, 255) if self.hit_timer > 0 else self.color
+            body_rect = (bx + 2, by + 8, self.w - 4, self.h - 8)
+            pygame.draw.rect(surf, color, body_rect, border_radius=4)
+            neck_rect = (bx + 6, by + 3, self.w - 12, 8)
+            pygame.draw.rect(surf, color, neck_rect, border_radius=3)
+            cap_rect = (bx + 7, by, self.w - 14, 5)
+            pygame.draw.rect(surf, (200, 200, 210), cap_rect, border_radius=2)
 
         # Health bar (only if damaged)
         if self.health < self.max_health:
@@ -442,7 +450,7 @@ class SanitizerWarrior(Enemy):
     """
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=32, h=40,
+        super().__init__(x, y, w=60, h=80,
                          health=SANITIZER_WARRIOR_HP,
                          enemy_type=EnemyType.SANITIZER_WARRIOR)
         self.patrol_speed = 1.0
@@ -462,6 +470,11 @@ class SanitizerWarrior(Enemy):
 
         # Detection range
         self.detect_range = 250
+
+        # Sprites
+        self._sprite_side = load_sprite('enemies/sanitizer-warrior-side-view.png', 60, 80)
+        self._sprite_side_flipped = flip_h(self._sprite_side) if self._sprite_side else None
+        self._sprite_front = load_sprite('enemies/sanitizer-warrior-front-view.png', 60, 80)
 
     @property
     def hat_vulnerable(self):
@@ -524,57 +537,34 @@ class SanitizerWarrior(Enemy):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
-        color = (255, 255, 255) if self.hit_timer > 0 else self.color
-        hat_color = (255, 255, 255) if self.hit_timer > 0 else (120, 100, 70)
-        spike_color = (255, 255, 255) if self.hit_timer > 0 else (180, 160, 120)
-        pack_color = (255, 255, 255) if self.hit_timer > 0 else (80, 130, 180)
+        # Choose sprite based on state
+        sprite = None
+        if self.state == EnemyState.ATTACK and self._sprite_front:
+            sprite = self._sprite_front
+        elif self._sprite_side:
+            sprite = self._sprite_side if self.facing >= 0 else self._sprite_side_flipped
 
-        # Legs
-        leg_y = by + self.h - 10
-        pygame.draw.rect(surf, color, (bx + 4, leg_y, 8, 10))
-        pygame.draw.rect(surf, color, (bx + self.w - 12, leg_y, 8, 10))
-
-        # Body (torso)
-        body_rect = (bx + 2, by + 12, self.w - 4, self.h - 20)
-        pygame.draw.rect(surf, color, body_rect, border_radius=3)
-
-        # Backpack bottle (on back side)
-        back_x = bx - 6 if self.facing == 1 else bx + self.w - 2
-        pygame.draw.rect(surf, pack_color,
-                         (back_x, by + 14, 8, 16), border_radius=2)
-        pygame.draw.rect(surf, (60, 100, 150),
-                         (back_x, by + 14, 8, 16), 1, border_radius=2)
-
-        # Arms
-        arm_y = by + 16
-        pygame.draw.rect(surf, color, (bx - 4, arm_y, 6, 12), border_radius=2)
-        pygame.draw.rect(surf, color, (bx + self.w - 2, arm_y, 6, 12), border_radius=2)
-
-        # Head
-        head_rect = (bx + 4, by + 4, self.w - 8, 12)
-        pygame.draw.rect(surf, color, head_rect, border_radius=4)
-
-        # Spiked hat — tips down when firing
-        hat_y = by - 2 if not self.hat_vulnerable else by + 2
-        hat_points = [
-            (bx + 2, hat_y + 6),
-            (bx + self.w // 2, hat_y - 6),
-            (bx + self.w - 2, hat_y + 6),
-        ]
-        pygame.draw.polygon(surf, hat_color, hat_points)
-        # Spikes on hat
-        for sx in range(bx + 6, bx + self.w - 6, 8):
-            pygame.draw.line(surf, spike_color,
-                             (sx, hat_y + 2), (sx, hat_y - 4), 2)
-
-        # Eyes (angry slits)
-        eye_y = by + 8
-        for ex_off in [8, self.w - 12]:
-            pygame.draw.line(surf, (40, 20, 20),
-                             (bx + ex_off, eye_y), (bx + ex_off + 4, eye_y), 2)
-
-        # Metallic edge outline
-        pygame.draw.rect(surf, (100, 80, 60), body_rect, 1, border_radius=3)
+        if sprite:
+            if self.hit_timer > 0:
+                flash = sprite.copy()
+                flash.fill((255, 255, 255, 180), special_flags=pygame.BLEND_RGBA_MAX)
+                surf.blit(flash, (bx, by))
+            else:
+                surf.blit(sprite, (bx, by))
+        else:
+            # Programmatic fallback
+            color = (255, 255, 255) if self.hit_timer > 0 else self.color
+            body_rect = (bx + 4, by + 20, self.w - 8, self.h - 30)
+            pygame.draw.rect(surf, color, body_rect, border_radius=3)
+            head_rect = (bx + 10, by + 6, self.w - 20, 18)
+            pygame.draw.rect(surf, color, head_rect, border_radius=4)
+            hat_y = by - 2 if not self.hat_vulnerable else by + 2
+            hat_points = [
+                (bx + 4, hat_y + 10),
+                (bx + self.w // 2, hat_y - 8),
+                (bx + self.w - 4, hat_y + 10),
+            ]
+            pygame.draw.polygon(surf, (120, 100, 70), hat_points)
 
         # Health bar
         if self.health < self.max_health:
@@ -582,7 +572,7 @@ class SanitizerWarrior(Enemy):
 
     def _draw_health_bar(self, surf, x, y, w):
         bar_w = w
-        bar_h = 3
+        bar_h = 4
         ratio = max(0, self.health / self.max_health)
         pygame.draw.rect(surf, (60, 60, 60), (x, y, bar_w, bar_h))
         pygame.draw.rect(surf, (80, 200, 80), (x, y, int(bar_w * ratio), bar_h))
@@ -594,7 +584,7 @@ class JellyArcher(Enemy):
     """Jelly archer — 20 HP glass cannon. Stays far, fires SanitizerArrows."""
 
     def __init__(self, x, y, patrol_points=None):
-        super().__init__(x, y, w=26, h=34,
+        super().__init__(x, y, w=36, h=48,
                          health=JELLY_ARCHER_HP,
                          enemy_type=EnemyType.JELLY_ARCHER)
         self.patrol_speed = 1.2
@@ -632,10 +622,12 @@ class JellyArcher(Enemy):
         if self.state == EnemyState.ATTACK:
             self.facing = 1 if dx > 0 else -1
 
-            # Back away if player is too close
+            # Back away if player is too close (clamped to level bounds)
             if dist < self.flee_range and dist > 0:
                 flee_dx = -dx / dist
                 self.x += flee_dx * self.patrol_speed * 1.5
+                if self.x < 0:
+                    self.x = 0
 
             # Fire arrows on cooldown
             self.attack_timer += 1

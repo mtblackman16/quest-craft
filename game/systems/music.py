@@ -305,6 +305,7 @@ class AdaptiveMusicManager:
             return
 
         if not HAS_NUMPY:
+            print("[Music] numpy not available — music will be silent")
             return
 
         self._available = True

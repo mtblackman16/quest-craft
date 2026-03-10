@@ -339,6 +339,7 @@ class SFXManager:
         if HAS_NUMPY:
             self._synthesize_all()
         else:
+            print("[SFX] numpy not available — falling back to .wav files")
             self._load_wavs()
 
     def _synthesize_all(self):

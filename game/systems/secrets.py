@@ -455,6 +455,19 @@ class SecretsManager:
     # Integration: subscribe / on_event / update / draw
     # ──────────────────────────────────────────────
 
+    def reset(self):
+        """Reset session-specific state between playthroughs."""
+        self.death_count = 0
+        self._fourth_wall_triggered = False
+        self.glitch_active = False
+        self.glitch_timer = 0
+        self.barrel_interact_count = 0
+        self._claude_revealed = False
+        self.wall_splats.clear()
+        self._total_missed_shots = 0
+        self.idle_dance_active = False
+        self._idle_notes.clear()
+
     def subscribe(self, event_bus):
         """Subscribe to relevant game events."""
         event_bus.subscribe(GameEvent.PLAYER_DIED, self._on_player_died)

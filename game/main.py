@@ -45,6 +45,12 @@ class Game:
     """Main game class — owns the state machine and all systems."""
 
     def __init__(self, test_mode=False, test_floor=1, test_duration=30):
+        # Pre-init audio mixer BEFORE pygame.init() for correct sample rate
+        try:
+            from game.systems.sound import SFXManager
+            SFXManager.pre_init()
+        except Exception:
+            pass
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         pygame.display.set_caption("SPLIT")
@@ -118,6 +124,9 @@ class Game:
         # Cached background surface (avoid per-line gradient each frame)
         self._bg_cache_floor = -1
         self._bg_surface = None
+
+        # Cached torch glow surface (avoid per-frame SRCALPHA allocation)
+        self._torch_glow_cache = None
 
     def _init_controller(self):
         """Initialize first available controller."""
@@ -239,6 +248,17 @@ class Game:
 
     def _start_gameplay(self):
         """Reset for a new gameplay session."""
+        # Clear event bus to prevent listener accumulation across playthroughs
+        self.event_bus.clear()
+
+        # Re-subscribe systems that need events
+        if self.secrets:
+            self.secrets.reset()
+            self.secrets.subscribe(self.event_bus)
+        if self.narrator:
+            if hasattr(self.narrator, 'subscribe'):
+                self.narrator.subscribe(self.event_bus)
+
         self.player = JelloCube(100, 400)
         self.player_projectiles = []
         self.enemy_projectiles = []
@@ -255,12 +275,10 @@ class Game:
         self._first_kill_triggered = False
         self._first_split_triggered = False
 
-        # Load floor
+        # Load floor then fix spawn Y
         self._load_floor(self.current_floor)
-
-        # Music
-        if self.music:
-            self.music.set_zone(MusicZone.FLOORS_1_4)
+        spawn_y = self._calc_spawn_y()
+        self.player.y = spawn_y
 
     def _load_floor(self, floor_num):
         """Load a floor from level data and spawn entities."""
@@ -286,27 +304,6 @@ class Game:
         else:
             self._setup_fallback_level()
 
-        # Spawn boss on boss floors
-        if BOSSES_AVAILABLE:
-            level_w = self._get_level_width()
-            arena_r = max(1180, level_w - 100)
-            boss = None
-            if floor_num == 4:
-                boss = BigBottle(level_w // 2, 400, arena_left=100, arena_right=arena_r)
-            elif floor_num == 8:
-                boss = TheCleanser(level_w // 2, 400, arena_left=100, arena_right=arena_r)
-            elif floor_num == 15:
-                boss = TheLastGuard(level_w // 2, 400, arena_left=100, arena_right=arena_r)
-            if boss:
-                self._boss = boss
-                self.enemies.append(boss)
-                if self.music:
-                    self.music.set_zone(MusicZone.BOSS)
-                    self.music.play_stinger('boss_entrance')
-                if not self._first_boss_triggered:
-                    self._first_boss_triggered = True
-                    self.event_bus.emit(GameEvent.FIRST_BOSS_ENCOUNTER)
-
         # Camera bounds
         level_w = self._get_level_width()
         level_h = self._get_level_height()
@@ -314,7 +311,7 @@ class Game:
         if self.player:
             self.camera.reset(self.player.x, self.player.y)
 
-        # Update music zone based on floor
+        # Set floor-based music zone FIRST (boss override comes after)
         if self.music:
             if floor_num <= 4:
                 self.music.set_zone(MusicZone.FLOORS_1_4)
@@ -326,6 +323,32 @@ class Game:
                 self.music.set_zone(MusicZone.FLOORS_12_14)
             else:
                 self.music.set_zone(MusicZone.FLOOR_15)
+
+        # Spawn boss on boss floors (overrides music zone)
+        if BOSSES_AVAILABLE:
+            arena_r = max(1180, level_w - 100)
+            # Calculate boss spawn Y from level data
+            boss_y = self._calc_ground_y(level_w // 2)
+            boss = None
+            if floor_num == 4:
+                boss = BigBottle(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+            elif floor_num == 6:
+                boss = Gracie(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+            elif floor_num == 8:
+                boss = TheCleanser(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+            elif floor_num == 12:
+                boss = MamaSloth(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+            elif floor_num == 15:
+                boss = TheLastGuard(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+            if boss:
+                self._boss = boss
+                self.enemies.append(boss)
+                if self.music:
+                    self.music.set_zone(MusicZone.BOSS)
+                    self.music.play_stinger('boss_entrance')
+                if not self._first_boss_triggered:
+                    self._first_boss_triggered = True
+                    self.event_bus.emit(GameEvent.FIRST_BOSS_ENCOUNTER)
 
         # Stinger for floor change
         if self.music and floor_num > 1:
@@ -365,6 +388,30 @@ class Game:
         if self.level_manager:
             return self.level_manager.get_room_height()
         return SCREEN_H
+
+    def _calc_spawn_y(self):
+        """Calculate player spawn Y from the first wide platform.
+        Places player feet on the platform surface."""
+        player_h = self.player.h if self.player else 64
+        for plat in self.platforms:
+            pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(0, 0, 0, 0)
+            if pr.width >= 200 and pr.left <= 200:
+                return pr.top - player_h  # feet on platform
+        return 400  # fallback
+
+    def _calc_ground_y(self, x_pos):
+        """Find the ground Y position near x_pos from platform data.
+        Used to spawn bosses on solid ground instead of hardcoded 400."""
+        best_y = 400  # fallback
+        for plat in self.platforms:
+            pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(0, 0, 0, 0)
+            # Find platform that's wide enough (ground floor) and overlaps x_pos
+            if pr.width >= 200 and pr.left <= x_pos <= pr.right:
+                boss_y = pr.top - 160  # spawn boss above the platform
+                if boss_y > 0:
+                    best_y = boss_y
+                    break
+        return best_y
 
     def get_state_snapshot(self):
         """Return dict of current game state for test logging."""
@@ -413,12 +460,19 @@ class Game:
             self._start_gameplay()
             # Override starting floor if requested
             if self.test_start_floor > 1:
-                self.player.x = 100
-                self.player.y = 400
                 self._load_floor(self.test_start_floor)
+                self.player.x = 100
+                self.player.y = self._calc_spawn_y()
             return
 
+        # Set title music
+        if self.music:
+            self.music.set_zone(MusicZone.TITLE)
+
         while True:
+            # Update music during title screen loop
+            if self.music:
+                self.music.update()
             try:
                 from game.ui.title_screen import run_title_screen
                 result = run_title_screen(self.screen, self.clock, self.joystick)
@@ -508,7 +562,10 @@ class Game:
                 keys = self._test_ai_get_keys()
                 self._test_ai_actions()
 
-            self.player.update(keys, self.platforms, self.joystick if not self.test_mode else None)
+            room_w = self._get_level_width()
+            room_h = self._get_level_height()
+            self.player.update(keys, self.platforms, self.joystick if not self.test_mode else None,
+                               room_width=room_w, room_height=room_h)
 
             # Process player events
             for evt in self.player.pending_events:
@@ -621,29 +678,41 @@ class Game:
                             minions = self._spawn_enemies_from_data([spawn_cfg])
                             self.enemies.extend(minions)
 
-            # ── Boss special effects (MamaSloth spray cone, freeze) ──
-            if BOSSES_AVAILABLE and self._boss and self._boss.alive:
+            # ── Boss special effects ──
+            if BOSSES_AVAILABLE and self._boss and self._boss.alive and self.player:
+                # MamaSloth freeze request
                 if hasattr(self._boss, 'player_freeze_request') and self._boss.player_freeze_request:
                     self._boss.player_freeze_request = False
-                    # Freeze player for 2 seconds (120 frames)
-                    if self.player:
-                        self.player.freeze_timer = 120
+                    self.player.freeze_timer = 120
+                # MamaSloth spray cone
                 if hasattr(self._boss, 'active_spray_cone') and self._boss.active_spray_cone:
                     cx, cy, angle, half_arc, spray_range, damage = self._boss.active_spray_cone
-                    # Check if player is in the cone
-                    if self.player:
-                        px = self.player.x + self.player.w / 2
-                        py = self.player.y + self.player.h / 2
-                        dx = px - cx
-                        dy = py - cy
-                        dist = math.hypot(dx, dy)
-                        if dist < spray_range:
-                            player_angle = math.atan2(dy, dx)
-                            angle_diff = abs(player_angle - angle)
-                            if angle_diff > math.pi:
-                                angle_diff = 2 * math.pi - angle_diff
-                            if angle_diff < half_arc:
-                                self.player.take_damage(damage, self.difficulty)
+                    px = self.player.x + self.player.w / 2
+                    py = self.player.y + self.player.h / 2
+                    dx, dy = px - cx, py - cy
+                    dist = math.hypot(dx, dy)
+                    if dist < spray_range:
+                        player_angle = math.atan2(dy, dx)
+                        angle_diff = abs(player_angle - angle)
+                        if angle_diff > math.pi:
+                            angle_diff = 2 * math.pi - angle_diff
+                        if angle_diff < half_arc:
+                            self.player.take_damage(damage, self.difficulty)
+                # Shockwave (TheLastGuard, Gracie, MamaSloth)
+                if hasattr(self._boss, 'active_shockwave') and self._boss.active_shockwave:
+                    sx, sy, sr, sd = self._boss.active_shockwave
+                    px = self.player.x + self.player.w / 2
+                    py = self.player.y + self.player.h / 2
+                    if math.hypot(px - sx, py - sy) < sr:
+                        self.player.take_damage(sd, self.difficulty)
+                    self._boss.active_shockwave = None  # consume
+                # Grab (TheLastGuard)
+                if hasattr(self._boss, 'active_grab') and self._boss.active_grab:
+                    grab_rect = self._boss.active_grab
+                    player_rect = self.player.get_rect()
+                    if player_rect.colliderect(grab_rect):
+                        self.player.take_damage(15, self.difficulty)
+                    self._boss.active_grab = None  # consume
 
             # ── Update enemy projectiles ──
             for proj in self.enemy_projectiles[:]:
@@ -664,11 +733,11 @@ class Game:
             for plat in self.platforms:
                 if hasattr(plat, 'update'):
                     plat.update(1)
-                # Crumbling platform: detect player standing
+                # Crumbling platform: detect player standing (use consistent margin)
                 if hasattr(plat, 'stand_on') and self.player.on_ground:
                     pr = plat.get_rect()
                     player_rect = self.player.get_rect()
-                    if (player_rect.bottom >= pr.top and player_rect.bottom <= pr.top + 8 and
+                    if (player_rect.bottom >= pr.top and player_rect.bottom <= pr.top + 12 and
                             player_rect.right > pr.left and player_rect.left < pr.right):
                         plat.stand_on()
 
@@ -854,11 +923,11 @@ class Game:
                 # Take end-of-floor screenshot, advance
                 self.capture_screenshot(os.path.join(floor_dir, 'end.png'))
                 self._test_screenshot_count += 1
-                self.player.x = 100
-                self.player.y = 400
                 self.player.vx = 0
                 self.player.vy = 0
                 self._load_floor(next_floor)
+                self.player.x = 100
+                self.player.y = self._calc_spawn_y()
                 self._test_floor_start = now
 
     def _test_ai_get_keys(self):
@@ -937,6 +1006,18 @@ class Game:
         """Check if player reached an elevator/transition to next floor."""
         if not self.level_manager:
             return
+
+        # Guard: don't transition during dodge, hitstop, or death
+        if self.player.dodge_timer > 0 or self.player.ground_pounding:
+            return
+
+        # Transition cooldown (prevent instant re-triggers)
+        if not hasattr(self, '_transition_cooldown'):
+            self._transition_cooldown = 0
+        if self._transition_cooldown > 0:
+            self._transition_cooldown -= 1
+            return
+
         transitions = self.level_manager.get_transitions()
         player_rect = self.player.get_rect()
         for t in transitions:
@@ -944,12 +1025,13 @@ class Game:
             if player_rect.colliderect(t_rect):
                 target = t.get('target_floor', self.current_floor + 1)
                 if target != self.current_floor:
-                    # Transition! Place player at start of new floor
-                    self.player.x = 100
-                    self.player.y = 400
                     self.player.vx = 0
                     self.player.vy = 0
                     self._load_floor(target)
+                    # Calculate spawn Y from NEW floor's platforms
+                    self.player.x = 100
+                    self.player.y = self._calc_spawn_y()
+                    self._transition_cooldown = 30
                     self.event_bus.emit(GameEvent.FLOOR_CHANGE,
                                         floor=target, player=self.player)
                     break
@@ -1056,18 +1138,20 @@ class Game:
 
         self.screen.blit(self._bg_surface, (0, 0))
 
-        # Animated torch glow (needs to update each frame)
+        # Animated torch glow (cached surface, vary alpha per frame)
+        if self._torch_glow_cache is None:
+            self._torch_glow_cache = pygame.Surface((100, 100), pygame.SRCALPHA)
+            pygame.draw.circle(self._torch_glow_cache,
+                               (TORCH_AMBER[0], TORCH_AMBER[1], TORCH_AMBER[2], 24),
+                               (50, 50), 50)
+
         t = pygame.time.get_ticks()
-        palette = FLOOR_PALETTES.get(floor_num, FLOOR_PALETTES[1])
-        _, _, _, accent = palette
         torches = [200, 500, 800, 1100]
         for tx in torches:
             flame_h = 12 + math.sin(t * 0.008 + tx) * 4
-            glow = pygame.Surface((100, 100), pygame.SRCALPHA)
             glow_a = int(18 + math.sin(t * 0.005 + tx * 0.3) * 6)
-            pygame.draw.circle(glow, (TORCH_AMBER[0], TORCH_AMBER[1], TORCH_AMBER[2], glow_a),
-                               (50, 50), 50)
-            self.screen.blit(glow, (tx - 50, 140))
+            self._torch_glow_cache.set_alpha(glow_a * 255 // 24)
+            self.screen.blit(self._torch_glow_cache, (tx - 50, 140))
             # Flame
             points = [(tx - 4, 180), (tx, int(180 - flame_h)), (tx + 4, 180)]
             pygame.draw.polygon(self.screen, TORCH_AMBER, points)
@@ -1153,13 +1237,16 @@ class Game:
 
     def _run_death(self):
         if self.test_mode:
-            # Auto-retry in test mode
+            # Auto-respawn on current floor in test mode (don't restart from floor 1)
             self.state = GameState.GAMEPLAY
-            self._start_gameplay()
-            if self.test_start_floor > 1:
-                self.player.x = 100
-                self.player.y = 400
-                self._load_floor(self.test_start_floor)
+            self.player.health = self.player.max_health
+            self.player.vx = 0
+            self.player.vy = 0
+            self.player.x = 100
+            self.player.y = self._calc_spawn_y()
+            self.player_projectiles.clear()
+            self.enemy_projectiles.clear()
+            self.hazards.clear()
             return
 
         try:
