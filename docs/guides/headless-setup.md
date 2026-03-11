@@ -47,11 +47,12 @@ Run these commands on the Pi via SSH before launching a game.
 ### Step 1 — Start wayvnc
 
 ```bash
+export WAYLAND_DISPLAY=wayland-0
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-wayvnc 0.0.0.0 5900 &
+wayvnc --render-cursor 0.0.0.0 5900 &
 ```
 
-This starts the VNC server, listening on all interfaces on port 5900.
+This starts the VNC server, listening on all interfaces on port 5900. The `--render-cursor` flag ensures the mouse cursor is visible in the VNC stream.
 
 ### Step 2 — Start noVNC (browser bridge)
 
@@ -65,11 +66,19 @@ This bridges VNC (port 5900) to a WebSocket (port 6080) and serves the noVNC web
 
 ```bash
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-export WAYLAND_DISPLAY=wayland-1
+export WAYLAND_DISPLAY=wayland-0
 python3 /home/mark/quest-craft/game/spark.py
 ```
 
 The game runs on the Pi's Wayland display. You'll see it in your browser.
+
+### Or: Use the script
+
+```bash
+/home/mark/quest-craft/scripts/start-vnc.sh
+```
+
+This starts both wayvnc and noVNC in one step. See [scripts/start-vnc.sh](../../scripts/start-vnc.sh).
 
 ---
 
@@ -127,7 +136,7 @@ Open it in Safari, Chrome, or any mobile browser. Tap **Connect**. The game disp
 | "Connection refused" on port 5900 | wayvnc isn't running. Start it (Step 1 above). |
 | "Connection refused" on port 6080 | websockify/noVNC isn't running. Start it (Step 2 above). |
 | Black screen in VNC | The Wayland compositor may not have a virtual display. Try: `export WLR_BACKENDS=headless` before starting labwc. |
-| Game doesn't appear in VNC | Make sure `WAYLAND_DISPLAY=wayland-1` is set before launching the game. |
+| Game doesn't appear in VNC | Make sure `WAYLAND_DISPLAY=wayland-0` is set before launching the game. Check with `ls /run/user/1000/wayland-*` to confirm. |
 | Laggy or slow display | You're likely on WiFi. Try ethernet or a Tailscale direct connection for better performance. |
 | Need to kill VNC and start over | `pkill wayvnc && pkill websockify` |
 
@@ -138,17 +147,26 @@ Open it in Safari, Chrome, or any mobile browser. Tap **Connect**. The game disp
 Paste this entire block into an SSH session to start everything at once:
 
 ```bash
+/home/mark/quest-craft/scripts/start-vnc.sh
+```
+
+Or manually:
+
+```bash
 # Start remote display access
+export WAYLAND_DISPLAY=wayland-0
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-wayvnc 0.0.0.0 5900 &>/dev/null &
+pkill wayvnc 2>/dev/null; pkill websockify 2>/dev/null
+sleep 0.5
+wayvnc --render-cursor 0.0.0.0 5900 &>/dev/null &
 websockify --web /usr/share/novnc 6080 localhost:5900 &>/dev/null &
 echo "Browser: http://$(hostname -I | awk '{print $1}'):6080/vnc.html"
 ```
 
-Then launch your game in a separate terminal or after the above finishes:
+Then launch your game in a separate terminal:
 
 ```bash
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-export WAYLAND_DISPLAY=wayland-1
+export WAYLAND_DISPLAY=wayland-0
 python3 /home/mark/quest-craft/game/spark.py
 ```
