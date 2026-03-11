@@ -52,7 +52,7 @@ class Game:
         except Exception:
             pass
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.FULLSCREEN)
         pygame.display.set_caption("SPLIT")
         self.clock = pygame.time.Clock()
 
