@@ -102,10 +102,9 @@ class CookingPot(Interactable):
             return False
 
         elif self.state == POT_DONE:
-            # Heal the player
-            hp = getattr(player, "health", 0)
-            max_hp = getattr(player, "max_health", 100)
-            player.health = min(hp + JELLO_POWDER_HEAL, max_hp)
+            # Give the player cooked jelly (heals when eaten via X button)
+            cooked = getattr(player, "cooked_jelly_count", 0)
+            player.cooked_jelly_count = cooked + 1
             self.state = POT_EMPTY
             return True
 
@@ -244,12 +243,17 @@ class WaterSource(Interactable):
 #  Chest
 # ──────────────────────────────────────────────
 class Chest(Interactable):
-    """Y to open. Drops jello powder for the player."""
+    """Y to open. Drops jello powder (and sometimes other items) for the player."""
 
-    def __init__(self, x, y):
+    # Possible rare drops on later floors (floor >= 8)
+    RARE_DROPS = ['water', 'pill_fire', 'pill_water', 'pill_ice']
+
+    def __init__(self, x, y, floor_num=1):
         super().__init__(x, y, 32, 24, "chest")
         self.state = CHEST_CLOSED
         self._open_timer = 0
+        self._loot_given = False
+        self.floor_num = floor_num
 
     def interact(self, player, crafting_system=None):
         if self.state == CHEST_CLOSED:
@@ -265,10 +269,27 @@ class Chest(Interactable):
             if self._open_timer <= 0:
                 self.state = CHEST_OPEN
 
-    def on_opened(self, player):
-        """Call this once the opening animation finishes to grant loot."""
+    def grant_loot(self, player):
+        """Grant loot when chest finishes opening. Called by game loop."""
+        if self._loot_given:
+            return
+        self._loot_given = True
+        import random
+        # Always give 2 jelly powder
         powder = getattr(player, "jello_powder_count", 0)
-        player.jello_powder_count = powder + 1
+        player.jello_powder_count = powder + 2
+        # On later floors, chance for a bonus item
+        if self.floor_num >= 8 and random.random() < 0.4:
+            drop = random.choice(self.RARE_DROPS)
+            if drop == 'water':
+                player.has_water = True
+            elif drop.startswith('pill_'):
+                # Give a pill if player doesn't already have one
+                if not getattr(player, 'active_pill', None):
+                    from game.engine.settings import PILL_DURATIONS
+                    pill_type = drop.replace('pill_', '')
+                    player.active_pill = pill_type
+                    player.pill_timer = PILL_DURATIONS.get(pill_type, 60 * 60)
 
     def draw(self, surf, camera_offset):
         ox, oy = camera_offset
@@ -358,17 +379,36 @@ class Door(Interactable):
                            (int(sx) + self.w - 10, handle_y), 3)
 
 
+# ── Shrine pill types (matches PillType enum values) ──
+SHRINE_PILL_TYPES = ['fire', 'water', 'ice', 'electricity', 'attack_up']
+
+
 # ──────────────────────────────────────────────
 #  Shrine
 # ──────────────────────────────────────────────
 class Shrine(Interactable):
-    """Y to enter — placeholder for puzzle / parkour challenges."""
+    """Y to interact — grants a random pill on first use."""
 
     def __init__(self, x, y):
         super().__init__(x, y, 40, 48, "shrine")
+        self.used = False  # True after the shrine has been activated
 
     def interact(self, player, crafting_system=None):
-        # Shrine interaction handled by game state manager
+        if self.used:
+            return False  # already used — no further interaction
+
+        # Only grant a pill if the player doesn't already have one active
+        if getattr(player, 'active_pill', None) is not None:
+            return False  # player already has an active pill
+
+        # Pick a random pill type and grant it
+        pill_type = random.choice(SHRINE_PILL_TYPES)
+        player.active_pill = pill_type
+        from game.engine.settings import PILL_DURATIONS
+        player.pill_timer = PILL_DURATIONS.get(pill_type, 60 * 60)
+
+        # Mark shrine as used
+        self.used = True
         return True
 
     def draw(self, surf, camera_offset):
@@ -392,18 +432,26 @@ class Shrine(Interactable):
         cap = pygame.Rect(int(sx) + 6, int(sy) + 4, 28, 6)
         pygame.draw.rect(surf, (90, 88, 100), cap)
 
-        # Pulsing glow orb on top
-        pulse = int(abs(math.sin(self._tick * 0.05)) * 40)
-        glow_color = (140 + pulse, 200, 140 + pulse)
-        orb_x = int(sx) + self.w // 2
-        orb_y = int(sy) + 4
-        pygame.draw.circle(surf, glow_color, (orb_x, orb_y), 5)
+        # Glow orb on top — dimmer if used
+        if self.used:
+            # Used shrine: dim grey-green glow, no pulse
+            glow_color = (80, 100, 80)
+            orb_x = int(sx) + self.w // 2
+            orb_y = int(sy) + 4
+            pygame.draw.circle(surf, glow_color, (orb_x, orb_y), 4)
+        else:
+            # Active shrine: pulsing bright green glow
+            pulse = int(abs(math.sin(self._tick * 0.05)) * 40)
+            glow_color = (140 + pulse, 200, 140 + pulse)
+            orb_x = int(sx) + self.w // 2
+            orb_y = int(sy) + 4
+            pygame.draw.circle(surf, glow_color, (orb_x, orb_y), 5)
 
-        # Faint glow aura
-        aura_surf = pygame.Surface((20, 20), pygame.SRCALPHA)
-        pygame.draw.circle(aura_surf, (140, 220, 140, 25 + pulse // 2),
-                           (10, 10), 10)
-        surf.blit(aura_surf, (orb_x - 10, orb_y - 10))
+            # Faint glow aura (only on active shrines)
+            aura_surf = pygame.Surface((20, 20), pygame.SRCALPHA)
+            pygame.draw.circle(aura_surf, (140, 220, 140, 25 + pulse // 2),
+                               (10, 10), 10)
+            surf.blit(aura_surf, (orb_x - 10, orb_y - 10))
 
 
 # ──────────────────────────────────────────────

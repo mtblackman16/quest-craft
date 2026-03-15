@@ -31,6 +31,20 @@ PILL_NAMES = {
     PillType.ATTACK_UP:   "Attack Up",
 }
 
+PILL_DESCRIPTIONS = {
+    PillType.FIRE:        "Shots burn enemies. Trail damage.",
+    PillType.WATER:       "Immune to sanitizer puddles.",
+    PillType.ICE:         "Shots slow enemies on hit.",
+    PillType.ELECTRICITY: "Shots chain to nearby enemies.",
+    PillType.ATTACK_UP:   "+50% shot damage.",
+}
+
+ITEM_DESCRIPTIONS = {
+    'jello_powder': "Raw ingredient. Eat to heal, or cook into jelly.",
+    'cooked_jelly': "Cooked healing item. Restores more HP than powder.",
+    'water':        "Needed to cook jello powder into jelly at a pot.",
+}
+
 
 def _draw_diamond(surface, cx, cy, size, color):
     """Draw a diamond shape (jello powder icon)."""
@@ -178,13 +192,31 @@ def run_inventory(screen, clock, player, crafting_system, joystick=None):
         screen.blit(title_surf, title_rect)
 
         # ── Jello Powder (top-left area) ──
-        section_y = 120
+        section_y = 110
         powder_label = font_sub.render("Jello Powder", True, JELLO_GREEN)
         screen.blit(powder_label, (100, section_y))
         _draw_diamond(screen, 70, section_y + 12, 10, JELLO_GREEN)
         powder_count = getattr(player, 'jello_powder_count', 0)
         count_surf = font_sub.render(f"x {powder_count}", True, WHITE)
         screen.blit(count_surf, (260, section_y))
+        # Description
+        powder_desc = font_small.render(ITEM_DESCRIPTIONS['jello_powder'], True, (140, 140, 140))
+        screen.blit(powder_desc, (100, section_y + 26))
+
+        # ── Cooked Jelly (below powder) ──
+        jelly_y = section_y + 54
+        jelly_color = (220, 160, 80)
+        jelly_label = font_sub.render("Cooked Jelly", True, jelly_color)
+        screen.blit(jelly_label, (100, jelly_y))
+        # Small jelly icon (circle)
+        pygame.draw.circle(screen, jelly_color, (70, jelly_y + 12), 10)
+        pygame.draw.circle(screen, WHITE, (70, jelly_y + 12), 10, 2)
+        jelly_count = getattr(player, 'cooked_jelly_count', 0)
+        jelly_count_surf = font_sub.render(f"x {jelly_count}", True, WHITE)
+        screen.blit(jelly_count_surf, (260, jelly_y))
+        # Description
+        jelly_desc = font_small.render(ITEM_DESCRIPTIONS['cooked_jelly'], True, (140, 140, 140))
+        screen.blit(jelly_desc, (100, jelly_y + 26))
 
         # ── Water Status (top-right area) ──
         has_water = getattr(player, 'has_water', False)
@@ -195,9 +227,12 @@ def run_inventory(screen, clock, player, crafting_system, joystick=None):
         status_color = (60, 180, 240) if has_water else (120, 120, 120)
         status_surf = font_sub.render(status_text, True, status_color)
         screen.blit(status_surf, (SCREEN_W - 180, section_y))
+        # Description
+        water_desc = font_small.render(ITEM_DESCRIPTIONS['water'], True, (140, 140, 140))
+        screen.blit(water_desc, (SCREEN_W - 350, section_y + 26))
 
         # ── Active Pill Display ──
-        active_y = 180
+        active_y = 220
         active_pill = getattr(crafting_system, 'active_pill', None)
         if active_pill is not None:
             ap_color = PILL_COLORS.get(active_pill, WHITE)
@@ -233,7 +268,7 @@ def run_inventory(screen, clock, player, crafting_system, joystick=None):
             screen.blit(no_active, (100, active_y + 4))
 
         # ── Pill Grid (2 columns) ──
-        grid_top = 260
+        grid_top = 310
         col_w = 400
         row_h = 60
         cols = 2
@@ -268,6 +303,16 @@ def run_inventory(screen, clock, player, crafting_system, joystick=None):
             count_color = WHITE if count > 0 else (80, 80, 80)
             count_surf = font_prompt.render(f"x{count}", True, count_color)
             screen.blit(count_surf, (x + 220, y + 4))
+
+        # ── Selected pill description ──
+        if 0 <= selected < len(pill_types):
+            sel_pill = pill_types[selected]
+            desc = PILL_DESCRIPTIONS.get(sel_pill, "")
+            if desc:
+                desc_y = grid_top + ((len(pill_types) + 1) // 2) * row_h + 10
+                desc_surf = font_small.render(desc, True, (180, 180, 180))
+                desc_rect = desc_surf.get_rect(midtop=(SCREEN_W // 2, desc_y))
+                screen.blit(desc_surf, desc_rect)
 
         # ── Info text at bottom ──
         if info_timer > 0 and info_text:

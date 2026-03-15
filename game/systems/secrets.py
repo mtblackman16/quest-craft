@@ -411,9 +411,9 @@ class SecretsManager:
     # ──────────────────────────────────────────────
 
     def check_exhibition_day(self) -> bool:
-        """Returns True if today is the exhibition: March 15, 2026."""
+        """Returns True if today is the exhibition: March 27, 2026."""
         today = datetime.date.today()
-        is_exhibition = today == datetime.date(2026, 3, 15)
+        is_exhibition = today == datetime.date(2026, 3, 27)
         if is_exhibition and not self._exhibition_checked:
             self._exhibition_checked = True
             self.exhibition_mode = True

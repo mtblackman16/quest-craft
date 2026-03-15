@@ -14,13 +14,13 @@
 | Nathan | 9 | Co-creator & Game Designer |
 | Mark | — | Team Advisor |
 
-**Exhibition:** LASD Illuminate — March 15, 2026
+**Exhibition:** LASD Illuminate Inquiry Exhibition — March 27, 2026
 
 ---
 
 ## Project Status
 
-**Current Phase:** Session 2 — Design — COMPLETE
+**Current Phase:** Session 4 — Playtest — IN PROGRESS
 **Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
 **Core Word:** Survival
@@ -144,6 +144,45 @@ All 7 design topics completed, all PRDs written:
 
 ### Session 3 TODO:
 - Design the inventory screen (Minus button)
+
+## Session 3: Blueprint — COMPLETE
+
+Blueprint session completed. Controller test, technical plan established.
+
+## Session 4: Playtest (March 15) — IN PROGRESS
+
+### Completed:
+- Game launched on Pi, Pro Controller paired, all kids played the game
+- First full playthroughs completed by all team members
+- PRDs covered in depth -- what they are, how Claude uses them
+- File and folder structure -- how the project is organized, file types (.py, .md, .json)
+- AI Memory -- how memory/MEMORY.md and memory/lessons.md work, why they matter
+- Context windows -- how Claude loads PRDs and memories into context, token limits
+- Learning logs -- how lessons.md documents repeated issues and improves dev over sessions
+- Multiple bugs identified during gameplay
+
+### In Progress:
+- Bug dictation via Wispr Flow + /bughunt command
+- Bug fix rounds (go fix / squash them)
+
+### Remaining (Session 4):
+- Bug fix loop -- rotate roles (Player, Bug Caller, Feedback Lead, Logger)
+- Tuning session -- jump feel, enemy difficulty, controls
+- Build Record entries for each kid
+- Final clean playthrough (Victory Lap)
+- Reflections (Illuminate Phase 3 evidence)
+- AI Engineer block -- watch automated playtest harness
+- Commit and tag v0.9-playtested
+
+### RPi5 Performance Optimizations Applied (March 15):
+- CPU governor set to performance (persisted via systemd)
+- Audio buffer 1024 (from 512), channels 16 (from 32)
+- Display: FULLSCREEN | DOUBLEBUF
+- Sprite loading: scale instead of smoothscale
+- VFX particle alpha caching (8 quantized levels)
+- Projectile trail surface caching
+- Launcher script: /home/mark/quest-craft/start-game.sh
+- VNC (wayvnc) must be killed before gameplay
 
 ---
 

@@ -187,7 +187,7 @@ CTRL_X = 2       # Eat Jello Powder
 CTRL_Y = 3       # Interact
 CTRL_CAPTURE = 4  # unused
 CTRL_L = 5       # Switch Split Piece
-CTRL_R = 6       # unused
+CTRL_R = 6       # Switch Split Piece (reverse)
 CTRL_ZL = 7      # Split/Combine Toggle
 CTRL_ZR = 8      # Perfect Dodge
 CTRL_MINUS = 9   # Inventory
@@ -203,7 +203,7 @@ AXIS_RX = 2
 AXIS_RY = 3
 
 # Deadzone
-STICK_DEADZONE = 0.3
+STICK_DEADZONE = 0.15
 
 # ── Keyboard Mapping ──
 import pygame
@@ -280,7 +280,7 @@ NARRATOR_LINES = {
 
 # ── Audio ──
 AUDIO_SAMPLE_RATE = 44100
-AUDIO_CHANNELS = 32
+AUDIO_CHANNELS = 16
 AUDIO_BUFFER = 512
 SFX_CHANNELS = range(8, 16)   # channels 8-15 for SFX
 MUSIC_CHANNELS = range(0, 4)  # channels 0-3 for music layers
@@ -326,3 +326,44 @@ DIFFICULTY_SETTINGS = {
 # ── Banana Slug ──
 SLUG_APPEAR_DELAY = 30 * 60  # 30 seconds at 60fps
 SLUG_SPEED = 0.8
+
+# ── Sun Zone Placement Data ──
+# Recommended sun zone placements per floor (x, y, w, h, damage_per_tick).
+# The gameplay expert should add these to the level JSONs.
+# Sun zones are areas of broken walls/roof where sunlight dries the jello cube.
+# 2-second grace period (120 frames), then damage_per_tick each frame.
+SUN_ZONE_RECOMMENDATIONS = {
+    # Floors 9-11 (Parkour Zone): broken architecture, sunlight through gaps
+    9: [
+        {'x': 800, 'y': 0, 'w': 200, 'h': 400, 'damage': 1},
+        {'x': 1600, 'y': 0, 'w': 160, 'h': 400, 'damage': 1},
+    ],
+    10: [
+        {'x': 600, 'y': 0, 'w': 180, 'h': 400, 'damage': 1},
+        {'x': 1200, 'y': 0, 'w': 200, 'h': 400, 'damage': 1},
+    ],
+    11: [
+        {'x': 400, 'y': 0, 'w': 240, 'h': 400, 'damage': 1},
+        {'x': 1000, 'y': 0, 'w': 200, 'h': 400, 'damage': 2},
+    ],
+    # Floors 12-14 (Gauntlet): sand through cracks, more sun exposure
+    12: [
+        {'x': 500, 'y': 0, 'w': 200, 'h': 400, 'damage': 2},
+        {'x': 1100, 'y': 0, 'w': 200, 'h': 400, 'damage': 2},
+    ],
+    13: [
+        {'x': 300, 'y': 0, 'w': 220, 'h': 400, 'damage': 2},
+        {'x': 900, 'y': 0, 'w': 240, 'h': 400, 'damage': 2},
+        {'x': 1500, 'y': 0, 'w': 180, 'h': 400, 'damage': 2},
+    ],
+    14: [
+        {'x': 400, 'y': 0, 'w': 260, 'h': 400, 'damage': 3},
+        {'x': 1000, 'y': 0, 'w': 240, 'h': 400, 'damage': 3},
+    ],
+}
+
+# ── Cleanser Boss Reward ──
+# Defeating TheCleanser grants a permanent speed multiplier.
+# NOTE: This must be wired in main.py's BOSS_DEFEATED handler.
+# When boss_type == BossType.CLEANSER: player.speed_multiplier = CLEANSER_SPEED_REWARD
+CLEANSER_SPEED_REWARD = 1.25  # 25% permanent speed boost

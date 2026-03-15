@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from game.engine.settings import (
     SCREEN_W, SCREEN_H, FPS, GameState, Difficulty, GameEvent, EventBus, MusicZone,
-    CTRL_A, CTRL_B, CTRL_X, CTRL_Y, CTRL_L, CTRL_ZL, CTRL_ZR,
+    CTRL_A, CTRL_B, CTRL_X, CTRL_Y, CTRL_L, CTRL_R, CTRL_ZL, CTRL_ZR,
     CTRL_MINUS, CTRL_PLUS, AXIS_LY, STICK_DEADZONE, FLOOR_PALETTES,
     KEY_JUMP, KEY_SHOOT, KEY_EAT, KEY_INTERACT, KEY_SPLIT, KEY_DODGE,
     KEY_SWITCH_SPLIT, KEY_INVENTORY, KEY_PAUSE,
@@ -24,6 +24,7 @@ from game.engine.settings import (
 )
 from game.engine.camera import Camera
 from game.entities.player import JelloCube, JelloProjectile
+from game.world.platforms import SolidPlatform
 
 # Boss imports
 try:
@@ -52,7 +53,7 @@ class Game:
         except Exception:
             pass
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.FULLSCREEN | pygame.DOUBLEBUF)
         pygame.display.set_caption("SPLIT")
         self.clock = pygame.time.Clock()
 
@@ -91,6 +92,23 @@ class Game:
 
         # Active boss reference (only one boss at a time)
         self._boss = None
+
+        # Checkpoint system
+        self._checkpoint = None  # dict with saved player state
+        self._checkpoint_floor = -1
+        self._checkpoint_text_timer = 0
+
+        # Floor transition effect
+        self._floor_transition_active = False
+        self._floor_transition_frame = 0
+        self._floor_transition_target = 1
+        self._floor_transition_name = ""
+
+        # Boss intro sequence
+        self._boss_intro_active = False
+        self._boss_intro_frame = 0
+        self._boss_intro_name = ""
+        self._boss_intro_boss_pos = (0, 0)
 
         # Controller
         self.joystick = None
@@ -239,11 +257,32 @@ class Game:
             patrol_points = [(p[0], p[1]) for p in patrol] if patrol else None
 
             if etype == 'sanitizer_bottle':
-                enemies.append(SmallSanitizerBottle(x, y, patrol_points))
+                enemy = SmallSanitizerBottle(x, y, patrol_points)
             elif etype == 'sanitizer_warrior':
-                enemies.append(SanitizerWarrior(x, y, patrol_points))
+                enemy = SanitizerWarrior(x, y, patrol_points)
             elif etype == 'jelly_archer':
-                enemies.append(JellyArcher(x, y, patrol_points))
+                enemy = JellyArcher(x, y, patrol_points)
+            else:
+                continue
+
+            # Snap enemy to nearest platform below their spawn point
+            enemy_bottom = enemy.y + enemy.h
+            best_plat_y = None
+            for plat in self.platforms:
+                pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(0, 0, 0, 0)
+                if pr.width < 60:
+                    continue  # skip tiny platforms
+                # Platform must be at or below enemy's feet
+                if pr.top >= enemy.y - 20 and pr.left <= x <= pr.right:
+                    if best_plat_y is None or pr.top < best_plat_y:
+                        best_plat_y = pr.top
+            if best_plat_y is not None:
+                enemy.y = best_plat_y - enemy.h
+                # Also snap patrol points to same Y
+                if enemy.patrol_path:
+                    enemy.patrol_path = [(px, best_plat_y - enemy.h)
+                                         for px, py in enemy.patrol_path]
+            enemies.append(enemy)
         return enemies
 
     def _start_gameplay(self):
@@ -325,30 +364,39 @@ class Game:
                 self.music.set_zone(MusicZone.FLOOR_15)
 
         # Spawn boss on boss floors (overrides music zone)
+        self._boss_arena_active = False
+        self._boss_arena_walls = []
+        self._boss_arena_triggered = False
         if BOSSES_AVAILABLE:
+            # Boss arena spans the right 60% of the level
+            arena_l = int(level_w * 0.4)
             arena_r = max(1180, level_w - 100)
             # Calculate boss spawn Y from level data
-            boss_y = self._calc_ground_y(level_w // 2)
+            boss_y = self._calc_ground_y(level_w * 0.7)
             boss = None
             if floor_num == 4:
-                boss = BigBottle(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+                boss = BigBottle(int(level_w * 0.7), boss_y, arena_left=arena_l, arena_right=arena_r)
             elif floor_num == 6:
-                boss = Gracie(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+                boss = Gracie(int(level_w * 0.7), boss_y, arena_left=arena_l, arena_right=arena_r)
             elif floor_num == 8:
-                boss = TheCleanser(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+                boss = TheCleanser(int(level_w * 0.7), boss_y, arena_left=arena_l, arena_right=arena_r)
             elif floor_num == 12:
-                boss = MamaSloth(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+                boss = MamaSloth(int(level_w * 0.7), boss_y, arena_left=arena_l, arena_right=arena_r)
             elif floor_num == 15:
-                boss = TheLastGuard(level_w // 2, boss_y, arena_left=100, arena_right=arena_r)
+                boss = TheLastGuard(int(level_w * 0.7), boss_y, arena_left=arena_l, arena_right=arena_r)
             if boss:
                 self._boss = boss
+                self._boss_arena_left = arena_l
+                self._boss_arena_right = arena_r
                 self.enemies.append(boss)
-                if self.music:
-                    self.music.set_zone(MusicZone.BOSS)
-                    self.music.play_stinger('boss_entrance')
                 if not self._first_boss_triggered:
                     self._first_boss_triggered = True
                     self.event_bus.emit(GameEvent.FIRST_BOSS_ENCOUNTER)
+                # Trigger boss intro sequence
+                self._boss_intro_active = True
+                self._boss_intro_frame = 0
+                self._boss_intro_name = getattr(boss, 'name', type(boss).__name__.upper())
+                self._boss_intro_boss_pos = (boss.x + boss.w / 2, boss.y + boss.h / 2)
 
         # Stinger for floor change
         if self.music and floor_num > 1:
@@ -360,21 +408,21 @@ class Game:
     def _setup_fallback_level(self):
         """Basic level when LevelManager isn't available."""
         self.platforms = [
-            FallbackPlatform(0, 500, 2560, 220),
-            FallbackPlatform(180, 400, 120, 16),
-            FallbackPlatform(380, 330, 140, 16),
-            FallbackPlatform(560, 400, 100, 16),
-            FallbackPlatform(280, 240, 100, 16),
-            FallbackPlatform(500, 180, 130, 16),
-            FallbackPlatform(750, 350, 120, 16),
-            FallbackPlatform(950, 280, 140, 16),
-            FallbackPlatform(1150, 400, 100, 16),
-            FallbackPlatform(1350, 320, 130, 16),
-            FallbackPlatform(1550, 250, 100, 16),
-            FallbackPlatform(1750, 400, 120, 16),
-            FallbackPlatform(1950, 350, 140, 16),
-            FallbackPlatform(2150, 280, 100, 16),
-            FallbackPlatform(2350, 400, 160, 16),
+            SolidPlatform(0, 500, 2560, 220),
+            SolidPlatform(180, 400, 120, 16),
+            SolidPlatform(380, 330, 140, 16),
+            SolidPlatform(560, 400, 100, 16),
+            SolidPlatform(280, 240, 100, 16),
+            SolidPlatform(500, 180, 130, 16),
+            SolidPlatform(750, 350, 120, 16),
+            SolidPlatform(950, 280, 140, 16),
+            SolidPlatform(1150, 400, 100, 16),
+            SolidPlatform(1350, 320, 130, 16),
+            SolidPlatform(1550, 250, 100, 16),
+            SolidPlatform(1750, 400, 120, 16),
+            SolidPlatform(1950, 350, 140, 16),
+            SolidPlatform(2150, 280, 100, 16),
+            SolidPlatform(2350, 400, 160, 16),
         ]
         self.enemies = []
         self.interactables = []
@@ -505,6 +553,22 @@ class Game:
             dt = self.clock.tick(FPS)
             self.frame_count += 1
 
+            # Floor transition effect (blocks gameplay)
+            if self._floor_transition_active:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self._quit()
+                self._do_floor_transition()
+                continue
+
+            # Boss intro sequence (blocks gameplay)
+            if self._boss_intro_active:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self._quit()
+                self._do_boss_intro()
+                continue
+
             # Check hitstop (freeze physics for impact feel)
             if self.vfx and self.vfx.hitstop_frames > 0:
                 # During hitstop: still process events and draw, skip physics
@@ -631,9 +695,13 @@ class Game:
                     self.player_projectiles.remove(proj)
 
             # ── Update enemies + collect their projectiles ──
+            # Skip enemy updates during slow-mo (dodge effect)
+            skip_enemies = (time_scale < 0.5)
             from game.entities.enemies import SmallSanitizerBottle, SanitizerWarrior, JellyArcher
             for enemy in self.enemies[:]:
                 if not enemy.alive:
+                    continue
+                if skip_enemies:
                     continue
                 enemy.update(self.player)
 
@@ -642,12 +710,12 @@ class Game:
                     if enemy.should_spawn_trail():
                         self.hazards.append(enemy.spawn_trail())
                 elif isinstance(enemy, SanitizerWarrior):
-                    # Get ground_y from nearest ground platform
-                    ground_y = 500
+                    # Get ground_y: find the platform below the enemy
+                    ground_y = self._get_level_height()
                     for plat in self.platforms:
                         pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(0, 0, 0, 0)
-                        if pr.y > enemy.y and pr.h > 50:
-                            ground_y = pr.y
+                        if pr.top > enemy.y and pr.width >= 100:
+                            ground_y = pr.top
                             break
                     glob = enemy.consume_pending_glob(self.player, ground_y)
                     if glob:
@@ -680,6 +748,41 @@ class Game:
                         for spawn_cfg in enemy.consume_spawn_enemies():
                             minions = self._spawn_enemies_from_data([spawn_cfg])
                             self.enemies.extend(minions)
+
+            # ── Boss arena activation ──
+            if (BOSSES_AVAILABLE and self._boss and self._boss.alive
+                    and self.player and not self._boss_arena_triggered):
+                # Trigger arena when player walks into boss zone
+                arena_l = getattr(self, '_boss_arena_left', 0)
+                if self.player.x >= arena_l - 100:
+                    self._boss_arena_triggered = True
+                    self._boss_arena_active = True
+                    # Create invisible wall at left edge of arena
+                    wall_y = 0
+                    wall_h = self._get_level_height()
+                    self._boss_arena_walls = [
+                        SolidPlatform(arena_l - 20, wall_y, 20, wall_h),
+                    ]
+                    self.platforms.extend(self._boss_arena_walls)
+                    # Push player into arena if they're at the edge
+                    if self.player.x < arena_l:
+                        self.player.x = arena_l + 10
+                    # Start boss music
+                    if self.music:
+                        self.music.set_zone(MusicZone.BOSS)
+                        self.music.play_stinger('boss_entrance')
+                    if self.sfx:
+                        self.sfx.play('ground_pound', self.player.x)
+                    if self.camera:
+                        self.camera.shake(6)
+
+            # Remove arena walls when boss is defeated
+            if self._boss_arena_active and self._boss and not self._boss.alive:
+                self._boss_arena_active = False
+                for wall in self._boss_arena_walls:
+                    if wall in self.platforms:
+                        self.platforms.remove(wall)
+                self._boss_arena_walls = []
 
             # ── Boss special effects ──
             if BOSSES_AVAILABLE and self._boss and self._boss.alive and self.player:
@@ -719,7 +822,8 @@ class Game:
 
             # ── Update enemy projectiles ──
             for proj in self.enemy_projectiles[:]:
-                proj.update()
+                if not skip_enemies:
+                    proj.update()
                 if not proj.alive:
                     # If it's a glob, spawn puddle on landing
                     if hasattr(proj, 'create_puddle'):
@@ -748,6 +852,11 @@ class Game:
             for obj in self.interactables:
                 if hasattr(obj, 'update'):
                     obj.update(1)
+                # Grant chest loot when opening animation finishes
+                if hasattr(obj, 'grant_loot') and hasattr(obj, 'state'):
+                    from game.world.interactables import CHEST_OPEN
+                    if obj.state == CHEST_OPEN:
+                        obj.grant_loot(self.player)
 
             # ── Combat system ──
             if self.combat:
@@ -790,6 +899,10 @@ class Game:
                         # Drop jello powder
                         if self.player:
                             self.player.jello_powder_count += 1
+                        # 25% chance to drop water
+                        import random as _rng
+                        if self.player and _rng.random() < 0.25:
+                            self.player.has_water = True
 
                     elif event_type == GameEvent.PLAYER_HIT:
                         dmg = evt_data.get('damage', 0)
@@ -813,6 +926,12 @@ class Game:
                     self.vfx.burst('death', cx, cy)
                     self.camera.shake(10)
 
+                # Cleanser defeated → grant permanent speed upgrade
+                if BOSSES_AVAILABLE and isinstance(self._boss, TheCleanser):
+                    if self.player:
+                        from game.engine.settings import CLEANSER_SPEED_REWARD
+                        self.player.speed_multiplier = CLEANSER_SPEED_REWARD
+
                 # The Last Guard defeated → credits
                 if BOSSES_AVAILABLE and isinstance(self._boss, TheLastGuard):
                     self._boss = None
@@ -827,6 +946,13 @@ class Game:
             # ── Awareness / stealth ──
             if self.awareness:
                 self.awareness.update(self.player, self.enemies, self.platforms)
+
+            # ── Checkpoint auto-save at midpoint ──
+            self._check_checkpoint()
+
+            # ── Checkpoint text timer ──
+            if self._checkpoint_text_timer > 0:
+                self._checkpoint_text_timer -= 1
 
             # ── Check floor transitions ──
             self._check_floor_transitions()
@@ -1005,6 +1131,63 @@ class Game:
         if tick % 120 == 0 and not self.player.on_ground:
             self.player.start_ground_pound()
 
+    _FLOOR_NAMES = {
+        1: "Storage Rooms", 2: "Deeper Storage", 3: "Lower Cellars",
+        4: "Dining Halls", 5: "Living Quarters", 6: "Kitchens",
+        7: "Ornate Chambers", 8: "Transition Zone", 9: "Parkour Zone I",
+        10: "Parkour Zone II", 11: "Parkour Zone III", 12: "Gauntlet Start",
+        13: "Gauntlet Mid", 14: "Gauntlet End", 15: "The Top",
+    }
+
+    def _check_checkpoint(self):
+        """Auto-save checkpoint at midpoint of each level."""
+        from game.engine.settings import DIFFICULTY_SETTINGS
+        if not DIFFICULTY_SETTINGS[self.difficulty].get('checkpoint', True):
+            return  # no checkpoints in earthquake/hard mode
+        if not self.player:
+            return
+        level_w = self._get_level_width()
+        mid_x = level_w / 2
+        # Save checkpoint when player crosses midpoint (once per floor)
+        if (self.player.x >= mid_x and
+                self._checkpoint_floor != self.current_floor):
+            self._checkpoint_floor = self.current_floor
+            self._checkpoint = {
+                'floor': self.current_floor,
+                'x': self.player.x,
+                'y': self.player.y,
+                'health': self.player.health,
+                'jello_powder_count': self.player.jello_powder_count,
+                'cooked_jelly_count': getattr(self.player, 'cooked_jelly_count', 0),
+                'has_water': self.player.has_water,
+            }
+            self.event_bus.emit(GameEvent.CHECKPOINT_REACHED, player=self.player)
+            if self.sfx:
+                self.sfx.play('collect', self.player.x)
+            self._checkpoint_text_timer = 90
+
+    def _respawn_at_checkpoint(self):
+        """Respawn the player at the last checkpoint."""
+        if not self._checkpoint or not self.player:
+            return False
+        cp = self._checkpoint
+        # Reload the floor if needed
+        if cp['floor'] != self.current_floor:
+            self._load_floor(cp['floor'])
+        self.player.health = cp['health']
+        self.player.x = cp['x']
+        self.player.y = cp['y']
+        self.player.jello_powder_count = cp['jello_powder_count']
+        self.player.cooked_jelly_count = cp.get('cooked_jelly_count', 0)
+        self.player.has_water = cp['has_water']
+        self.player.vx = 0
+        self.player.vy = 0
+        self.player.invuln_timer = 60  # brief invuln after respawn
+        self.player_projectiles.clear()
+        self.enemy_projectiles.clear()
+        self.hazards.clear()
+        return True
+
     def _check_floor_transitions(self):
         """Check if player reached an elevator/transition to next floor."""
         if not self.level_manager:
@@ -1030,14 +1213,107 @@ class Game:
                 if target != self.current_floor:
                     self.player.vx = 0
                     self.player.vy = 0
-                    self._load_floor(target)
-                    # Calculate spawn Y from NEW floor's platforms
-                    self.player.x = 100
-                    self.player.y = self._calc_spawn_y()
+                    # Start the floor transition effect
+                    self._floor_transition_active = True
+                    self._floor_transition_frame = 0
+                    self._floor_transition_target = target
+                    self._floor_transition_name = self._FLOOR_NAMES.get(target, f"Floor {target}")
                     self._transition_cooldown = 30
-                    self.event_bus.emit(GameEvent.FLOOR_CHANGE,
-                                        floor=target, player=self.player)
                     break
+
+    def _do_floor_transition(self):
+        """Floor transition: fade out → floor name → fade in."""
+        FADE_OUT, HOLD, FADE_IN = 30, 60, 30
+        f = self._floor_transition_frame
+        self._floor_transition_frame += 1
+
+        if f < FADE_OUT:
+            cam_offset = self.camera.get_offset()
+            self._draw_gameplay(cam_offset)
+            alpha = int(255 * (f / FADE_OUT))
+            fade = pygame.Surface((SCREEN_W, SCREEN_H))
+            fade.fill((0, 0, 0))
+            fade.set_alpha(alpha)
+            self.screen.blit(fade, (0, 0))
+            pygame.display.flip()
+            return True
+        if f == FADE_OUT:
+            target = self._floor_transition_target
+            self._load_floor(target)
+            self.player.x = 100
+            self.player.y = self._calc_spawn_y()
+            self.event_bus.emit(GameEvent.FLOOR_CHANGE, floor=target, player=self.player)
+        if f < FADE_OUT + HOLD:
+            self.screen.fill((0, 0, 0))
+            font = pygame.font.Font(None, 64)
+            font_sub = pygame.font.Font(None, 32)
+            txt = font.render(f"Floor {self._floor_transition_target}", True, (255, 255, 255))
+            name = font_sub.render(self._floor_transition_name, True, TORCH_AMBER)
+            local_f = f - FADE_OUT
+            text_alpha = min(255, int(255 * min(local_f / 15, (HOLD - local_f) / 15, 1.0)))
+            txt.set_alpha(text_alpha)
+            name.set_alpha(text_alpha)
+            self.screen.blit(txt, (SCREEN_W // 2 - txt.get_width() // 2, SCREEN_H // 2 - 30))
+            self.screen.blit(name, (SCREEN_W // 2 - name.get_width() // 2, SCREEN_H // 2 + 30))
+            pygame.display.flip()
+            return True
+        if f < FADE_OUT + HOLD + FADE_IN:
+            cam_offset = self.camera.get_offset()
+            self._draw_gameplay(cam_offset)
+            alpha = int(255 * (1.0 - (f - FADE_OUT - HOLD) / FADE_IN))
+            fade = pygame.Surface((SCREEN_W, SCREEN_H))
+            fade.fill((0, 0, 0))
+            fade.set_alpha(alpha)
+            self.screen.blit(fade, (0, 0))
+            pygame.display.flip()
+            return True
+        self._floor_transition_active = False
+        return False
+
+    def _do_boss_intro(self):
+        """Boss intro: camera pan to boss → name text → pan back."""
+        PAN_TO, HOLD, PAN_BACK = 30, 60, 30
+        TOTAL = PAN_TO + HOLD + PAN_BACK
+        f = self._boss_intro_frame
+        self._boss_intro_frame += 1
+
+        boss_x, boss_y = self._boss_intro_boss_pos
+        px = self.player.x + self.player.w / 2
+        py = self.player.y + self.player.h / 2
+
+        if f < PAN_TO:
+            t = f / PAN_TO
+            cx = px + (boss_x - px) * t
+            cy = py + (boss_y - py) * t
+        elif f < PAN_TO + HOLD:
+            cx, cy = boss_x, boss_y
+        elif f < TOTAL:
+            t = (f - PAN_TO - HOLD) / PAN_BACK
+            cx = boss_x + (px - boss_x) * t
+            cy = boss_y + (py - boss_y) * t
+        else:
+            self._boss_intro_active = False
+            return False
+
+        if hasattr(self.camera, 'reset'):
+            self.camera.reset(cx, cy)
+        cam_offset = self.camera.get_offset()
+        self._draw_gameplay(cam_offset)
+
+        if PAN_TO <= f < PAN_TO + HOLD:
+            font = pygame.font.Font(None, 64)
+            name_surf = font.render(self._boss_intro_name, True, (220, 50, 50))
+            local_f = f - PAN_TO
+            if local_f < 15:
+                name_surf.set_alpha(int(255 * (local_f / 15)))
+            elif local_f > HOLD - 15:
+                name_surf.set_alpha(int(255 * ((HOLD - local_f) / 15)))
+            self.screen.blit(name_surf, (SCREEN_W // 2 - name_surf.get_width() // 2, SCREEN_H // 3))
+            sub = pygame.font.Font(None, 28).render("Prepare yourself...", True, TORCH_AMBER)
+            self.screen.blit(sub, (SCREEN_W // 2 - sub.get_width() // 2, SCREEN_H // 3 + 50))
+
+        pygame.display.flip()
+        return True
 
     def _draw_gameplay(self, cam_offset):
         """Draw all gameplay elements."""
@@ -1093,6 +1369,26 @@ class Game:
         if self._boss and self._boss.alive:
             self._boss.draw_boss_health_bar(self.screen)
 
+        # "Press Y to interact" prompt near interactables
+        if self.player:
+            player_rect = self.player.get_rect().inflate(30, 30)
+            for obj in self.interactables:
+                if hasattr(obj, 'get_rect') and player_rect.colliderect(obj.get_rect()):
+                    # Don't show for already-open chests or sun zones
+                    if hasattr(obj, 'state'):
+                        from game.world.interactables import CHEST_OPEN
+                        if obj.state == CHEST_OPEN:
+                            continue
+                    if getattr(obj, 'interactable_type', '') == 'sun_zone':
+                        continue
+                    ox, oy = cam_offset
+                    prompt_x = int(obj.x + obj.w / 2 + ox)
+                    prompt_y = int(obj.y + oy - 20)
+                    prompt_font = pygame.font.Font(None, 22)
+                    prompt_surf = prompt_font.render("Press Y to interact", True, (255, 255, 200))
+                    self.screen.blit(prompt_surf, (prompt_x - prompt_surf.get_width() // 2, prompt_y))
+                    break  # only show one prompt
+
         # HUD (screen-space, no camera offset)
         if self.hud and self.player:
             self.hud.draw(self.screen, self.player, self.current_floor,
@@ -1102,6 +1398,24 @@ class Game:
         # Narrator
         if self.narrator:
             self.narrator.draw(self.screen)
+
+        # Checkpoint text ("CHECKPOINT" fades in then out)
+        if self._checkpoint_text_timer > 0:
+            cp_font = pygame.font.Font(None, 42)
+            t = self._checkpoint_text_timer
+            # Fade in during first 15 frames, fade out during last 30
+            if t > 75:
+                alpha = int(255 * (90 - t) / 15)
+            elif t < 30:
+                alpha = int(255 * t / 30)
+            else:
+                alpha = 255
+            alpha = max(0, min(255, alpha))
+            cp_surf = cp_font.render("CHECKPOINT", True, (180, 255, 180))
+            cp_surf.set_alpha(alpha)
+            self.screen.blit(cp_surf,
+                             (SCREEN_W // 2 - cp_surf.get_width() // 2,
+                              SCREEN_H // 2 - 60))
 
     def _draw_background(self, floor_num):
         """Draw castle background for current floor (cached)."""
@@ -1116,10 +1430,46 @@ class Game:
                 b = int(deep[2] + (warm[2] - deep[2]) * ratio * 0.5)
                 pygame.draw.line(self._bg_surface, (r, g, b), (0, y), (SCREEN_W, y))
 
-            # Stone wall pattern (static, no random per-frame)
+            # Ceiling
+            ceiling_color = (
+                max(0, deep[0] - 5),
+                max(0, deep[1] - 5),
+                max(0, deep[2] - 5),
+            )
+            pygame.draw.rect(self._bg_surface, ceiling_color, (0, 0, SCREEN_W, 30))
+            # Ceiling trim
+            pygame.draw.line(self._bg_surface, accent, (0, 30), (SCREEN_W, 30), 2)
+
+            # Windows with light beams
             import random as rng
+            rng.seed(floor_num * 500)
+            for wx in range(150, SCREEN_W, 350):
+                wx += rng.randint(-30, 30)
+                # Window frame
+                win_w, win_h = 50, 70
+                win_y = 35
+                frame_color = (min(255, warm[0] + 15), min(255, warm[1] + 15),
+                               min(255, warm[2] + 15))
+                pygame.draw.rect(self._bg_surface, frame_color,
+                                 (wx - 2, win_y - 2, win_w + 4, win_h + 4))
+                # Window pane — pale sky blue
+                pygame.draw.rect(self._bg_surface, (160, 190, 220),
+                                 (wx, win_y, win_w, win_h))
+                # Cross bars
+                pygame.draw.line(self._bg_surface, frame_color,
+                                 (wx + win_w // 2, win_y), (wx + win_w // 2, win_y + win_h), 2)
+                pygame.draw.line(self._bg_surface, frame_color,
+                                 (wx, win_y + win_h // 2), (wx + win_w, win_y + win_h // 2), 2)
+                # Light beam (translucent trapezoid)
+                beam = pygame.Surface((win_w + 60, 400), pygame.SRCALPHA)
+                beam_points = [(10, 0), (win_w - 10, 0),
+                               (win_w + 60, 400), (-30, 400)]
+                pygame.draw.polygon(beam, (255, 245, 220, 12), beam_points)
+                self._bg_surface.blit(beam, (wx - 15, win_y + win_h))
+
+            # Stone wall pattern (static, no random per-frame)
             rng.seed(floor_num * 1000)  # deterministic per floor
-            for row in range(0, 500, 40):
+            for row in range(30, 500, 40):
                 offset = 20 if (row // 40) % 2 == 0 else 0
                 for col in range(-40 + offset, SCREEN_W + 40, 80):
                     brick_color = (
@@ -1129,13 +1479,27 @@ class Game:
                     )
                     pygame.draw.rect(self._bg_surface, brick_color, (col, row, 78, 38))
                     pygame.draw.rect(self._bg_surface, deep, (col, row, 78, 38), 1)
-            rng.seed()  # reset
 
             # Floor tiles
             pygame.draw.rect(self._bg_surface, floor_color,
                              (0, 500, SCREEN_W, SCREEN_H - 500))
             pygame.draw.line(self._bg_surface, accent,
                              (0, 500), (SCREEN_W, 500), 2)
+
+            # Decorative sand mounds on the floor
+            rng.seed(floor_num * 2000)
+            for _ in range(rng.randint(3, 7)):
+                mx = rng.randint(50, SCREEN_W - 50)
+                mw = rng.randint(30, 60)
+                mh = rng.randint(6, 14)
+                sand_color = (
+                    min(255, floor_color[0] + rng.randint(5, 20)),
+                    min(255, floor_color[1] + rng.randint(5, 15)),
+                    min(255, floor_color[2] + rng.randint(0, 10)),
+                )
+                pygame.draw.ellipse(self._bg_surface, sand_color,
+                                    (mx - mw // 2, 500 - mh, mw, mh * 2))
+            rng.seed()  # reset
 
             self._bg_cache_floor = floor_num
 
@@ -1175,7 +1539,10 @@ class Game:
         elif key == KEY_INTERACT:
             self._do_interact()
         elif key == KEY_SPLIT:
-            self.player.split()
+            if self.player.is_split:
+                self.player.try_unsplit(self.platforms)
+            else:
+                self.player.split()
         elif key == KEY_DODGE:
             self.player.perfect_dodge()
         elif key == KEY_SWITCH_SPLIT:
@@ -1201,11 +1568,16 @@ class Game:
         elif button == CTRL_Y:
             self._do_interact()
         elif button == CTRL_ZL:
-            self.player.split()
+            if self.player.is_split:
+                self.player.try_unsplit(self.platforms)
+            else:
+                self.player.split()
         elif button == CTRL_ZR:
             self.player.perfect_dodge()
         elif button == CTRL_L:
-            self.player.switch_split_piece()
+            self.player.switch_split_piece(direction=1)
+        elif button == CTRL_R:
+            self.player.switch_split_piece(direction=-1)
         elif button == CTRL_PLUS:
             self.state = GameState.PAUSE
         elif button == CTRL_MINUS:
@@ -1254,10 +1626,24 @@ class Game:
 
         try:
             from game.ui.death_screen import run_death_screen
-            result = run_death_screen(self.screen, self.clock, self.run_count, self.joystick)
+            floor_name = self._FLOOR_NAMES.get(self.current_floor, f"Floor {self.current_floor}")
+            has_cp = self._checkpoint is not None and self._checkpoint_floor == self.current_floor
+            result = run_death_screen(self.screen, self.clock, self.run_count, self.joystick,
+                                      floor_num=self.current_floor, floor_name=floor_name,
+                                      has_checkpoint=has_cp)
         except Exception:
             result = self._fallback_death()
         if result == "retry":
+            self.state = GameState.GAMEPLAY
+            # Try checkpoint respawn first, otherwise full restart
+            if self._checkpoint and self._respawn_at_checkpoint():
+                pass  # respawned at checkpoint
+            else:
+                self._start_gameplay()
+        elif result == "restart":
+            # Full restart from floor 1 (no checkpoint)
+            self._checkpoint = None
+            self._checkpoint_floor = -1
             self.state = GameState.GAMEPLAY
             self._start_gameplay()
         else:
@@ -1383,7 +1769,7 @@ class Game:
         sys.exit()
 
 
-class FallbackPlatform:
+class SolidPlatform:
     """Simple platform when LevelManager isn't available."""
     def __init__(self, x, y, w, h):
         self.x = x

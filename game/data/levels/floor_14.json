@@ -120,7 +120,8 @@
         {"type": "cooking_pot", "x": 1740, "y": 308},
         {"type": "water_source", "x": 2840, "y": 308},
         {"type": "sun_zone", "x": 500, "y": 320, "w": 200, "h": 200},
-        {"type": "sun_zone", "x": 3200, "y": 320, "w": 200, "h": 200}
+        {"type": "sun_zone", "x": 3200, "y": 320, "w": 200, "h": 200},
+        {"type": "chest", "x": 3500, "y": 388}
       ],
       "transitions": [
         {

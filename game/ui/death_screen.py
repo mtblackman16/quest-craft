@@ -55,12 +55,43 @@ class _Splatter:
 # run_death_screen
 # ---------------------------------------------------------------------------
 
-MENU_OPTIONS = ["Try Again", "Quit to Title"]
 INPUT_DELAY = 30  # frames before accepting input
 
 
-def run_death_screen(screen, clock, run_count, joystick=None):
+def _menu_result(selected, menu_options):
+    """Convert a menu selection index to a return string."""
+    label = menu_options[selected]
+    if "Checkpoint" in label or "Try Again" in label:
+        return "retry"
+    elif "Restart" in label:
+        return "restart"
+    else:
+        return "quit"
+
+
+# Flavor text for the death screen (random selection)
+_FLAVOR_TEXT = [
+    "You melted...",
+    "Dissolved into a puddle...",
+    "The sanitizer won this round...",
+    "Splat. But jello always bounces back.",
+    "You got cleaned up...",
+    "Melted, but not forgotten.",
+]
+
+
+def run_death_screen(screen, clock, run_count, joystick=None,
+                     floor_num=None, floor_name=None, has_checkpoint=False):
     """Run the death screen loop.
+
+    Parameters
+    ----------
+    floor_num : int or None
+        The floor number where the player died.
+    floor_name : str or None
+        The floor name where the player died.
+    has_checkpoint : bool
+        Whether a checkpoint is available for respawn.
 
     Returns
     -------
@@ -68,6 +99,12 @@ def run_death_screen(screen, clock, run_count, joystick=None):
         'retry' or 'quit'
     """
     pygame.font.init()
+
+    # Build menu options dynamically
+    if has_checkpoint:
+        menu_options = ["Respawn at Checkpoint", "Restart Run", "Quit to Title"]
+    else:
+        menu_options = ["Try Again", "Quit to Title"]
 
     font_title = pygame.font.Font(None, FONT_TITLE)
     font_sub = pygame.font.Font(None, FONT_SUBTITLE)
@@ -143,18 +180,18 @@ def run_death_screen(screen, clock, run_count, joystick=None):
             # Keyboard
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_UP, pygame.K_w):
-                    selected = (selected - 1) % len(MENU_OPTIONS)
+                    selected = (selected - 1) % len(menu_options)
                 elif event.key in (pygame.K_DOWN, pygame.K_s):
-                    selected = (selected + 1) % len(MENU_OPTIONS)
+                    selected = (selected + 1) % len(menu_options)
                 elif event.key in (pygame.K_SPACE, pygame.K_RETURN):
-                    return "retry" if selected == 0 else "quit"
+                    return _menu_result(selected, menu_options)
                 elif event.key == pygame.K_ESCAPE:
                     return "quit"
 
             # Controller buttons
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.button == CTRL_A:
-                    return "retry" if selected == 0 else "quit"
+                    return _menu_result(selected, menu_options)
                 elif event.button == CTRL_B:
                     return "quit"
 
@@ -162,9 +199,9 @@ def run_death_screen(screen, clock, run_count, joystick=None):
             if event.type == pygame.JOYHATMOTION:
                 _, hat_y = event.value
                 if hat_y == 1:
-                    selected = (selected - 1) % len(MENU_OPTIONS)
+                    selected = (selected - 1) % len(menu_options)
                 elif hat_y == -1:
-                    selected = (selected + 1) % len(MENU_OPTIONS)
+                    selected = (selected + 1) % len(menu_options)
 
         # -- controller stick ------------------------------------------------
         if joystick and can_accept_input:
@@ -182,12 +219,12 @@ def run_death_screen(screen, clock, run_count, joystick=None):
 
             if stick_dir != 0:
                 if stick_dir != last_stick_dir:
-                    selected = (selected + stick_dir) % len(MENU_OPTIONS)
+                    selected = (selected + stick_dir) % len(menu_options)
                     stick_held_frames = 0
                 else:
                     stick_held_frames += 1
                     if stick_held_frames > 20 and stick_held_frames % 8 == 0:
-                        selected = (selected + stick_dir) % len(MENU_OPTIONS)
+                        selected = (selected + stick_dir) % len(menu_options)
             else:
                 stick_held_frames = 0
             last_stick_dir = stick_dir
@@ -224,18 +261,33 @@ def run_death_screen(screen, clock, run_count, joystick=None):
         if text_alpha < 255:
             title_surf.set_alpha(text_alpha)
         tw = title_surf.get_width()
-        screen.blit(title_surf, (SCREEN_W // 2 - tw // 2, 200))
+        screen.blit(title_surf, (SCREEN_W // 2 - tw // 2, 170))
 
-        # Run counter
+        # Flavor text
+        if text_alpha >= 200:
+            # Use frame count as seed for consistent flavor text per death
+            flavor = _FLAVOR_TEXT[run_count % len(_FLAVOR_TEXT)]
+            flavor_surf = font_small.render(flavor, True, (180, 120, 120))
+            flavor_surf.set_alpha(text_alpha)
+            screen.blit(flavor_surf, (SCREEN_W // 2 - flavor_surf.get_width() // 2, 240))
+
+        # Floor info and run counter
         if text_alpha >= 255:
-            run_surf = font_sub.render(f"Run #{run_count}", True, (180, 180, 180))
-            rw = run_surf.get_width()
-            screen.blit(run_surf, (SCREEN_W // 2 - rw // 2, 275))
+            info_y = 270
+            if floor_num is not None:
+                floor_label = f"Floor {floor_num}"
+                if floor_name:
+                    floor_label += f" - {floor_name}"
+                floor_surf = font_sub.render(floor_label, True, (160, 140, 120))
+                screen.blit(floor_surf, (SCREEN_W // 2 - floor_surf.get_width() // 2, info_y))
+                info_y += 30
+            run_surf = font_sub.render(f"Run #{run_count}", True, (140, 140, 140))
+            screen.blit(run_surf, (SCREEN_W // 2 - run_surf.get_width() // 2, info_y))
 
         # Menu options
         if can_accept_input:
-            menu_y = 380
-            for i, label in enumerate(MENU_OPTIONS):
+            menu_y = 370
+            for i, label in enumerate(menu_options):
                 is_sel = (i == selected)
                 color = JELLO_GREEN if is_sel else (100, 100, 100)
                 label_surf = font_prompt.render(label, True, color)
@@ -245,7 +297,7 @@ def run_death_screen(screen, clock, run_count, joystick=None):
                 if is_sel:
                     arrow = font_prompt.render(">", True, JELLO_GREEN)
                     screen.blit(arrow, (lx - 22, menu_y))
-                menu_y += 48
+                menu_y += 42
 
         pygame.display.flip()
 

@@ -99,7 +99,9 @@
       "interactables": [
         {"type": "shrine", "x": 1720, "y": 308},
         {"type": "sun_zone", "x": 2500, "y": 320, "w": 200, "h": 200},
-        {"type": "chest", "x": 3460, "y": 368}
+        {"type": "chest", "x": 3460, "y": 368},
+        {"type": "cooking_pot", "x": 660, "y": 308},
+        {"type": "water_source", "x": 2800, "y": 308}
       ],
       "transitions": [
         {

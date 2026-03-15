@@ -59,7 +59,8 @@
       ],
       "interactables": [
         {"type": "water_source", "x": 1980, "y": 388},
-        {"type": "chest", "x": 2740, "y": 398}
+        {"type": "chest", "x": 2740, "y": 398},
+        {"type": "cooking_pot", "x": 3420, "y": 378}
       ],
       "transitions": [
         {

@@ -33,7 +33,8 @@
       "enemies": [],
       "interactables": [
         {"type": "shrine", "x": 1140, "y": 348},
-        {"type": "water_source", "x": 1880, "y": 318}
+        {"type": "water_source", "x": 1880, "y": 318},
+        {"type": "cooking_pot", "x": 440, "y": 318}
       ],
       "transitions": [
         {

@@ -42,21 +42,32 @@ class JelloProjectile:
             self.alive = False
         return self.alive
 
+    # Class-level cached surfaces for trail and glow
+    _trail_cache = {}  # (size, alpha) -> Surface
+    _glow_cache = None  # pre-built glow surface
+
     def draw(self, surf, camera_offset=(0, 0)):
         ox, oy = camera_offset
-        # Trail
+        # Trail (cached surfaces)
         for i, (tx, ty, tl) in enumerate(self.trail):
             alpha = int(80 * (i / max(1, len(self.trail))))
             s = max(1, int(self.radius * 0.5 * (i / max(1, len(self.trail)))))
-            ts = pygame.Surface((s * 2, s * 2), pygame.SRCALPHA)
-            pygame.draw.circle(ts, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], alpha), (s, s), s)
+            key = (s, alpha)
+            ts = JelloProjectile._trail_cache.get(key)
+            if ts is None:
+                ts = pygame.Surface((s * 2, s * 2), pygame.SRCALPHA)
+                pygame.draw.circle(ts, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], alpha), (s, s), s)
+                JelloProjectile._trail_cache[key] = ts
             surf.blit(ts, (int(tx + ox) - s, int(ty + oy) - s))
-        # Glow
+        # Glow (cached surface with varying alpha)
         fade = self.lifetime / self.max_lifetime
         glow_s = int(self.radius * 3)
-        glow = pygame.Surface((glow_s * 2, glow_s * 2), pygame.SRCALPHA)
-        pygame.draw.circle(glow, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], int(30 * fade)),
-                           (glow_s, glow_s), glow_s)
+        if JelloProjectile._glow_cache is None or JelloProjectile._glow_cache.get_width() != glow_s * 2:
+            JelloProjectile._glow_cache = pygame.Surface((glow_s * 2, glow_s * 2), pygame.SRCALPHA)
+            pygame.draw.circle(JelloProjectile._glow_cache, (JELLO_GREEN[0], JELLO_GREEN[1], JELLO_GREEN[2], 30),
+                               (glow_s, glow_s), glow_s)
+        glow = JelloProjectile._glow_cache.copy()
+        glow.set_alpha(int(255 * fade))
         surf.blit(glow, (int(self.x + ox) - glow_s, int(self.y + oy) - glow_s))
         # Main ball
         r = int(self.radius * fade) + 2
@@ -114,6 +125,7 @@ class JelloCube:
         self.dodge_timer = 0
         self.dodge_invulnerable = False
         self.dodge_cooldown = 0
+        self.dodge_slow_mo = False  # True during dodge -- game loop can check for time dilation
 
         # Pill
         self.active_pill = None
@@ -121,6 +133,9 @@ class JelloCube:
 
         # Water
         self.has_water = False
+
+        # Cooked jelly (crafted at cooking pot — this is what heals)
+        self.cooked_jelly_count = 0
 
         # Idle timer (for banana slug + dance)
         self.idle_timer = 0
@@ -153,6 +168,7 @@ class JelloCube:
             self.dodge_timer -= 1
             if self.dodge_timer <= 0:
                 self.dodge_invulnerable = False
+                self.dodge_slow_mo = False
         if self.dodge_cooldown > 0:
             self.dodge_cooldown -= 1
         if self.invuln_timer > 0:
@@ -264,7 +280,8 @@ class JelloCube:
                         self.pending_events.append(GameEvent.PLAYER_GROUND_POUND)
                     elif self.vy > 4:
                         self.squish = 0.4
-                        self.pending_events.append(GameEvent.PLAYER_LAND)
+                        # Defer land event by a few frames so sound syncs with visual squish
+                        self._land_delay = 3
                     self.vy = 0
                     self.on_ground = True
                     self._ground_frames = 0
@@ -290,6 +307,12 @@ class JelloCube:
         if room_height > 0 and self.y > room_height + 200:
             self.pending_events.append(GameEvent.PLAYER_DIED)
 
+        # ── Deferred land sound ──
+        if hasattr(self, '_land_delay') and self._land_delay > 0:
+            self._land_delay -= 1
+            if self._land_delay <= 0:
+                self.pending_events.append(GameEvent.PLAYER_LAND)
+
         # ── Squish spring animation ──
         self.squish_v += (-self.squish) * 0.3
         self.squish_v *= 0.7
@@ -302,7 +325,9 @@ class JelloCube:
         if self.is_split:
             self.split_timer -= 1
             if self.split_timer <= 0:
-                self.unsplit()
+                # Try safe unsplit first; if blocked, force it
+                if not self.try_unsplit(platforms):
+                    self.unsplit()
 
         # ── Trail ──
         if abs(self.vx) > 0 or not self.on_ground:
@@ -350,24 +375,27 @@ class JelloCube:
         return False
 
     def perfect_dodge(self):
-        """Start a perfect dodge — brief invulnerability."""
+        """Start a perfect dodge — brief invulnerability + slow-mo flag.
+        Dodge window: 10 frames (~167ms). Cooldown: 30 frames (~500ms).
+        """
         if self.freeze_timer > 0:
             return False
         if self.dodge_cooldown > 0:
             return False
         self.dodge_timer = PERFECT_DODGE_FRAMES
         self.dodge_invulnerable = True
+        self.dodge_slow_mo = True  # signal game loop for time dilation
         self.dodge_cooldown = 30  # half second cooldown
         self.pending_events.append(GameEvent.PLAYER_DODGE)
         return True
 
     def eat_jello_powder(self):
-        """Consume jello powder to heal."""
-        if self.jello_powder_count <= 0:
+        """Consume cooked jelly to heal. Raw jello powder must be cooked first."""
+        if self.cooked_jelly_count <= 0:
             return False
         if self.health >= self.max_health:
             return False
-        self.jello_powder_count -= 1
+        self.cooked_jelly_count -= 1
         self.health = min(self.max_health, self.health + JELLO_POWDER_HEAL)
         self._update_visual_size()
         self.squish = 0.2
@@ -392,26 +420,62 @@ class JelloCube:
         return True
 
     def split(self):
-        """Split into 4 pieces."""
+        """Split into 4 quarter-size pieces. Player controls one, R/L switches."""
         if self.is_split:
-            return self.unsplit()
+            return self.try_unsplit()
         self.is_split = True
         self.split_timer = SPLIT_DURATION
-        self.active_split_piece = 0
+        self.active_split_piece = 0  # 0 = main body, 1-3 = ghost pieces
         self.pre_split_w = self.w
         self.pre_split_h = self.h
-        self.w = max(16, self.w // 2)
-        self.h = max(16, self.h // 2)
+        self.pre_split_x = self.x
+        self.pre_split_y = self.y
+        # Quarter size (half width AND half height)
+        self.w = max(12, self.w // 2)
+        self.h = max(12, self.h // 2)
+        # 3 ghost pieces left behind at the split location
         self.split_pieces = [
-            (-20, -15, 0),
-            (20, -10, math.pi * 0.66),
-            (0, -25, math.pi * 1.33),
+            {'x': self.x - 20, 'y': self.y, 'vx': 0, 'vy': 0},
+            {'x': self.x + 20, 'y': self.y - 10, 'vx': 0, 'vy': 0},
+            {'x': self.x, 'y': self.y - 25, 'vx': 0, 'vy': 0},
         ]
         self.pending_events.append(GameEvent.PLAYER_SPLIT)
         return True
 
+    def try_unsplit(self, platforms=None):
+        """Reform from split — only if there's room for full size."""
+        if not self.is_split:
+            return False
+        full_w = self.pre_split_w if hasattr(self, 'pre_split_w') else self.base_w
+        full_h = self.pre_split_h if hasattr(self, 'pre_split_h') else self.base_h
+        # Check if full-size rect would overlap any platform
+        test_rect = pygame.Rect(int(self.x), int(self.y - (full_h - self.h)),
+                                full_w, full_h)
+        if platforms:
+            for plat in platforms:
+                pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(*plat)
+                if pr.width == 0 or pr.height == 0:
+                    continue
+                # Only block if it's a ceiling/side collision, not the floor we're on
+                if test_rect.colliderect(pr):
+                    overlap_y = test_rect.top < pr.bottom and test_rect.bottom > pr.top
+                    overlap_x = test_rect.left < pr.right and test_rect.right > pr.left
+                    if overlap_x and overlap_y:
+                        # Check if it's the floor we're standing on
+                        if pr.top >= self.y + self.h - 4:
+                            continue  # this is the ground, that's fine
+                        return False  # blocked — can't unsplit here
+        self.is_split = False
+        self.split_timer = 0
+        self.w = full_w
+        self.h = full_h
+        self.split_pieces = []
+        self.squish = 0.3
+        self.pending_events.append(GameEvent.PLAYER_UNSPLIT)
+        return True
+
     def unsplit(self):
-        """Reform from split."""
+        """Reform from split (no collision check — used by timer expiry)."""
         if not self.is_split:
             return False
         self.is_split = False
@@ -423,11 +487,42 @@ class JelloCube:
         self.pending_events.append(GameEvent.PLAYER_UNSPLIT)
         return True
 
-    def switch_split_piece(self):
-        """Cycle control between split pieces."""
+    def switch_split_piece(self, direction=1):
+        """Cycle control between split pieces. direction: 1=R, -1=L."""
         if not self.is_split or len(self.split_pieces) == 0:
             return False
-        self.active_split_piece = (self.active_split_piece + 1) % (len(self.split_pieces) + 1)
+        old_idx = self.active_split_piece
+        num_pieces = len(self.split_pieces) + 1  # +1 for main body
+        self.active_split_piece = (self.active_split_piece + direction) % num_pieces
+        # Swap position with the newly-controlled piece
+        new_idx = self.active_split_piece
+        if old_idx == 0 and new_idx > 0:
+            # Switching from main body to ghost piece — swap positions
+            piece = self.split_pieces[new_idx - 1]
+            old_x, old_y = self.x, self.y
+            self.x = piece['x']
+            self.y = piece['y']
+            piece['x'] = old_x
+            piece['y'] = old_y
+        elif old_idx > 0 and new_idx == 0:
+            # Switching from ghost piece back to main body — swap back
+            piece = self.split_pieces[old_idx - 1]
+            old_x, old_y = self.x, self.y
+            self.x = piece['x']
+            self.y = piece['y']
+            piece['x'] = old_x
+            piece['y'] = old_y
+        elif old_idx > 0 and new_idx > 0:
+            # Switching between two ghost pieces
+            piece_old = self.split_pieces[old_idx - 1]
+            piece_new = self.split_pieces[new_idx - 1]
+            old_x, old_y = self.x, self.y
+            self.x = piece_new['x']
+            self.y = piece_new['y']
+            piece_new['x'] = old_x
+            piece_new['y'] = old_y
+        self.vy = 0
+        self.vx = 0
         return True
 
     def take_damage(self, amount, difficulty=Difficulty.NORMAL):
@@ -452,7 +547,10 @@ class JelloCube:
         self._update_visual_size()
 
     def _update_visual_size(self):
-        """Update visual size based on health percentage."""
+        """Update visual size based on health percentage.
+        4 visible size stages at 25% health thresholds.
+        When split, pieces are quarter of the current visual size (not base).
+        """
         ratio = self.health / self.max_health
         # 4 size stages at 25% thresholds
         if ratio > 0.75:
@@ -463,8 +561,17 @@ class JelloCube:
             target_w = int(self.base_w * 0.70)
         else:
             target_w = int(self.base_w * 0.55)
-        self.w = target_w
-        self.h = target_w  # keep square
+
+        if self.is_split:
+            # When split, pieces are half width/height of the health-based size
+            self.w = max(12, target_w // 2)
+            self.h = max(12, target_w // 2)
+            # Also update pre_split dimensions so unsplit restores correctly
+            self.pre_split_w = target_w
+            self.pre_split_h = target_w
+        else:
+            self.w = target_w
+            self.h = target_w  # keep square
 
     def get_rect(self):
         return pygame.Rect(int(self.x), int(self.y), self.w, self.h)
@@ -595,22 +702,26 @@ class JelloCube:
                              (draw_x + 2 + int(jiggle_x), int(draw_y + draw_h * 0.5),
                               draw_w - 4, draw_h // 3), border_radius=3)
 
-        # Split ghost pieces
+        # Split ghost pieces (stationary at their positions)
         if self.is_split:
-            t = pygame.time.get_ticks()
             piece_w = self.w
             piece_h = self.h
             body_color = JELLO_GREEN
-            for i, (pox, poy, phase) in enumerate(self.split_pieces):
-                orbit_x = self.x + ox + self.w / 2 + pox + math.sin(t * 0.004 + phase) * 12
-                orbit_y = self.y + oy + poy + math.cos(t * 0.005 + phase) * 8
-                alpha = 120 if i == self.active_split_piece - 1 else 80
+            for i, piece in enumerate(self.split_pieces):
+                px = piece['x'] + ox
+                py = piece['y'] + oy
+                # Highlight the piece that would be selected next
+                is_active_ghost = (i == self.active_split_piece - 1)
+                alpha = 160 if is_active_ghost else 100
                 ghost = pygame.Surface((piece_w, piece_h), pygame.SRCALPHA)
                 pygame.draw.rect(ghost, (*body_color, alpha),
                                  (0, 0, piece_w, piece_h), border_radius=4)
-                pygame.draw.rect(ghost, (*body_color, alpha + 40),
+                pygame.draw.rect(ghost, (*body_color, min(255, alpha + 40)),
                                  (0, 0, piece_w, piece_h), 1, border_radius=4)
-                surf.blit(ghost, (int(orbit_x - piece_w / 2), int(orbit_y - piece_h / 2)))
+                surf.blit(ghost, (int(px), int(py)))
+                # Eyes on ghost pieces
+                eye_cx = int(px + piece_w / 2)
+                eye_cy = int(py + piece_h * 0.35)
                 for eo in [-3, 3]:
-                    pygame.draw.circle(surf, (255, 255, 255), (int(orbit_x + eo), int(orbit_y - 2)), 2)
-                    pygame.draw.circle(surf, (20, 20, 40), (int(orbit_x + eo), int(orbit_y - 2)), 1)
+                    pygame.draw.circle(surf, (255, 255, 255), (eye_cx + eo, eye_cy), 2)
+                    pygame.draw.circle(surf, (20, 20, 40), (eye_cx + eo, eye_cy), 1)

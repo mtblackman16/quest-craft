@@ -50,7 +50,9 @@
       ],
       "enemies": [],
       "interactables": [
-        {"type": "water_source", "x": 1460, "y": 388}
+        {"type": "water_source", "x": 1460, "y": 388},
+        {"type": "cooking_pot", "x": 2180, "y": 348},
+        {"type": "chest", "x": 2880, "y": 318}
       ],
       "transitions": [
         {

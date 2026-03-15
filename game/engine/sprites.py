@@ -45,7 +45,7 @@ def load_sprite(rel_path, width, height):
 
     try:
         raw = pygame.image.load(full_path).convert_alpha()
-        scaled = pygame.transform.smoothscale(raw, (width, height))
+        scaled = pygame.transform.scale(raw, (width, height))
         _sprite_cache[key] = scaled
         return scaled
     except (pygame.error, FileNotFoundError):
@@ -79,7 +79,7 @@ def load_portrait(rel_path, size):
     try:
         raw = pygame.image.load(full_path).convert_alpha()
         # Scale to fill the circle
-        scaled = pygame.transform.smoothscale(raw, (size, size))
+        scaled = pygame.transform.scale(raw, (size, size))
         # Create circular mask
         portrait = pygame.Surface((size, size), pygame.SRCALPHA)
         pygame.draw.circle(portrait, (255, 255, 255, 255), (size // 2, size // 2), size // 2)

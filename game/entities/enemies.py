@@ -70,8 +70,8 @@ class SanitizerGlob:
     def __init__(self, x, y, target_x, target_y, ground_y):
         self.x = float(x)
         self.y = float(y)
-        self.w = 16
-        self.h = 16
+        self.w = 24
+        self.h = 24
         self.damage = WARRIOR_GLOB_DAMAGE
         self.alive = True
         self.ground_y = ground_y
@@ -176,10 +176,10 @@ class SanitizerArrow:
     def __init__(self, x, y, target_x, target_y):
         self.x = float(x)
         self.y = float(y)
-        self.w = 20
-        self.h = 8
+        self.w = 24
+        self.h = 24
         self.damage = ARCHER_ARROW_DAMAGE
-        self.speed = 7.0
+        self.speed = 6.0
         self.lifetime = 120  # 2 seconds max
         self.alive = True
 
@@ -259,6 +259,9 @@ class Enemy:
 
         # Stun timer (electricity pill effect)
         self.stun_timer = 0
+
+        # Ground snap: set by game loop to place enemies on platforms
+        self._snapped_to_ground = False
 
     def update(self, player):
         """Run the state machine. Subclasses override specific states."""

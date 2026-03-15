@@ -100,7 +100,8 @@
         {"type": "water_source", "x": 860, "y": 308},
         {"type": "water_source", "x": 1880, "y": 308},
         {"type": "chest", "x": 500, "y": 398},
-        {"type": "chest", "x": 2520, "y": 398}
+        {"type": "chest", "x": 2520, "y": 398},
+        {"type": "shrine", "x": 1720, "y": 338}
       ],
       "transitions": [
         {

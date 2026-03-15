@@ -14,9 +14,11 @@ from game.engine.settings import (
     SCREEN_W,
     SCREEN_H,
     JELLO_GREEN,
+    SANITIZER_BLUE,
     TORCH_AMBER,
     EMBER,
     WHITE,
+    BLACK,
 )
 
 # ---------------------------------------------------------------------------
@@ -37,6 +39,21 @@ def _make_circle_surface(radius, color):
 
 
 # ---------------------------------------------------------------------------
+# Color constants for VFX (not exported to settings -- internal only)
+# ---------------------------------------------------------------------------
+
+_GOLD = (255, 215, 60)
+_GOLD_BRIGHT = (255, 240, 120)
+_STONE_GRAY = (140, 130, 120)
+_STONE_BROWN = (110, 95, 80)
+_DUST_TAN = (170, 155, 130)
+_HEAL_GREEN = (100, 230, 90)
+_HEAL_GREEN_LIGHT = (160, 255, 140)
+_RIPPLE_CYAN = (180, 220, 255)
+_RIPPLE_WHITE = (220, 235, 255)
+
+
+# ---------------------------------------------------------------------------
 # ParticlePool
 # ---------------------------------------------------------------------------
 
@@ -52,8 +69,11 @@ class ParticlePool:
         self.y = [0.0] * POOL_SIZE
         self.vx = [0.0] * POOL_SIZE
         self.vy = [0.0] * POOL_SIZE
+        self.gravity = [0.0] * POOL_SIZE  # per-particle gravity (0 = float, >0 = fall)
         self.color = [WHITE] * POOL_SIZE
         self.size = [2] * POOL_SIZE
+        self.start_size = [2] * POOL_SIZE  # for shrink-over-lifetime effects
+        self.shrink = [False] * POOL_SIZE  # whether particle shrinks as it dies
         self.lifetime = [0] * POOL_SIZE
         self.max_lifetime = [1] * POOL_SIZE
         self.alive = [False] * POOL_SIZE
@@ -79,7 +99,8 @@ class ParticlePool:
 
     # -- public API ----------------------------------------------------------
 
-    def emit(self, x, y, color, size=3, speed=2.0, lifetime=30, drift_x=0.0):
+    def emit(self, x, y, color, size=3, speed=2.0, lifetime=30, drift_x=0.0,
+             gravity=0.0, shrink_flag=False):
         """Activate one particle in the pool."""
         idx = self._grab_slot()
         angle = random.uniform(0, math.tau)
@@ -89,33 +110,54 @@ class ParticlePool:
         self.y[idx] = float(y)
         self.vx[idx] = math.cos(angle) * spd + drift_x
         self.vy[idx] = math.sin(angle) * spd
+        self.gravity[idx] = float(gravity)
         self.color[idx] = color[:3]  # strip alpha if present
         self.size[idx] = max(int(size), 1)
+        self.start_size[idx] = max(int(size), 1)
+        self.shrink[idx] = shrink_flag
         self.lifetime[idx] = int(lifetime)
         self.max_lifetime[idx] = int(lifetime)
         self.alive[idx] = True
 
-    def burst(self, preset, x, y):
+    def emit_directed(self, x, y, vx, vy, color, size=3, lifetime=30,
+                      gravity=0.0, shrink_flag=False):
+        """Activate one particle with explicit velocity (no random angle)."""
+        idx = self._grab_slot()
+        self.x[idx] = float(x)
+        self.y[idx] = float(y)
+        self.vx[idx] = float(vx)
+        self.vy[idx] = float(vy)
+        self.gravity[idx] = float(gravity)
+        self.color[idx] = color[:3]
+        self.size[idx] = max(int(size), 1)
+        self.start_size[idx] = max(int(size), 1)
+        self.shrink[idx] = shrink_flag
+        self.lifetime[idx] = int(lifetime)
+        self.max_lifetime[idx] = int(lifetime)
+        self.alive[idx] = True
+
+    def burst(self, preset, x, y, **kwargs):
         """Emit a group of particles based on a named preset."""
-        if preset == "death":
-            self._burst_death(x, y)
-        elif preset == "collect":
-            self._burst_collect(x, y)
-        elif preset == "ground_pound":
-            self._burst_ground_pound(x, y)
-        elif preset == "split":
-            self._burst_split(x, y)
-        elif preset == "dodge":
-            self._burst_dodge(x, y)
+        handler = self._BURST_TABLE.get(preset)
+        if handler is not None:
+            handler(self, x, y, **kwargs)
 
     # -- presets -------------------------------------------------------------
 
-    def _burst_death(self, x, y):
-        """30 green particles bursting outward, large."""
-        for _ in range(30):
-            self.emit(x, y, JELLO_GREEN, size=5, speed=5.0, lifetime=40)
+    def _burst_death(self, x, y, **kwargs):
+        """Explosion of colored particles that shrink and fade.
 
-    def _burst_collect(self, x, y):
+        Pass color=(r,g,b) for enemy-colored death; defaults to jello green.
+        """
+        color = kwargs.get("color", JELLO_GREEN)
+        # 30 particles: mix of sizes for visual variety
+        for _ in range(20):
+            self.emit(x, y, color, size=5, speed=5.0, lifetime=40, shrink_flag=True)
+        # Smaller sparkle debris
+        for _ in range(10):
+            self.emit(x, y, color, size=2, speed=6.5, lifetime=25, shrink_flag=True)
+
+    def _burst_collect(self, x, y, **kwargs):
         """15 amber/colored particles floating upward."""
         colors = [TORCH_AMBER, EMBER, JELLO_GREEN]
         for _ in range(15):
@@ -125,45 +167,100 @@ class ParticlePool:
             self.y[idx] = float(y)
             self.vx[idx] = random.uniform(-0.5, 0.5)
             self.vy[idx] = random.uniform(-3.0, -1.0)
+            self.gravity[idx] = 0.0
             self.color[idx] = c[:3]
             self.size[idx] = 3
+            self.start_size[idx] = 3
+            self.shrink[idx] = False
             self.lifetime[idx] = 35
             self.max_lifetime[idx] = 35
             self.alive[idx] = True
 
-    def _burst_ground_pound(self, x, y):
-        """25 amber particles in an upward half-circle."""
-        for _ in range(25):
-            angle = random.uniform(-math.pi, 0)  # upper half-circle
-            spd = random.uniform(2.0, 5.0)
+    def _burst_ground_pound(self, x, y, **kwargs):
+        """HEAVY impact: debris arcing outward + dust cloud.
+
+        Impact ring handled by VFXManager (shockwave).
+        15 rock/dust particles arc outward and fall with gravity.
+        10 dust puff particles spread low along the ground.
+        """
+        rock_colors = [_STONE_GRAY, _STONE_BROWN, _DUST_TAN]
+
+        # Rock debris arcing outward and falling
+        for _ in range(15):
             idx = self._grab_slot()
-            self.x[idx] = float(x)
+            # Horizontal spread, upward launch
+            angle = random.uniform(-math.pi * 0.85, -math.pi * 0.15)
+            spd = random.uniform(3.0, 7.0)
+            self.x[idx] = float(x) + random.uniform(-8, 8)
             self.y[idx] = float(y)
             self.vx[idx] = math.cos(angle) * spd
-            self.vy[idx] = math.sin(angle) * spd
-            self.color[idx] = TORCH_AMBER[:3]
-            self.size[idx] = 4
-            self.lifetime[idx] = 30
-            self.max_lifetime[idx] = 30
+            self.vy[idx] = math.sin(angle) * spd - random.uniform(1.0, 3.0)
+            self.gravity[idx] = 0.35  # fall back down
+            self.color[idx] = random.choice(rock_colors)
+            self.size[idx] = random.choice([2, 3, 4])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = False
+            self.lifetime[idx] = 35
+            self.max_lifetime[idx] = 35
             self.alive[idx] = True
 
-    def _burst_split(self, x, y):
-        """20 green particles in a radial burst."""
-        for i in range(20):
-            angle = (math.tau / 20) * i + random.uniform(-0.15, 0.15)
-            spd = random.uniform(2.5, 4.5)
+        # Low dust puffs spreading horizontally
+        for _ in range(10):
             idx = self._grab_slot()
-            self.x[idx] = float(x)
-            self.y[idx] = float(y)
-            self.vx[idx] = math.cos(angle) * spd
-            self.vy[idx] = math.sin(angle) * spd
-            self.color[idx] = JELLO_GREEN[:3]
+            direction = random.choice([-1, 1])
+            self.x[idx] = float(x) + random.uniform(-4, 4)
+            self.y[idx] = float(y) + random.uniform(-2, 2)
+            self.vx[idx] = direction * random.uniform(2.0, 5.0)
+            self.vy[idx] = random.uniform(-1.5, 0.0)
+            self.gravity[idx] = 0.0
+            self.color[idx] = _DUST_TAN
             self.size[idx] = 3
-            self.lifetime[idx] = 25
-            self.max_lifetime[idx] = 25
+            self.start_size[idx] = 3
+            self.shrink[idx] = True
+            self.lifetime[idx] = 20
+            self.max_lifetime[idx] = 20
             self.alive[idx] = True
 
-    def _burst_dodge(self, x, y):
+    def _burst_split(self, x, y, **kwargs):
+        """Jello glob separation: 4 large blobs fly outward briefly, plus
+        16 small drip particles for a wet, physical feel."""
+        # 4 large jello blobs at cardinal-ish directions
+        for i in range(4):
+            idx = self._grab_slot()
+            angle = (math.tau / 4) * i + random.uniform(-0.3, 0.3)
+            spd = random.uniform(3.0, 5.0)
+            self.x[idx] = float(x)
+            self.y[idx] = float(y)
+            self.vx[idx] = math.cos(angle) * spd
+            self.vy[idx] = math.sin(angle) * spd
+            self.gravity[idx] = 0.15  # settle down
+            self.color[idx] = JELLO_GREEN[:3]
+            self.size[idx] = 6
+            self.start_size[idx] = 6
+            self.shrink[idx] = True
+            self.lifetime[idx] = 22
+            self.max_lifetime[idx] = 22
+            self.alive[idx] = True
+
+        # Smaller drip/splash particles
+        for _ in range(16):
+            idx = self._grab_slot()
+            angle = random.uniform(0, math.tau)
+            spd = random.uniform(1.5, 4.0)
+            self.x[idx] = float(x) + random.uniform(-4, 4)
+            self.y[idx] = float(y) + random.uniform(-4, 4)
+            self.vx[idx] = math.cos(angle) * spd
+            self.vy[idx] = math.sin(angle) * spd
+            self.gravity[idx] = 0.1
+            self.color[idx] = JELLO_GREEN[:3]
+            self.size[idx] = 2
+            self.start_size[idx] = 2
+            self.shrink[idx] = False
+            self.lifetime[idx] = 18
+            self.max_lifetime[idx] = 18
+            self.alive[idx] = True
+
+    def _burst_dodge(self, x, y, **kwargs):
         """8 white particles in a horizontal streak."""
         for _ in range(8):
             idx = self._grab_slot()
@@ -171,11 +268,156 @@ class ParticlePool:
             self.y[idx] = float(y) + random.uniform(-4, 4)
             self.vx[idx] = random.uniform(-4.0, 4.0)
             self.vy[idx] = random.uniform(-0.3, 0.3)
+            self.gravity[idx] = 0.0
             self.color[idx] = WHITE[:3]
             self.size[idx] = 2
+            self.start_size[idx] = 2
+            self.shrink[idx] = False
             self.lifetime[idx] = 12
             self.max_lifetime[idx] = 12
             self.alive[idx] = True
+
+    def _burst_dodge_slow_mo(self, x, y, **kwargs):
+        """Concentric ripple particles for successful dodge slow-mo.
+
+        Creates a brief visual ripple/distortion feel using rings of particles
+        that expand outward and fade over 3-4 frames of visual.
+        """
+        colors = [_RIPPLE_CYAN, _RIPPLE_WHITE, WHITE]
+        # Two concentric ring waves
+        for ring in range(2):
+            ring_delay_offset = ring * 4  # stagger timing
+            num_points = 10
+            base_radius = 12 + ring * 10
+            for i in range(num_points):
+                idx = self._grab_slot()
+                angle = (math.tau / num_points) * i + random.uniform(-0.1, 0.1)
+                spd = 3.5 + ring * 1.5
+                self.x[idx] = float(x) + math.cos(angle) * base_radius
+                self.y[idx] = float(y) + math.sin(angle) * base_radius
+                self.vx[idx] = math.cos(angle) * spd
+                self.vy[idx] = math.sin(angle) * spd
+                self.gravity[idx] = 0.0
+                self.color[idx] = random.choice(colors)
+                self.size[idx] = 3 - ring
+                self.start_size[idx] = self.size[idx]
+                self.shrink[idx] = True
+                lt = 10 - ring_delay_offset
+                self.lifetime[idx] = max(lt, 4)
+                self.max_lifetime[idx] = max(lt, 4)
+                self.alive[idx] = True
+
+    def _burst_crumble_particles(self, x, y, **kwargs):
+        """Stone/dust particles when a crumbling platform breaks.
+
+        Gray/brown colored, 12 particles, fall with gravity, short lifetime.
+        """
+        colors = [_STONE_GRAY, _STONE_BROWN, _DUST_TAN]
+        for _ in range(12):
+            idx = self._grab_slot()
+            self.x[idx] = float(x) + random.uniform(-20, 20)
+            self.y[idx] = float(y) + random.uniform(-4, 4)
+            self.vx[idx] = random.uniform(-1.5, 1.5)
+            self.vy[idx] = random.uniform(-2.0, 0.5)
+            self.gravity[idx] = 0.25
+            self.color[idx] = random.choice(colors)
+            self.size[idx] = random.choice([2, 3])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = False
+            self.lifetime[idx] = 28
+            self.max_lifetime[idx] = 28
+            self.alive[idx] = True
+
+    def _burst_collect_sparkle(self, x, y, **kwargs):
+        """Golden sparkle particles floating upward on item collect.
+
+        5-8 golden/yellow particles that drift upward and fade.
+        """
+        colors = [_GOLD, _GOLD_BRIGHT, TORCH_AMBER]
+        count = random.randint(5, 8)
+        for _ in range(count):
+            idx = self._grab_slot()
+            self.x[idx] = float(x) + random.uniform(-8, 8)
+            self.y[idx] = float(y) + random.uniform(-4, 4)
+            self.vx[idx] = random.uniform(-0.8, 0.8)
+            self.vy[idx] = random.uniform(-2.5, -1.0)
+            self.gravity[idx] = -0.02  # gentle upward drift
+            self.color[idx] = random.choice(colors)
+            self.size[idx] = random.choice([2, 3])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = False
+            self.lifetime[idx] = 30
+            self.max_lifetime[idx] = 30
+            self.alive[idx] = True
+
+    def _burst_boss_entrance(self, x, y, **kwargs):
+        """Dramatic boss entrance: burst of large particles outward.
+
+        The big shockwave ring + screen flash are handled by VFXManager.
+        This emits 25 particles to fill the space.
+        """
+        colors = [EMBER, (180, 40, 40), TORCH_AMBER]
+        for _ in range(25):
+            idx = self._grab_slot()
+            angle = random.uniform(0, math.tau)
+            spd = random.uniform(3.0, 8.0)
+            self.x[idx] = float(x)
+            self.y[idx] = float(y)
+            self.vx[idx] = math.cos(angle) * spd
+            self.vy[idx] = math.sin(angle) * spd
+            self.gravity[idx] = 0.05
+            self.color[idx] = random.choice(colors)
+            self.size[idx] = random.choice([3, 4, 5])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = True
+            self.lifetime[idx] = 35
+            self.max_lifetime[idx] = 35
+            self.alive[idx] = True
+
+    def _burst_checkpoint_save(self, x, y, **kwargs):
+        """Golden glow burst when checkpoint is reached.
+
+        Warm yellow/gold particles rising upward, nurturing feel.
+        """
+        colors = [_GOLD, _GOLD_BRIGHT, TORCH_AMBER]
+        for _ in range(15):
+            idx = self._grab_slot()
+            self.x[idx] = float(x) + random.uniform(-12, 12)
+            self.y[idx] = float(y) + random.uniform(-6, 6)
+            self.vx[idx] = random.uniform(-0.6, 0.6)
+            self.vy[idx] = random.uniform(-2.8, -0.8)
+            self.gravity[idx] = -0.03  # float upward
+            self.color[idx] = random.choice(colors)
+            self.size[idx] = random.choice([2, 3, 4])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = False
+            self.lifetime[idx] = 40
+            self.max_lifetime[idx] = 40
+            self.alive[idx] = True
+
+    def _burst_heal_effect(self, x, y, **kwargs):
+        """Green particles rising from the player when eating cooked jelly.
+
+        Gentle, nurturing feel. Particles drift upward slowly.
+        """
+        colors = [_HEAL_GREEN, _HEAL_GREEN_LIGHT, JELLO_GREEN]
+        for _ in range(12):
+            idx = self._grab_slot()
+            self.x[idx] = float(x) + random.uniform(-16, 16)
+            self.y[idx] = float(y) + random.uniform(0, 10)
+            self.vx[idx] = random.uniform(-0.4, 0.4)
+            self.vy[idx] = random.uniform(-2.0, -0.6)
+            self.gravity[idx] = -0.02
+            self.color[idx] = random.choice(colors)
+            self.size[idx] = random.choice([2, 3])
+            self.start_size[idx] = self.size[idx]
+            self.shrink[idx] = False
+            self.lifetime[idx] = 35
+            self.max_lifetime[idx] = 35
+            self.alive[idx] = True
+
+    # -- preset dispatch table (avoids long if/elif chains) ------------------
+    _BURST_TABLE: dict = {}  # populated after class body
 
     # -- simulation ----------------------------------------------------------
 
@@ -190,9 +432,15 @@ class ParticlePool:
                 continue
             self.x[i] += self.vx[i]
             self.y[i] += self.vy[i]
+            # Apply per-particle gravity
+            self.vy[i] += self.gravity[i]
             # Gentle drag
             self.vx[i] *= 0.96
             self.vy[i] *= 0.96
+            # Shrink over lifetime
+            if self.shrink[i]:
+                t = self.lifetime[i] / self.max_lifetime[i]
+                self.size[i] = max(int(self.start_size[i] * t), 1)
 
     # -- rendering -----------------------------------------------------------
 
@@ -222,17 +470,39 @@ class ParticlePool:
             if sx < -r or sx > sw + r or sy < -r or sy > sh + r:
                 continue
 
-            # Alpha based on remaining lifetime
+            # Alpha based on remaining lifetime (quantize to 8 levels to reduce cache)
             t = self.lifetime[i] / self.max_lifetime[i]
-            alpha = int(255 * t)
+            alpha_bucket = max(1, int(t * 8)) * 32 - 1  # 31,63,95,...,255
 
             circle = self._get_cached_surface(r, self.color[i])
-            if alpha < 255:
-                faded = circle.copy()
-                faded.set_alpha(alpha)
+            if alpha_bucket < 255:
+                # Cache faded versions by (radius, color, alpha_bucket)
+                alpha_key = (r, self.color[i][0], self.color[i][1],
+                             self.color[i][2], alpha_bucket)
+                faded = self._cache.get(alpha_key)
+                if faded is None:
+                    faded = circle.copy()
+                    faded.set_alpha(alpha_bucket)
+                    self._cache[alpha_key] = faded
                 surf.blit(faded, (int(sx) - r, int(sy) - r))
             else:
                 surf.blit(circle, (int(sx) - r, int(sy) - r))
+
+
+# -- Wire up burst dispatch table after all methods are defined --------------
+ParticlePool._BURST_TABLE = {
+    "death": ParticlePool._burst_death,
+    "collect": ParticlePool._burst_collect,
+    "ground_pound": ParticlePool._burst_ground_pound,
+    "split": ParticlePool._burst_split,
+    "dodge": ParticlePool._burst_dodge,
+    "dodge_slow_mo": ParticlePool._burst_dodge_slow_mo,
+    "crumble_particles": ParticlePool._burst_crumble_particles,
+    "collect_sparkle": ParticlePool._burst_collect_sparkle,
+    "boss_entrance": ParticlePool._burst_boss_entrance,
+    "checkpoint_save": ParticlePool._burst_checkpoint_save,
+    "heal_effect": ParticlePool._burst_heal_effect,
+}
 
 
 # ---------------------------------------------------------------------------
@@ -240,9 +510,10 @@ class ParticlePool:
 # ---------------------------------------------------------------------------
 
 class Shockwave:
-    """Expanding elliptical ring with amber color and alpha fade."""
+    """Expanding elliptical ring with configurable color and alpha fade."""
 
-    def __init__(self, x, y, radius=5, max_radius=80, lifetime=15):
+    def __init__(self, x, y, radius=5, max_radius=80, lifetime=15,
+                 color=None, circular=False):
         self.x = float(x)
         self.y = float(y)
         self.radius = float(radius)
@@ -250,6 +521,8 @@ class Shockwave:
         self.max_radius = float(max_radius)
         self.lifetime = lifetime
         self.max_lifetime = lifetime
+        self.color = color if color is not None else TORCH_AMBER
+        self.circular = circular  # True = perfect circle, False = ellipse
         self.alive = True
 
     def update(self):
@@ -283,17 +556,27 @@ class Shockwave:
         if alpha <= 0:
             return
 
-        # Elliptical ring: wider than tall (draw directly, no temp surface)
-        rx = r
-        ry = max(int(r * 0.5), 1)
         ring_width = max(int(3 * t), 1)
-        rect = pygame.Rect(sx - rx, sy - ry, rx * 2, ry * 2)
-        pygame.draw.ellipse(surf, TORCH_AMBER, rect, ring_width)
+        color = self.color[:3]
+
+        if self.circular:
+            # Perfect circle ring
+            pygame.draw.circle(surf, color, (sx, sy), r, ring_width)
+        else:
+            # Elliptical ring: wider than tall (ground-hugging impact)
+            rx = r
+            ry = max(int(r * 0.5), 1)
+            rect = pygame.Rect(sx - rx, sy - ry, rx * 2, ry * 2)
+            pygame.draw.ellipse(surf, color, rect, ring_width)
 
 
 # ---------------------------------------------------------------------------
 # VFXManager
 # ---------------------------------------------------------------------------
+
+# Slow-mo ramp duration (frames to transition in/out)
+_SLOW_MO_RAMP = 3
+
 
 class VFXManager:
     """Owns all visual effects. The game loop calls update() and draw()."""
@@ -313,9 +596,13 @@ class VFXManager:
         # -- hitstop --------------------------------------------------------
         self.hitstop_frames = 0
 
-        # -- slow-mo --------------------------------------------------------
-        self.slow_mo_timer = 0
-        self._slow_mo_scale = 0.3
+        # -- slow-mo (with smooth ramp) -------------------------------------
+        self._slow_mo_target_frames = 0  # total slow-mo frames requested
+        self._slow_mo_elapsed = 0        # frames since slow-mo started
+        self._slow_mo_total = 0          # target + ramp out
+        self._slow_mo_active = False
+        self._slow_mo_base_scale = 0.3   # deepest slow-mo value
+        self._current_time_scale = 1.0   # smoothly interpolated
 
         # -- darkness overlay -----------------------------------------------
         self._dark_surf: pygame.Surface | None = None
@@ -346,19 +633,6 @@ class VFXManager:
             d = self._torch_radius * 2
             self._torch_gradient = pygame.Surface((d, d), pygame.SRCALPHA)
             # Radial gradient: center transparent, edges opaque black
-            for r in range(self._torch_radius, 0, -1):
-                alpha = int(255 * (1.0 - (r / self._torch_radius) ** 2))
-                alpha = max(0, min(255, 255 - alpha))
-                # We draw concentric circles from outside in; inner ones are
-                # more transparent.
-                # Actually we want the center clear and edges dark, but we
-                # will blit this with BLEND_RGBA_MIN to "cut" the darkness.
-                # So the gradient stores alpha=0 in the center (clear) and
-                # alpha=255 at edges (don't cut).
-                # Simplest: draw from outside-in, center = (0,0,0,0).
-                pass
-            # Rebuild properly: gradient where center is (0,0,0,0) and
-            # edges are (0,0,0,255).
             self._torch_gradient.fill((0, 0, 0, 255))
             for r in range(self._torch_radius, 0, -1):
                 t = r / self._torch_radius
@@ -456,17 +730,38 @@ class VFXManager:
         """Emit a single particle (delegates to the pool)."""
         self.particles.emit(x, y, color, size, speed, lifetime, drift_x)
 
-    def burst(self, preset, x, y):
-        """Emit a preset burst. Some presets also spawn a shockwave."""
-        self.particles.burst(preset, x, y)
+    def burst(self, preset, x, y, **kwargs):
+        """Emit a preset burst. Some presets also spawn a shockwave.
+
+        Supported presets:
+            death, collect, ground_pound, split, dodge,
+            dodge_slow_mo, crumble_particles, collect_sparkle,
+            boss_entrance, checkpoint_save, heal_effect
+        """
+        self.particles.burst(preset, x, y, **kwargs)
 
         # Certain presets get a shockwave too
         if preset == "death":
-            self.shockwaves.append(Shockwave(x, y, radius=5, max_radius=90, lifetime=18))
+            self.shockwaves.append(
+                Shockwave(x, y, radius=5, max_radius=90, lifetime=18))
         elif preset == "ground_pound":
-            self.shockwaves.append(Shockwave(x, y, radius=5, max_radius=80, lifetime=15))
+            self.shockwaves.append(
+                Shockwave(x, y, radius=5, max_radius=80, lifetime=15))
         elif preset == "split":
-            self.shockwaves.append(Shockwave(x, y, radius=5, max_radius=60, lifetime=12))
+            self.shockwaves.append(
+                Shockwave(x, y, radius=5, max_radius=60, lifetime=12,
+                          color=JELLO_GREEN, circular=True))
+        elif preset == "dodge_slow_mo":
+            self.shockwaves.append(
+                Shockwave(x, y, radius=8, max_radius=50, lifetime=8,
+                          color=_RIPPLE_CYAN, circular=True))
+        elif preset == "boss_entrance":
+            # Large dramatic shockwave
+            self.shockwaves.append(
+                Shockwave(x, y, radius=10, max_radius=160, lifetime=25,
+                          color=EMBER, circular=True))
+            # Trigger a white screen flash for the dramatic entrance
+            self.trigger_flash("white")
 
     def trigger_flash(self, flash_type="white"):
         """Start a screen flash.
@@ -474,38 +769,99 @@ class VFXManager:
         Parameters
         ----------
         flash_type : str
-            'white' for hit flash (8 frames) or 'red' for damage flash (12 frames).
+            'white' -- enemy hit confirmation (4 frames, semi-transparent)
+            'red'   -- damage taken (5 frames)
+            'gold'  -- item collected (4 frames)
         """
         if flash_type == "white":
             self._flash_color = WHITE
-            self._flash_timer = 8
-            self._flash_max = 8
+            self._flash_timer = 4
+            self._flash_max = 4
         elif flash_type == "red":
             self._flash_color = (220, 50, 50)
-            self._flash_timer = 12
-            self._flash_max = 12
+            self._flash_timer = 5
+            self._flash_max = 5
+        elif flash_type == "gold":
+            self._flash_color = _GOLD
+            self._flash_timer = 4
+            self._flash_max = 4
 
     def trigger_hitstop(self, frames=2):
         """Pause the game for *frames* to sell impact."""
         self.hitstop_frames = frames
 
     def trigger_slow_mo(self, frames=6):
-        """Slow time for a perfect-dodge effect."""
-        self.slow_mo_timer = frames
+        """Slow time for a perfect-dodge effect.
+
+        Ramps smoothly: 3 frames ramp-in to 0.3x, hold, 3 frames ramp-out.
+        """
+        self._slow_mo_target_frames = frames
+        self._slow_mo_elapsed = 0
+        self._slow_mo_total = frames + _SLOW_MO_RAMP  # ramp-in happens during frames
+        self._slow_mo_active = True
 
     def trigger_shake(self, amount):
         """Signal the camera to shake. Camera reads ``vfx.shake_amount``."""
         self.shake_amount = float(amount)
 
     def get_time_scale(self):
-        """Return current time multiplier (1.0 = normal, <1.0 = slow-mo)."""
-        if self.slow_mo_timer > 0:
-            return self._slow_mo_scale
-        return 1.0
+        """Return current time multiplier (1.0 = normal, <1.0 = slow-mo).
+
+        Smoothly ramps over 3 frames in and out of slow-mo.
+        """
+        return self._current_time_scale
+
+    # Legacy attribute access for code that reads slow_mo_timer directly
+    @property
+    def slow_mo_timer(self):
+        """Backwards-compatible: returns frames remaining in slow-mo."""
+        if self._slow_mo_active:
+            remaining = self._slow_mo_total - self._slow_mo_elapsed
+            return max(remaining, 0)
+        return 0
+
+    @slow_mo_timer.setter
+    def slow_mo_timer(self, value):
+        """Backwards-compatible setter: starts slow-mo with the given frames."""
+        if value > 0:
+            self.trigger_slow_mo(value)
+        else:
+            self._slow_mo_active = False
+            self._current_time_scale = 1.0
 
     # -----------------------------------------------------------------------
     # Update
     # -----------------------------------------------------------------------
+
+    def _update_slow_mo(self):
+        """Update slow-mo with smooth ramp in/out."""
+        if not self._slow_mo_active:
+            self._current_time_scale = 1.0
+            return
+
+        self._slow_mo_elapsed += 1
+        base = self._slow_mo_base_scale
+        target_frames = self._slow_mo_target_frames
+
+        if self._slow_mo_elapsed > self._slow_mo_total:
+            # Done
+            self._slow_mo_active = False
+            self._current_time_scale = 1.0
+            return
+
+        # Ramp-in phase (first _SLOW_MO_RAMP frames)
+        if self._slow_mo_elapsed <= _SLOW_MO_RAMP:
+            t = self._slow_mo_elapsed / _SLOW_MO_RAMP
+            self._current_time_scale = 1.0 - (1.0 - base) * t
+        # Hold phase
+        elif self._slow_mo_elapsed <= target_frames:
+            self._current_time_scale = base
+        # Ramp-out phase (last _SLOW_MO_RAMP frames)
+        else:
+            frames_into_rampout = self._slow_mo_elapsed - target_frames
+            t = frames_into_rampout / _SLOW_MO_RAMP
+            t = min(t, 1.0)
+            self._current_time_scale = base + (1.0 - base) * t
 
     def update(self):
         """Tick all VFX subsystems. Call once per frame."""
@@ -526,9 +882,8 @@ class VFXManager:
         if self.hitstop_frames > 0:
             self.hitstop_frames -= 1
 
-        # Slow-mo countdown
-        if self.slow_mo_timer > 0:
-            self.slow_mo_timer -= 1
+        # Slow-mo with smooth ramp
+        self._update_slow_mo()
 
         # Shake decay
         if self.shake_amount > 0:
@@ -566,6 +921,6 @@ class VFXManager:
         # Screen flash (screen-space, drawn last so it overlays everything)
         if self._flash_timer > 0:
             t = self._flash_timer / self._flash_max
-            alpha = int(120 * t)
+            alpha = int(100 * t)  # semi-transparent, brief
             self._flash_surface.fill((*self._flash_color[:3], alpha))
             surf.blit(self._flash_surface, (0, 0))

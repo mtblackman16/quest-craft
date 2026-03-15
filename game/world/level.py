@@ -203,8 +203,9 @@ class LevelManager:
         if not room:
             return
 
+        floor_num = self._floor.floor_number if self._floor else 1
         for cfg in room.interactable_positions:
-            obj = _make_interactable(cfg)
+            obj = _make_interactable(cfg, floor_num=floor_num)
             if obj:
                 self._interactable_objs.append(obj)
 
@@ -248,7 +249,7 @@ def _make_platform(data, difficulty=Difficulty.NORMAL):
     return SolidPlatform(x, y, w, h)
 
 
-def _make_interactable(cfg):
+def _make_interactable(cfg, floor_num=1):
     """Create the correct Interactable subclass from a config dict."""
     itype = cfg.get("type", "chest")
     x = cfg.get("x", 0)
@@ -259,7 +260,7 @@ def _make_interactable(cfg):
     elif itype == "water_source":
         return WaterSource(x, y)
     elif itype == "chest":
-        return Chest(x, y)
+        return Chest(x, y, floor_num=floor_num)
     elif itype == "door":
         return Door(x, y, target_floor=cfg.get("target_floor"))
     elif itype == "shrine":

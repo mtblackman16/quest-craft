@@ -94,7 +94,9 @@
         {"type": "sun_zone", "x": 1100, "y": 320, "w": 200, "h": 200},
         {"type": "sun_zone", "x": 2800, "y": 320, "w": 200, "h": 200},
         {"type": "cooking_pot", "x": 700, "y": 308},
-        {"type": "water_source", "x": 1780, "y": 308}
+        {"type": "water_source", "x": 1780, "y": 308},
+        {"type": "shrine", "x": 2460, "y": 398},
+        {"type": "chest", "x": 3140, "y": 368}
       ],
       "transitions": [
         {

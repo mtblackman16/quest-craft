@@ -65,7 +65,8 @@
       "interactables": [
         {"type": "cooking_pot", "x": 660, "y": 308},
         {"type": "water_source", "x": 1340, "y": 388},
-        {"type": "shrine", "x": 2000, "y": 368}
+        {"type": "shrine", "x": 2000, "y": 368},
+        {"type": "chest", "x": 1740, "y": 308}
       ],
       "transitions": [
         {
