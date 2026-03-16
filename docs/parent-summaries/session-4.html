@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Craft — Session 4: Playtest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Press+Start+2P&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Color Tokens ── */
+  :root {
+    --deep-stone: #1a1a2e;
+    --warm-stone: #2d2d44;
+    --torchlight: #e8a838;
+    --torch-glow: #f5e6c8;
+    --jello-green: #7ddf64;
+    --ember: #c44b2b;
+    --dim-text: #a89e8a;
+    --border-glow: rgba(232, 168, 56, 0.25);
+    --parchment: #f0e4cc;
+  }
+
+  /* ── Page Background with Vignette + Stone Noise ── */
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--torch-glow);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-size: 15px;
+    min-height: 100vh;
+    background-color: var(--deep-stone);
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 50% 0%, #2d2d44 0%, #1a1a2e 70%);
+  }
+
+  /* ── Torch Flicker Animation ── */
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.92; }
+  }
+
+  /* ── 1. Title Block ── */
+  .title-block {
+    text-align: center;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }
+
+  .title-block .program-name {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--dim-text);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .title-block .session-number {
+    font-family: 'Cinzel Decorative', Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--torchlight);
+    line-height: 1.1;
+    animation: flicker 4s ease-in-out infinite;
+    margin-bottom: 8px;
+  }
+
+  .title-block .session-subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .title-block .meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--dim-text);
+    line-height: 1.4;
+  }
+
+  /* ── Fading Gradient Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(232, 168, 56, 0.5) 20%,
+      rgba(232, 168, 56, 0.5) 80%,
+      transparent 100%
+    );
+    margin: 0;
+  }
+
+  /* ── 2. The Hook ── */
+  .hook {
+    background: rgba(45, 45, 68, 0.6);
+    border: 1.5px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 22px 20px;
+    margin: 28px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hook::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(232, 168, 56, 0.08);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .hook .headline {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--torchlight);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .hook .supporting {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--torch-glow);
+    line-height: 1.5;
+  }
+
+  /* ── Section Headings (h2) with Ornamental Lines ── */
+  h2 {
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--torchlight);
+    text-align: center;
+    margin: 40px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before,
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  h2::before {
+    background: linear-gradient(to right, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  h2::after {
+    background: linear-gradient(to left, transparent, rgba(232, 168, 56, 0.5));
+  }
+
+  /* ── Diamond Bullet List ── */
+  .quest-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .quest-list li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--torch-glow);
+  }
+
+  .quest-list li::before {
+    content: '\25C6';
+    position: absolute;
+    left: 0;
+    color: var(--torchlight);
+    font-size: 10px;
+    top: 11px;
+  }
+
+  .quest-list li + li {
+    margin-top: 4px;
+  }
+
+  .quest-list li strong {
+    color: var(--torch-glow);
+  }
+
+  /* ── Skill Cards (Stacked) ── */
+  .skill-card {
+    background: rgba(45, 45, 68, 0.4);
+    border-left: 3px solid var(--torchlight);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .skill-card .name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--torchlight);
+    line-height: 1.3;
+  }
+
+  .skill-card .detail {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: #c4b8a0;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── Illuminate Connection ── */
+  .illuminate {
+    background: var(--parchment);
+    border: 1px solid #d4c4a0;
+    border-radius: 4px;
+    padding: 16px 18px;
+    color: #3a3020;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-top: 24px;
+  }
+
+  .illuminate strong {
+    color: #6b4c1e;
+  }
+
+  .illuminate em {
+    font-style: italic;
+  }
+
+  /* ── Reflections Section ── */
+  .reflections {
+    background: rgba(45, 45, 68, 0.5);
+    border: 1px solid var(--border-glow);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .reflections .kid {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--torch-glow);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .reflections .kid:last-child {
+    margin-bottom: 0;
+  }
+
+  .reflections .kid strong {
+    color: var(--torchlight);
+    font-weight: 600;
+  }
+
+  /* ── Photo Section ── */
+  .photo-section {
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .photo-section img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 6px;
+    border: 2px solid var(--border-glow);
+    display: block;
+    margin: 0 auto;
+  }
+
+  .photo-section .photo-caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--dim-text);
+    font-style: italic;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* ── Closing Quote ── */
+  .closing-quote {
+    position: relative;
+    font-style: italic;
+    color: var(--torch-glow);
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 8px 32px;
+    margin: 28px 0;
+  }
+
+  .closing-quote::before {
+    content: '\201C';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    top: -12px;
+    left: 2px;
+    line-height: 1;
+  }
+
+  .closing-quote::after {
+    content: '\201D';
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 48px;
+    font-style: normal;
+    color: rgba(232, 168, 56, 0.3);
+    position: absolute;
+    bottom: -28px;
+    right: 2px;
+    line-height: 1;
+  }
+
+  /* ── Footer / Seal ── */
+  .ornament-divider {
+    text-align: center;
+    margin: 36px 0 20px;
+    color: var(--torchlight);
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--dim-text);
+    line-height: 1.4;
+    padding-bottom: 20px;
+  }
+
+  .footer .credits {
+    margin-bottom: 6px;
+  }
+
+  .footer .next-session {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #b8aa96;
+  }
+
+  /* ── Bug Counter ── */
+  .bug-counter {
+    text-align: center;
+    margin: 28px 0;
+  }
+
+  .bug-counter .number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 48px;
+    color: var(--jello-green);
+    text-shadow:
+      0 0 8px rgba(125, 223, 100, 0.5),
+      0 0 24px rgba(125, 223, 100, 0.2);
+    line-height: 1.2;
+  }
+
+  .bug-counter .label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--dim-text);
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     1. TITLE BLOCK
+     ═══════════════════════════════════════════════════════ -->
+<header class="title-block">
+  <div class="program-name">Quest Craft</div>
+  <div class="session-number">Session 4</div>
+  <div class="session-subtitle">Playtest, The Bug Hunt</div>
+  <div class="meta">March 15, 2026 &nbsp;|&nbsp; Ethan, Eins, Nathan &amp; Andrew</div>
+  <div class="meta" style="margin-top: 4px; font-size: 14px; color: #8a7e6a;">The team becomes QA testers, their words change the code in real time</div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     2. THE HOOK
+     ═══════════════════════════════════════════════════════ -->
+<div class="hook">
+  <div class="headline">Today the team directed AI agents, squashed 62 bugs, and watched a robot play their game.</div>
+  <div class="supporting">They dictated bug reports by voice, orchestrated sub-agents at a whiteboard, read code diffs, committed to GitHub, and watched an automated harness test all 15 floors. These are real AI engineering skills, the same ones top engineers are learning right now.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PHOTO PLACEHOLDER — First playthrough
+     ═══════════════════════════════════════════════════════ -->
+<div class="photo-section">
+  <img src="images/session-4/team1.jpg" alt="The team learning AI engineering concepts at the whiteboard">
+  <div class="photo-caption">The team at the whiteboard learning how AI agents work together, sub-agents, team leaders, and parallel processing</div>
+</div>
+
+<!-- AI SKILLS DEEP DIVE -->
+<h2>AI Engineering Skills</h2>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #f5e6c8; line-height: 1.6; margin-bottom: 16px;">
+These skills have been building since Session 1. PRDs and design-first thinking in Session 1. Project structure and memory in Session 2. Technical planning in Session 3. Today, in Session 4, it clicked. The kids stopped needing prompts and started applying the concepts on their own.</p>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #f5e6c8; line-height: 1.6; margin-bottom: 16px;">
+None of this is simplified or watered down. These are the same techniques that senior AI engineers at top companies use every day, and most of them are still figuring it out. Your kids are not learning to write code. They are learning the harder skill: how to imagine something, direct AI to build it, test it, fix it, and ship it. The full lifecycle from concept to working product, guided by their voice.
+</p>
+
+<div class="skill-card">
+  <div class="name">PRDs, Product Requirements Documents</div>
+  <div class="detail">Since Session 1, every feature started as a conversation that became a design document. Today the kids traced the full path: their spoken ideas from Session 2 became PRDs, those PRDs guided Claude to write 15 floors of game code, and now they are testing the result. They see the direct line from &ldquo;I want a jello cube that splits apart&rdquo; to working gameplay. Their words became the blueprint. The blueprint became the game.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Spawning Sub-Agents &amp; Orchestration</div>
+  <div class="detail">This is cutting-edge AI engineering that most developers have not touched yet. At the whiteboard, the kids learned to create a team leader agent that spawns specialized workers, one for sound, one for graphics, one for bugs, each working independently in parallel. A validator checks everything before it goes in. When asked why this matters, they nailed all three reasons: it is faster, each agent stays focused, and you do not blow up the context window. These kids are orchestrating AI agents. That is not &ldquo;using AI.&rdquo; That is directing it.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Creating AI Memory</div>
+  <div class="detail">AI starts every conversation blank unless you build it a memory system. The kids have been contributing to this since Session 1, every decision, every lesson, every design choice gets saved. Today they explored exactly how it works: MEMORY.md holds the project brain, lessons.md prevents repeated mistakes, and the whole system loads automatically at the start of each session. When asked why this matters, Eins said: &ldquo;Without it, Claude repeats the same mistakes.&rdquo; That is an 11-year-old articulating the core problem of AI memory systems.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Context Windows &amp; What AI Can See</div>
+  <div class="detail">AI can only hold so much information at once. The kids now understand that PRDs, memory, and code all compete for space, and that loading the right context matters more than loading everything. When asked which single file he would load first, Ethan chose CLAUDE.md, the project constitution. That is not a guess. That is an instinct for how to direct AI effectively, built up over four sessions.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Project Navigation &amp; File Types</div>
+  <div class="detail">The kids can navigate the full project structure now, game/ for code, docs/ for design documents and PRDs, assets/ for Andrew&rsquo;s artwork, memory/ for AI context. They know .py is Python code, .md is documentation, .json is level data. This is not trivia. When you are directing an AI to fix a bug, you need to know where to point it. They do.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Commits, Pushes &amp; Diffs</div>
+  <div class="detail">Every fix got committed with a message, pushed to GitHub, and verified. The kids learned to read diffs, seeing exactly which lines changed before accepting AI-generated code. They do not blindly trust the output. They review it. When asked what a diff is, Ethan said: &ldquo;It shows what changed.&rdquo; Version control in four words, from a nine-year-old.</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     BUG COUNTER
+     ═══════════════════════════════════════════════════════ -->
+<div class="bug-counter">
+  <div class="number">62</div>
+  <div class="label">bugs squashed, 22 reported by the kids, 40 more found and fixed by AI agents</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     4. WHAT THEY DID TODAY
+     ═══════════════════════════════════════════════════════ -->
+<h2>What They Did Today</h2>
+<ul class="quest-list">
+  <li><strong>Played the complete game for the first time</strong>, 15 floors, 5 bosses, sound, music, all built by Claude from their Session 2 designs. Every kid got multiple turns with the Pro Controller.</li>
+  <li><strong>Ran a professional QA rotation</strong>, Player, Bug Caller, Feedback Lead, and Logger roles rotating every 10-15 minutes. Everyone played, everyone reported, everyone directed the AI.</li>
+  <li><strong>Fixed bugs in real time</strong>, described problems out loud, Claude changed the code, restarted the game, verified the fix. The full feedback loop, dozens of times.</li>
+  <li><strong>Tuned the game feel</strong>, adjusted jump height, gravity, speed, enemy difficulty, and ground pound radius until it felt right to <em>them</em>.</li>
+  <li><strong>Documented their process</strong>, filled in Experiment/Build Record sheets after every few fixes, creating real evidence of iterative development for the Illuminate exhibition.</li>
+  <li><strong>Watched AI play the game</strong>, saw the automated test harness control the jello cube, take screenshots, and log game state. Then watched Claude analyze the screenshots and identify visual issues.</li>
+  <li><strong>Set up an overnight AI testing loop</strong>, Claude will play, screenshot, analyze, and fix bugs autonomously while they sleep.</li>
+</ul>
+
+<div class="photo-section">
+  <img src="images/session-4/bug.jpg" alt="Bug hunting in action">
+  <div class="photo-caption">Bug hunting, the team finding and reporting issues during live gameplay</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     5. SKILLS UNLOCKED
+     ═══════════════════════════════════════════════════════ -->
+<h2>Skills Unlocked</h2>
+<div class="skill-card">
+  <div class="name">QA Testing &amp; Bug Reporting</div>
+  <div class="detail">Learned to describe bugs precisely: not &ldquo;it&rsquo;s broken&rdquo; but &ldquo;when I jump near the edge of a platform, I fall through it.&rdquo; Specificity is the difference between a bug that gets fixed and one that doesn&rsquo;t.</div>
+</div>
+<div class="skill-card">
+  <div class="name">The Human+AI Feedback Loop</div>
+  <div class="detail">Experienced the core workflow of AI-augmented development: human identifies the problem, human describes it clearly, AI implements the fix, human verifies. Repeat. This is how software gets built in 2026.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Game Feel &amp; Tuning</div>
+  <div class="detail">Discovered that the difference between &ldquo;okay&rdquo; and &ldquo;great&rdquo; is tiny numerical changes. Jump power, gravity, speed, single numbers that transform the entire experience. Game design is about feel, not features.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Scientific Documentation</div>
+  <div class="detail">Filled in Experiment/Build Records, documenting what they tried, what happened, and what changed. The same iterative documentation scientists and engineers use.</div>
+</div>
+<div class="skill-card">
+  <div class="name">Automated Testing &amp; AI Engineering</div>
+  <div class="detail">Saw the leap from manual QA to automated testing. The game plays itself, takes screenshots, logs state, and Claude analyzes the results. They didn&rsquo;t just test a game, they built a system that tests itself.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PHOTO PLACEHOLDER — Bug fix moment
+     ═══════════════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════════
+     6. WHAT THEY SAID
+     ═══════════════════════════════════════════════════════ -->
+<div class="photo-section">
+  <img src="images/session-4/diff.jpg" alt="Learning to read code diffs">
+  <div class="photo-caption">Reading a diff, learning to see exactly what changed in the code before accepting it</div>
+</div>
+
+<h2>What They Said</h2>
+<div class="reflections">
+  <!-- Replace with actual quotes after Session 4 -->
+  <div class="kid"><strong>Eins:</strong> &ldquo;AI needs context. Without the right information loaded upfront, AI can&rsquo;t do good work.&rdquo;</div>
+  <div class="kid"><strong>Ethan:</strong> &ldquo;It takes a team. Nobody builds anything real alone, everyone has a role.&rdquo;</div>
+  <div class="kid"><strong>Nathan:</strong> Nathan missed today for his brother&rsquo;s birthday, Ethan, Andrew, and Eins will catch him up at school this week. The team may squeeze in a mid-week play session to keep building before the final session next weekend.</div>
+  <div class="kid"><strong>Andrew:</strong> &ldquo;The hardest part was knowing the right words to describe what went wrong. You have to be specific.&rdquo;</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     7. ILLUMINATE CONNECTION
+     ═══════════════════════════════════════════════════════ -->
+<div class="illuminate">
+  <strong>How This Maps to LASD Illuminate:</strong> This session was pure <em>Phase 2</em> and <em>Phase 3</em> evidence. The kids didn&rsquo;t just play a game, they systematically tested it, documented what they found (Build Records), iterated on fixes in real time, and reflected on what they learned. The Experiment/Build Records they filled in are authentic artifacts of the inquiry process. And the automated testing loop? That&rsquo;s next-level: kids building systems that learn and improve autonomously. The Illuminate question &ldquo;How did you learn?&rdquo; has a vivid answer: by playing, breaking, describing, fixing, and repeating, with AI as their engineering partner.
+</div>
+
+
+<div class="photo-section">
+  <img src="images/session-4/gameplay-gracie-boss-floor6.png" alt="Gracie boss fight on Floor 6">
+  <div class="photo-caption">Floor 6, the Gracie boss fight captured by the automated playtest harness</div>
+</div>
+
+<h2>The AI Engineer</h2>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #f5e6c8; line-height: 1.6; margin-bottom: 16px;">
+After two hours of manual bug hunting, the kids watched something they didn&rsquo;t expect: the game playing itself.
+</p>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #f5e6c8; line-height: 1.6; margin-bottom: 16px;">
+We ran the automated playtest harness on the big screen. No controller. No human. A bot walked, jumped, shot, and navigated through all 15 floors while the kids watched. It captured 154 screenshots, logged game state every half-second, and detected when it got stuck.
+</p>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #f5e6c8; line-height: 1.6; margin-bottom: 16px;">
+The result: <strong>15 floors, zero crashes, 8 bugs found</strong> that the kids missed during manual play, including a floor with no death zone where the player fell off the screen forever, a final boss that never attacks, and a boss sprite rendering backwards.
+</p>
+<p style="font-family: Source Sans 3, sans-serif; font-size: 15px; color: #c4b8a0; line-height: 1.6; margin-bottom: 16px; font-style: italic;">
+They started the day as game testers. They ended it understanding how to build systems that test themselves. That&rsquo;s not QA. That&rsquo;s engineering.
+</p>
+
+<!-- ═══════════════════════════════════════════════════════
+     9. CLOSING QUOTE
+     ═══════════════════════════════════════════════════════ -->
+<div class="closing-quote">
+  They are not learning to code. They are learning to imagine something, speak it into existence, test it, fix it, and ship it. The full lifecycle, concept to product, guided by their voice. The skills they are building are the same ones the most advanced AI engineers in the industry are figuring out right now. Your kids are already there.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     10. FOOTER / SEAL
+     ═══════════════════════════════════════════════════════ -->
+<div class="ornament-divider">&#9670; &#9670; &#9670;</div>
+
+<footer class="footer">
+  <div class="credits">Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (11), Nathan (9) &amp; Andrew (11) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026</div>
+  <div class="next-session">Next: possible mid-week play session to keep momentum, then Session 5 (Showcase) next weekend, exhibition display board, deep reflections, demo rehearsal, and full 15-floor run</div>
+</footer>
+
+</body>
+</html>
