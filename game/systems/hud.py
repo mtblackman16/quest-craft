@@ -321,11 +321,12 @@ class HUD:
         # Pill timer
         active_pill = getattr(player, "active_pill", None)
         if active_pill is not None:
-            pill_name = active_pill.get("name", "Pill")
-            frames_left = active_pill.get("frames_left", 0)
-            max_frames = active_pill.get("max_frames", 1)
+            pill_name = active_pill if isinstance(active_pill, str) else active_pill.get("name", "Pill")
+            frames_left = getattr(player, "pill_timer", 0)
+            max_frames = getattr(player, "pill_max_timer", 1) or 1
             if frames_left > 0:
                 self._draw_pill_timer(surf, pill_name, frames_left, max_frames)
+
 
         # Run counter
         self._draw_run_counter(surf, run_count)
