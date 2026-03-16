@@ -181,13 +181,19 @@ Blueprint session completed. Controller test, technical plan established.
 ## Session 5: Showcase -- UPCOMING (March 22, 2026)
 
 ### Pre-Session (Mark solo):
-- Fix any remaining bugs from Session 4 list + harness findings
-- Run 30+ minute soak test
-- Print all exhibition materials (10 display board pages, photos, artwork)
-- Buy tri-fold display board if not done
-- Update 06-reflections.html with Session 4 quotes
-- Insert real screenshots and team photos into display HTML files
-- Capture 3-5 gameplay screenshots for boards
+- Fix remaining harness bugs: boss sprite mirrored (floor 4), floor 11 death zone, floors 10/11/15 enemies not attacking, player color tint floors 9-15, arena boundary debug lines, torch placement
+- Run 30+ minute soak test (game stable, no crashes)
+- Update 06-reflections.html with Session 4 interview quotes (Andrew, Ethan, Eins)
+- Insert gameplay screenshot into 04-the-game.html (use Gracie boss fight or similar)
+- Insert team photo into 05-the-team.html (session 2 or session 4 photo)
+- Print all 10 exhibition display board pages in color
+- Print 2-3 large gameplay screenshots
+- Print 2-3 large team/process photos from Sessions 2 and 4
+- Print Andrew artwork large
+- Buy tri-fold display board
+- Capture 3-5 fresh gameplay screenshots for boards
+- Controller: verify Bluetooth ERTM fix works after reboot, have USB cable as backup
+- Controller: verify joydev udev rule creates js0 automatically
 
 ### Session 5 Plan:
 - Quick bug fix pass + final polish (30 min)
