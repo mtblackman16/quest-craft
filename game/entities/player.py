@@ -9,6 +9,7 @@ from game.engine.settings import (
     GRAVITY, MAX_FALL_SPEED, GROUND_POUND_SPEED, PLAYER_SPEED, PLAYER_JUMP_POWER,
     PLAYER_BASE_SIZE, PLAYER_MAX_HEALTH, JELLY_SHOT_COST, JELLO_POWDER_HEAL,
     PERFECT_DODGE_FRAMES, SPLIT_DURATION, HARD_DAMAGE_MULTIPLIER,
+    SCREEN_H,
     JELLO_GREEN, JELLO_GREEN_DIM, TORCH_AMBER, STICK_DEADZONE,
     CTRL_A, CTRL_B, CTRL_X, CTRL_Y, CTRL_L, CTRL_ZL, CTRL_ZR,
     AXIS_LX, AXIS_LY, AXIS_RX,
@@ -304,7 +305,8 @@ class JelloCube:
         if self.y < 0:
             self.y = 0
         # Fall death: fell off the bottom of the level
-        if room_height > 0 and self.y > room_height + 200:
+        kill_y = (room_height + 100) if room_height > 0 else (SCREEN_H + 100)
+        if self.y > kill_y:
             self.pending_events.append(GameEvent.PLAYER_DIED)
 
         # ── Deferred land sound ──

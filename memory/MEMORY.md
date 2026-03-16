@@ -161,18 +161,22 @@ Blueprint session completed. Controller test, technical plan established.
 - Learning logs -- how lessons.md documents repeated issues and improves dev over sessions
 - Multiple bugs identified during gameplay
 
-### In Progress:
+### Completed (continued):
 - Bug dictation via Wispr Flow + /bughunt command
-- Bug fix rounds (go fix / squash them)
+- Bug fix rounds -- 22 bugs squashed across gameplay, combat, music, SFX, VFX, levels
+- Build Record sheets completed by all 4 kids (physical sheets collected)
+- AI Engineer block -- kids watched automated playtest harness run all 15 floors on big screen
+- Harness report: 15 floors, 0 crashes, 8 additional bugs identified, 154 screenshots captured
+- Victory Lap -- clean playthrough with all fixes applied (did not complete all 15 floors, will continue Session 5)
+- HUD pill crash fix (hud.py active_pill was string not dict)
+- Controller fixes: Bluetooth ERTM disable, joydev udev rule, USB fallback
+- Commits: ed72207 (22 bugs), 3858161 (HUD fixes), 921a6a3 (harness report)
 
-### Remaining (Session 4):
-- Bug fix loop -- rotate roles (Player, Bug Caller, Feedback Lead, Logger)
-- Tuning session -- jump feel, enemy difficulty, controls
-- Build Record entries for each kid
-- Final clean playthrough (Victory Lap)
-- Reflections (Illuminate Phase 3 evidence)
-- AI Engineer block -- watch automated playtest harness
+### Remaining (for Session 5 or between sessions):
+- Kid interview reflections (Illuminate Phase 3 evidence)
+- Full 15-floor playthrough
 - Commit and tag v0.9-playtested
+- Overnight autonomous playtest loop (optional)
 
 ### RPi5 Performance Optimizations Applied (March 15):
 - CPU governor set to performance (persisted via systemd)

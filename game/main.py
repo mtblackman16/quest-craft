@@ -1296,6 +1296,10 @@ class Game:
             cy = boss_y + (py - boss_y) * t
         else:
             self._boss_intro_active = False
+            # Sync: end the boss's own internal intro too so it attacks immediately
+            if self._boss and hasattr(self._boss, 'intro_active'):
+                self._boss.intro_active = False
+                self._boss.intro_timer = 0
             return False
 
         if hasattr(self.camera, 'reset'):
@@ -1625,6 +1629,14 @@ class Game:
             self.player_projectiles.clear()
             self.enemy_projectiles.clear()
             self.hazards.clear()
+            # Remove boss arena walls so player can re-enter after respawn
+            if self._boss_arena_active:
+                for wall in self._boss_arena_walls:
+                    if wall in self.platforms:
+                        self.platforms.remove(wall)
+                self._boss_arena_walls = []
+                self._boss_arena_active = False
+                self._boss_arena_triggered = False
             return
 
         try:
