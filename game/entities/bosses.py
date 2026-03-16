@@ -241,9 +241,8 @@ class BigBottle(Boss):
         self.color = (100, 180, 220)
         self.arena_bounds = (arena_left, arena_right)
 
-        # Sprite (oversized hand sanitizer bottle!)
+        # Sprite (oversized hand sanitizer bottle — front-facing, never flipped)
         self._sprite = load_sprite('items/hand-sanitizer-front.png', 120, 160)
-        self._sprite_flipped = flip_h(self._sprite) if self._sprite else None
 
         # Movement
         self.patrol_speed = 1.2
@@ -386,7 +385,8 @@ class BigBottle(Boss):
             by += random.randint(-3, 3)
 
         if self._sprite:
-            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            # Front-facing bottle sprite — never flip (text would appear mirrored)
+            sprite = self._sprite
             # Hit flash: white tint
             if self.hit_timer > 0:
                 flash = sprite.copy()
@@ -704,15 +704,15 @@ class TheLastGuard(Boss):
         self.color = (140, 120, 100)
         self.arena_bounds = (arena_left, arena_right)
 
-        # Phase 1: The Chase
-        self.chase_speed = 5.0
+        # Phase 1: The Chase (must be faster than PLAYER_SPEED=5.0 to catch up)
+        self.chase_speed = 6.5
         self.grab_timer = 0
         self.grab_cooldown = 45
         self.grab_active = False
         self.grab_frame = 0
         self.grab_duration = 15
-        self.grab_rect_w = 40
-        self.grab_rect_h = 20
+        self.grab_rect_w = 60
+        self.grab_rect_h = 40
 
         # Phase 2: Hand-to-Hand
         self.combo_state = None  # None, "telegraph", "punch", "cooldown"
@@ -781,11 +781,12 @@ class TheLastGuard(Boss):
 
         if self.grab_active:
             self.grab_frame += 1
-            # Active grab hitbox
+            # Active grab hitbox — extends from boss center outward so it
+            # connects even when the boss overlaps the player.
             if self.facing == 1:
-                gx = self.x + self.w
+                gx = self.x + self.w // 2
             else:
-                gx = self.x - self.grab_rect_w
+                gx = self.x - self.grab_rect_w + self.w // 2
             gy = self.y + self.h // 2 - self.grab_rect_h // 2
             self.active_grab = pygame.Rect(int(gx), int(gy),
                                            self.grab_rect_w, self.grab_rect_h)

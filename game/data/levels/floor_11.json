@@ -23,6 +23,7 @@
         {"type": "crumbling", "x": 1280, "y": 370, "w": 80, "h": 16},
 
         {"type": "solid", "x": 1420, "y": 420, "w": 100, "h": 16},
+        {"type": "solid", "x": 1420, "y": 540, "w": 100, "h": 180},
 
         {"type": "crumbling", "x": 1580, "y": 360, "w": 80, "h": 16},
         {"type": "crumbling", "x": 1720, "y": 300, "w": 80, "h": 16},
@@ -37,6 +38,7 @@
         {"type": "crumbling", "x": 2700, "y": 280, "w": 80, "h": 16},
 
         {"type": "solid", "x": 2840, "y": 350, "w": 80, "h": 16},
+        {"type": "solid", "x": 2840, "y": 540, "w": 100, "h": 180},
 
         {"type": "crumbling", "x": 2980, "y": 290, "w": 80, "h": 16},
         {"type": "crumbling", "x": 3120, "y": 350, "w": 80, "h": 16},
@@ -48,7 +50,20 @@
         {"type": "solid", "x": 3840, "y": 540, "w": 256, "h": 180},
         {"type": "solid", "x": 3840, "y": 360, "w": 200, "h": 16}
       ],
-      "enemies": [],
+      "enemies": [
+        {
+          "type": "jelly_archer",
+          "x": 1450,
+          "y": 380,
+          "patrol": [[1420, 380], [1520, 380]]
+        },
+        {
+          "type": "jelly_archer",
+          "x": 2870,
+          "y": 310,
+          "patrol": [[2840, 310], [2940, 310]]
+        }
+      ],
       "interactables": [
         {"type": "water_source", "x": 1460, "y": 388},
         {"type": "cooking_pot", "x": 2180, "y": 348},
