@@ -20,7 +20,7 @@
 
 ## Project Status
 
-**Current Phase:** Session 4 — Playtest — IN PROGRESS
+**Current Phase:** Session 4 — Playtest — COMPLETE (tagged v0.9-playtested)
 **Game Name:** Split
 **Game Type:** 2D side-scrolling platformer with puzzles and stealth
 **Core Word:** Survival
@@ -172,11 +172,34 @@ Blueprint session completed. Controller test, technical plan established.
 - Controller fixes: Bluetooth ERTM disable, joydev udev rule, USB fallback
 - Commits: ed72207 (22 bugs), 3858161 (HUD fixes), 921a6a3 (harness report)
 
-### Remaining (for Session 5 or between sessions):
-- Kid interview reflections (Illuminate Phase 3 evidence)
-- Full 15-floor playthrough
-- Commit and tag v0.9-playtested
-- Overnight autonomous playtest loop (optional)
+### Session 4 Wrap-Up:
+- Kid interviews completed (Andrew, Ethan, Eins) -- saved to learning log
+- Tagged v0.9-playtested
+- Parent summary live on GitHub Pages
+- Nathan missed (brother birthday) -- team will catch him up at school
+
+## Session 5: Showcase -- UPCOMING (March 22, 2026)
+
+### Pre-Session (Mark solo):
+- Fix any remaining bugs from Session 4 list + harness findings
+- Run 30+ minute soak test
+- Print all exhibition materials (10 display board pages, photos, artwork)
+- Buy tri-fold display board if not done
+- Update 06-reflections.html with Session 4 quotes
+- Insert real screenshots and team photos into display HTML files
+- Capture 3-5 gameplay screenshots for boards
+
+### Session 5 Plan:
+- Quick bug fix pass + final polish (30 min)
+- Build the physical display board (45 min)
+- Learning Story reflections from each kid (30 min)
+- Demo rehearsal -- practice the exhibition pitch (15 min)
+- Nathan interview / catch-up
+- Full 15-floor playthrough attempt
+- Commit and tag v1.0-exhibition
+- Final team photo with completed board
+
+### Exhibition: March 27, 2026 (4:00-7:00 PM, setup 3:30)
 
 ### RPi5 Performance Optimizations Applied (March 15):
 - CPU governor set to performance (persisted via systemd)
