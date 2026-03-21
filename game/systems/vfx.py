@@ -81,8 +81,9 @@ class ParticlePool:
         # Ring-buffer index for fast allocation.
         self._next = 0
 
-        # Surface cache: (radius, r, g, b) -> Surface
+        # Surface cache: (radius, r, g, b) -> Surface (capped to prevent leaks)
         self._cache: dict[tuple, pygame.Surface] = {}
+        self._CACHE_MAX = 512  # evict oldest when exceeded
 
     # -- allocation ----------------------------------------------------------
 
@@ -449,6 +450,11 @@ class ParticlePool:
         key = (radius, color[0], color[1], color[2])
         surf = self._cache.get(key)
         if surf is None:
+            # Evict half the cache if it's too large
+            if len(self._cache) >= self._CACHE_MAX:
+                keys = list(self._cache.keys())
+                for k in keys[:len(keys) // 2]:
+                    del self._cache[k]
             surf = _make_circle_surface(radius, color)
             self._cache[key] = surf
         return surf

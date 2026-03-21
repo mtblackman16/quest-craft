@@ -40,6 +40,7 @@ class Platform:
         self.h = h
         self.platform_type = platform_type
         self.floor_num = 1          # set by LevelManager after creation
+        self.visible = True         # can be set False for invisible collision walls
 
     # ── helpers ──
     def get_rect(self):

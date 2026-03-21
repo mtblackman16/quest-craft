@@ -29,9 +29,14 @@ JELLY_SHOT_DAMAGE = 10
 class CombatSystem:
     """Per-frame combat resolution: projectile hits, hazard damage, ground pound."""
 
-    def __init__(self, event_bus):
+    def __init__(self, event_bus=None):
         self.event_bus = event_bus
         self.missed_shots = 0  # track for Jello Graveyard easter egg
+
+    def _emit(self, event, **kwargs):
+        """Safe event_bus emit -- no-op if bus is None."""
+        if self.event_bus:
+            self._emit(event, **kwargs)
 
     def check_hits(self, player, enemies, projectiles, difficulty=Difficulty.NORMAL):
         """Main per-frame collision check.
@@ -123,7 +128,7 @@ class CombatSystem:
                         'enemy_type': enemy.enemy_type,
                     }
                     events.append(evt)
-                    self.event_bus.emit(GameEvent.ENEMY_HIT,
+                    self._emit(GameEvent.ENEMY_HIT,
                                        x=evt['x'], y=evt['y'],
                                        damage=damage)
 
@@ -135,7 +140,7 @@ class CombatSystem:
                             'enemy_type': enemy.enemy_type,
                         }
                         events.append(kill_evt)
-                        self.event_bus.emit(GameEvent.ENEMY_DIED,
+                        self._emit(GameEvent.ENEMY_DIED,
                                            x=kill_evt['x'], y=kill_evt['y'])
 
                     break  # projectile can only hit one enemy
@@ -261,7 +266,7 @@ class CombatSystem:
                     'source': 'ground_pound',
                 }
                 events.append(evt)
-                self.event_bus.emit(GameEvent.ENEMY_HIT,
+                self._emit(GameEvent.ENEMY_HIT,
                                    x=ecx, y=ecy, damage=damage)
 
                 if killed:
@@ -272,7 +277,7 @@ class CombatSystem:
                         'enemy_type': enemy.enemy_type,
                     }
                     events.append(kill_evt)
-                    self.event_bus.emit(GameEvent.ENEMY_DIED, x=ecx, y=ecy)
+                    self._emit(GameEvent.ENEMY_DIED, x=ecx, y=ecy)
 
         return events
 

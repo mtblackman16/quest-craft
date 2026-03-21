@@ -477,13 +477,16 @@ class JelloCube:
         return True
 
     def unsplit(self):
-        """Reform from split (no collision check — used by timer expiry)."""
+        """Reform from split (timer expiry fallback -- nudge up if stuck)."""
         if not self.is_split:
             return False
         self.is_split = False
         self.split_timer = 0
+        old_h = self.h
         self.w = self.pre_split_w if hasattr(self, 'pre_split_w') else self.base_w
         self.h = self.pre_split_h if hasattr(self, 'pre_split_h') else self.base_h
+        # Nudge player up by the height difference so they don't clip into floor
+        self.y -= (self.h - old_h)
         self.split_pieces = []
         self.squish = 0.3
         self.pending_events.append(GameEvent.PLAYER_UNSPLIT)

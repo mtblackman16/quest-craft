@@ -465,18 +465,89 @@ class Game:
         return best_y
 
     def get_state_snapshot(self):
-        """Return dict of current game state for test logging."""
-        return {
+        """Return comprehensive game state for test logging and bug analysis."""
+        p = self.player
+        snapshot = {
             'timestamp': _time.time(),
             'frame': self.frame_count,
             'floor': self.current_floor,
             'state': self.state.value if hasattr(self.state, 'value') else str(self.state),
-            'player_x': round(self.player.x, 1) if self.player else None,
-            'player_y': round(self.player.y, 1) if self.player else None,
-            'player_health': self.player.health if self.player else None,
-            'enemies_alive': len([e for e in self.enemies if e.alive]),
             'fps': int(self.clock.get_fps()),
         }
+
+        # Player state
+        if p:
+            snapshot.update({
+                'player_x': round(p.x, 1),
+                'player_y': round(p.y, 1),
+                'player_health': p.health,
+                'player_max_health': p.max_health,
+                'player_on_ground': p.on_ground,
+                'player_is_split': p.is_split,
+                'player_facing': p.facing,
+                'player_jello_powder': getattr(p, 'jello_powder_count', 0),
+                'player_has_water': getattr(p, 'has_water', False),
+                'player_active_pill': getattr(p, 'active_pill', None),
+                'player_invuln': getattr(p, 'invuln_timer', 0) > 0,
+                'player_dodge_active': getattr(p, 'dodge_invulnerable', False),
+            })
+
+        # Enemies
+        enemies_alive = [e for e in self.enemies if e.alive]
+        snapshot['enemies_alive'] = len(enemies_alive)
+        snapshot['enemies_detail'] = [
+            {
+                'type': getattr(e, 'enemy_type', 'unknown').value if hasattr(getattr(e, 'enemy_type', None), 'value') else str(getattr(e, 'enemy_type', 'unknown')),
+                'x': round(e.x, 1),
+                'y': round(e.y, 1),
+                'health': e.health,
+                'state': e.state.value if hasattr(e.state, 'value') else str(e.state),
+            }
+            for e in enemies_alive[:10]  # cap at 10 to avoid log bloat
+        ]
+
+        # Boss state
+        if self._boss:
+            b = self._boss
+            snapshot['boss'] = {
+                'type': getattr(b, 'boss_type', 'unknown').value if hasattr(getattr(b, 'boss_type', None), 'value') else str(getattr(b, 'boss_type', 'unknown')),
+                'health': b.health,
+                'max_health': b.max_health,
+                'phase': getattr(b, 'phase', 0),
+                'alive': b.alive,
+                'x': round(b.x, 1),
+                'y': round(b.y, 1),
+                'state': getattr(b, 'boss_state', 'unknown'),
+            }
+
+        # Projectiles and hazards
+        snapshot['player_projectiles'] = len(self.player_projectiles)
+        snapshot['enemy_projectiles'] = len(self.enemy_projectiles)
+        snapshot['hazards'] = len(self.hazards)
+
+        # Interactables status
+        snapshot['interactables'] = len(self.interactables)
+
+        # Platform counts
+        snapshot['platforms'] = len(self.platforms)
+
+        # Arena state
+        snapshot['boss_arena_active'] = getattr(self, '_boss_arena_active', False)
+
+        # Anomaly flags
+        anomalies = []
+        if p and p.y > 720:
+            anomalies.append('player_below_screen')
+        if p and p.x < 0:
+            anomalies.append('player_left_of_screen')
+        if p and p.health <= 0 and self.state.value == 'gameplay':
+            anomalies.append('dead_player_in_gameplay')
+        if snapshot['fps'] < 30:
+            anomalies.append(f'low_fps_{snapshot["fps"]}')
+        if anomalies:
+            snapshot['anomalies'] = anomalies
+
+        return snapshot
 
     def capture_screenshot(self, path):
         """Save current screen to a PNG file."""
@@ -1063,76 +1134,122 @@ class Game:
                 self._test_floor_start = now
 
     def _test_ai_get_keys(self):
-        """Return a fake key state dict for AI-driven movement."""
+        """Return a fake key state dict for thorough AI exploration.
+
+        Phases: EXPLORE (sweep right then left) -> FIGHT (engage enemies) -> EXIT.
+        Spends 70% of floor time exploring, 30% heading to transition.
+        """
         class FakeKeys:
-            """Mimics pygame.key.get_pressed() with AI-chosen keys."""
             def __init__(self):
                 self._pressed = set()
             def __getitem__(self, key):
                 return key in self._pressed
 
         keys = FakeKeys()
-
         if not self.player:
             return keys
 
-        # Check if there's a door/transition to walk toward
-        target_x = None
-        if self.level_manager:
-            transitions = self.level_manager.get_transitions()
-            if transitions:
-                # Walk toward nearest transition
-                nearest = min(transitions, key=lambda t: abs(t['x'] - self.player.x))
-                target_x = nearest['x']
+        tick = self._test_ai_tick
+        level_w = self._get_level_width()
+        px = self.player.x
+        elapsed = _time.time() - self._test_floor_start
+        explore_time = self.test_duration * 0.70
 
-        if target_x is not None:
-            # Walk toward the transition zone
-            if self.player.x < target_x - 20:
-                keys._pressed.add(pygame.K_RIGHT)
-            elif self.player.x > target_x + 20:
-                keys._pressed.add(pygame.K_LEFT)
+        # Combat override: if an enemy is within 200px, face and approach it
+        for e in self.enemies:
+            if e.alive and abs(e.x - px) < 200:
+                if e.x > px:
+                    keys._pressed.add(pygame.K_RIGHT)
+                else:
+                    keys._pressed.add(pygame.K_LEFT)
+                return keys
+
+        if elapsed < explore_time:
+            # Exploration: sweep back and forth across the full level
+            # Each sweep cycle is ~8 seconds (240 frames at 60fps per direction)
+            cycle_frames = tick % 480
+            if cycle_frames < 240:
+                # Walk right
+                if px >= level_w - 80:
+                    keys._pressed.add(pygame.K_LEFT)
+                else:
+                    keys._pressed.add(pygame.K_RIGHT)
             else:
-                # On top of transition — interact to trigger it
-                keys._pressed.add(pygame.K_RIGHT)
+                # Walk left
+                if px <= 30:
+                    keys._pressed.add(pygame.K_RIGHT)
+                else:
+                    keys._pressed.add(pygame.K_LEFT)
         else:
-            # No transitions — default walk right, bounce at edges
-            level_w = self._get_level_width()
-            if self.player.x > level_w - 100:
-                keys._pressed.add(pygame.K_LEFT)
-            elif self.player.x < 10:
-                keys._pressed.add(pygame.K_RIGHT)
+            # Exit phase: head to transition
+            target_x = None
+            if self.level_manager:
+                transitions = self.level_manager.get_transitions()
+                if transitions:
+                    nearest = min(transitions, key=lambda t: abs(t['x'] - px))
+                    target_x = nearest['x']
+
+            if target_x is not None:
+                if px < target_x - 20:
+                    keys._pressed.add(pygame.K_RIGHT)
+                elif px > target_x + 20:
+                    keys._pressed.add(pygame.K_LEFT)
+                else:
+                    keys._pressed.add(pygame.K_RIGHT)
             else:
-                keys._pressed.add(pygame.K_RIGHT)
+                if px > level_w - 100:
+                    keys._pressed.add(pygame.K_LEFT)
+                else:
+                    keys._pressed.add(pygame.K_RIGHT)
 
         return keys
 
     def _test_ai_actions(self):
-        """Trigger discrete actions (jump, shoot, interact) on schedule."""
+        """Trigger ALL game actions aggressively for thorough testing."""
         if not self.player:
             return
 
         tick = self._test_ai_tick
 
-        # Jump every ~45 frames, or when near a wall edge
-        if tick % 45 == 0:
+        # Jump frequently (needed for parkour, reaching platforms)
+        if tick % 25 == 0:
             self.player.jump()
 
-        # Shoot when enemies are within 250px horizontally
-        if tick % 15 == 0:
+        # Double-jump for extra height
+        if tick % 25 == 8 and not self.player.on_ground:
+            self.player.jump()
+
+        # Shoot at any enemy within range (aggressive)
+        if tick % 8 == 0:
             for e in self.enemies:
-                if e.alive and abs(e.x - self.player.x) < 250:
+                if e.alive and abs(e.x - self.player.x) < 350:
                     proj = self.player.shoot()
                     if proj:
                         self.player_projectiles.append(proj)
                     break
 
-        # Try interact every ~60 frames (doors, pickups)
-        if tick % 60 == 0:
+        # Interact with everything: cooking pots, chests, water, doors
+        if tick % 20 == 0:
             self._do_interact()
 
-        # Ground pound occasionally when airborne
-        if tick % 120 == 0 and not self.player.on_ground:
+        # Ground pound when airborne (tests combat + crumbling platforms)
+        if tick % 45 == 0 and not self.player.on_ground:
             self.player.start_ground_pound()
+
+        # Perfect dodge periodically
+        if tick % 75 == 0:
+            self.player.perfect_dodge()
+
+        # Split/combine every ~5 seconds
+        if tick % 300 == 0:
+            self.player.split()
+        if tick % 300 == 150:
+            if self.player.is_split:
+                self.player.unsplit()
+
+        # Eat jello powder when hurt
+        if tick % 40 == 0 and self.player.health < self.player.max_health * 0.6:
+            self.player.eat_jello_powder()
 
     _FLOOR_NAMES = {
         1: "Storage Rooms", 2: "Deeper Storage", 3: "Lower Cellars",
@@ -1213,6 +1330,10 @@ class Game:
             t_rect = pygame.Rect(t['x'], t['y'], t.get('w', 80), t.get('h', 150))
             if player_rect.colliderect(t_rect):
                 target = t.get('target_floor', self.current_floor + 1)
+                # Guard: target_floor=-1 means "end of game" (floor 15)
+                if target < 1:
+                    self.state = GameState.CREDITS
+                    break
                 if target != self.current_floor:
                     self.player.vx = 0
                     self.player.vy = 0

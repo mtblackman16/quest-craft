@@ -54,11 +54,30 @@ echo "[4/4] Launching SPLIT..."
 echo "  Press Ctrl+C to stop."
 echo ""
 
+HANG_TIMEOUT=300  # kill game if unresponsive for 5 minutes
+
 crash_count=0
 while [ $crash_count -lt $MAX_CRASHES ]; do
     cd "$GAME_DIR"
-    python3 -m game.main
+    python3 -m game.main &
+    game_pid=$!
+
+    # Watchdog: kill hung process after timeout
+    (
+        sleep $HANG_TIMEOUT
+        if kill -0 $game_pid 2>/dev/null; then
+            echo "WATCHDOG: Game hung for ${HANG_TIMEOUT}s, killing PID $game_pid"
+            kill -9 $game_pid 2>/dev/null
+        fi
+    ) &
+    watchdog_pid=$!
+
+    wait $game_pid
     exit_code=$?
+
+    # Clean up watchdog
+    kill $watchdog_pid 2>/dev/null
+    wait $watchdog_pid 2>/dev/null
 
     if [ $exit_code -eq 0 ]; then
         echo ""
