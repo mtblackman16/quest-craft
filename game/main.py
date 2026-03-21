@@ -1907,16 +1907,19 @@ class Game:
 
 class SolidPlatform:
     """Simple platform when LevelManager isn't available."""
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, visible=True):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.visible = visible
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.w, self.h)
 
     def draw(self, surf, camera_offset=(0, 0)):
+        if not self.visible:
+            return
         ox, oy = camera_offset
         r = pygame.Rect(self.x + ox, self.y + oy, self.w, self.h)
         if r.right < 0 or r.left > SCREEN_W or r.bottom < 0 or r.top > SCREEN_H:
