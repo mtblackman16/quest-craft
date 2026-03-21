@@ -79,8 +79,9 @@ class Platform:
 class SolidPlatform(Platform):
     """Static stone platform. The bread and butter of every floor."""
 
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, visible=True):
         super().__init__(x, y, w, h, PlatformType.SOLID)
+        self.visible = visible
         self._cached_surf = None
         self._cached_floor = -1
 
@@ -118,6 +119,8 @@ class SolidPlatform(Platform):
         self._cached_floor = self.floor_num
 
     def draw(self, surf, camera_offset):
+        if not self.visible:
+            return
         ox, oy = camera_offset
         sx = self.x + ox
         sy = self.y + oy
@@ -187,6 +190,8 @@ class MovingPlatform(Platform):
 
     # ── draw ──
     def draw(self, surf, camera_offset):
+        if not self.visible:
+            return
         ox, oy = camera_offset
         sx = self.x + ox
         sy = self.y + oy
@@ -377,6 +382,8 @@ class ElevatorPlatform(Platform):
 
     # ── draw ──
     def draw(self, surf, camera_offset):
+        if not self.visible:
+            return
         ox, oy = camera_offset
         sx = self.x + ox
         sy = self.y + oy

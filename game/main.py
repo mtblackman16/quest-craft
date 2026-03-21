@@ -764,7 +764,7 @@ class Game:
                     wall_y = 0
                     wall_h = self._get_level_height()
                     self._boss_arena_walls = [
-                        SolidPlatform(arena_l - 20, wall_y, 20, wall_h),
+                        SolidPlatform(arena_l - 20, wall_y, 20, wall_h, visible=False),
                     ]
                     self.platforms.extend(self._boss_arena_walls)
                     # Push player into arena if they're at the edge
@@ -1525,9 +1525,9 @@ class Game:
             flame_h = 12 + math.sin(t * 0.008 + tx) * 4
             glow_a = int(18 + math.sin(t * 0.005 + tx * 0.3) * 6)
             self._torch_glow_cache.set_alpha(glow_a * 255 // 24)
-            self.screen.blit(self._torch_glow_cache, (tx - 50, 140))
+            self.screen.blit(self._torch_glow_cache, (tx - 50, 320))
             # Flame
-            points = [(tx - 4, 180), (tx, int(180 - flame_h)), (tx + 4, 180)]
+            points = [(tx - 4, 360), (tx, int(360 - flame_h)), (tx + 4, 360)]
             pygame.draw.polygon(self.screen, TORCH_AMBER, points)
 
     # ── Input handlers ──

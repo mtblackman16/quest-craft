@@ -630,7 +630,8 @@ class TheCleanser(Boss):
         by = int(self.y + oy)
 
         if self._sprite:
-            sprite = self._sprite if self.facing >= 0 else self._sprite_flipped
+            # Front-facing bottle — never flip (text would appear mirrored)
+            sprite = self._sprite
             if self.hit_timer > 0:
                 flash = sprite.copy()
                 flash.fill((255, 255, 255, 180), special_flags=pygame.BLEND_RGBA_MAX)
