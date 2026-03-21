@@ -36,7 +36,7 @@ class CombatSystem:
     def _emit(self, event, **kwargs):
         """Safe event_bus emit -- no-op if bus is None."""
         if self.event_bus:
-            self._emit(event, **kwargs)
+            self.event_bus.emit(event, **kwargs)
 
     def check_hits(self, player, enemies, projectiles, difficulty=Difficulty.NORMAL):
         """Main per-frame collision check.
