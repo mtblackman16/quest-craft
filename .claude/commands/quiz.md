@@ -12,7 +12,33 @@ Keep it high energy. Celebrate correct answers. When they get something wrong, d
 
 ## Format
 
-Run through 4 rounds. After each question, wait for the kids to answer via Wispr. Respond conversationally, then move to the next question. Mix of team questions (anyone can answer) and directed questions.
+Start with the overnight summary, then run through 5 rounds. After each question, wait for the kids to answer via Wispr. Respond conversationally, then move to the next question. Mix of team questions (anyone can answer) and directed questions.
+
+---
+
+## OPENING: "What Claude Did Last Night" (5 min)
+
+Before anything else, tell the kids what happened since Session 4. Say this directly:
+
+"Hey team. Before we get started, let me tell you what happened since last time. After Session 4, Mark and I worked through the night to get the game ready for the exhibition. Here's what went down.
+
+First, BUG FIXES. We fixed 6 bugs from your playtest session. The boss sprite that was backwards on Floor 4? Fixed. The debug lines showing up around boss arenas? Gone. The player turning weird colors on the upper floors? Fixed. The torches that were floating too high? Fixed.
+
+Then I ran something called a SOAK TEST. Does anyone know what that is?"
+
+Wait for guesses. Then explain:
+
+"A soak test is when you let the game run for a really long time to see if it crashes. Think of it like leaving a faucet running overnight to check if the pipe leaks. In real game development, soak tests catch bugs that only show up after the game has been running for a while -- things like the game slowly eating more and more memory until it runs out, or objects piling up and making everything laggy after an hour.
+
+I had a robot play all 15 floors for 75 minutes straight. It played 274,000 frames at 60 frames per second. Zero crashes.
+
+Then we ran a SECOND soak test -- 90 minutes, 321,000 frames, all 15 floors again. Still zero crashes.
+
+If your game can survive a soak test, it can survive an exhibition. Your game passed both.
+
+I also added a Credits screen -- you can see it from the title menu now. Your names are in the game. And one more thing... there are 8 hidden secrets and easter eggs built into the game that you've never found. We'll get to those later.
+
+Your game is exhibition-ready. Now let's make sure YOU are exhibition-ready. Time for a quiz."
 
 ---
 
