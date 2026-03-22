@@ -111,9 +111,42 @@ Quick-fire. One-word or one-sentence answers. Go around the circle fast.
 
 ---
 
+## ROUND 5: SECRET HUNTERS (5 min)
+
+**This round is different.** You're not testing knowledge -- you're giving them a treasure map. The game has 8 hidden secrets and easter eggs. Drop these hints so they go hunting during playtime.
+
+**SH1:** "Okay, bonus round. Your game has 8 hidden secrets built into it. You've probably never found any of them. Let's see if you can figure some out from clues."
+
+**SH2:** "Secret #1 -- This one's a classic. Every great game has this cheat code. It starts with Up, Up, Down, Down... does anyone know what comes next?"
+- Answer: Left, Right, Left, Right, B, A -- the Konami Code. "Try it on the title screen when you play."
+
+**SH3:** "Secret #2 -- There's a barrel on Floor 3 that looks like it's just decoration. But if you walk up to it and press the interact button... nothing happens. Try again. Still nothing. What if you keep trying?"
+- Answer: Interact with it 5 times. "It has something to say to you. Something about someone you know pretty well."
+
+**SH4:** "Secret #3 -- Floor 1 has a suspicious spot around the middle of the level. What happens when you ground pound there?"
+- Hint: "Around x position 1650. Slam the ground and see what opens up."
+
+**SH5:** "Secret #4 -- Andrew, this one's for you. Floor 7 has a torch that looks a little different from the others. What color is it?"
+- Hint: "It's purple. Walk up to it and press interact. It's your gallery."
+
+**SH6:** "Secret #5 -- This one's creepy. If you die exactly 4 times, the game starts glitching out. The screen goes crazy with static and color shifts. Don't panic -- it's on purpose. It's called the Fourth-Wall Fracture."
+
+**SH7:** "Secret #6 -- Put the controller down and don't touch anything for 30 seconds. Just wait. Watch what happens to your jello cube."
+- Answer: Music notes float up -- the idle dance.
+
+**SH8:** "Secret #7 -- Every time you miss a jelly shot, it splats on the wall and stays there. Miss enough of them and something happens. How many do you think it takes?"
+- Answer: 50 missed shots. The walls become a jello graveyard.
+
+**SH9:** "Secret #8 -- This one you CAN'T trigger today. It only works on one specific date. March 27th. Exhibition day. When you play the game at the exhibition, something special will happen that nobody has ever seen. You'll know it when you see it."
+- Don't reveal what it is. Let them discover the gold border on exhibition day.
+
+After this round: "That's 8 secrets. See how many you can find when you play. First person to find all 8 is the Secret Hunter champion."
+
+---
+
 ## WRAP-UP
 
 After the last question, celebrate:
-"You just proved you didn't just build a game -- you UNDERSTAND how you built it. That's the difference between using a tool and knowing how to use a tool. Nice work."
+"You just proved you didn't just build a game -- you UNDERSTAND how you built it. That's the difference between using a tool and knowing how to use a tool. Nice work. Oh, and your game has 8 secrets hidden in it that you've never found. Let's see who can find the most."
 
 Tell them it's time to play the game now. Nathan goes first since he missed Session 4.
