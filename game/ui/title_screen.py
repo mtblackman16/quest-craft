@@ -143,6 +143,7 @@ DIFFICULTY_OPTIONS = [
     (Difficulty.NORMAL, "Normal", "The intended experience"),
     (Difficulty.HARD, "Hard", "No checkpoints. +25% damage."),
     (Difficulty.EARTHQUAKE, "Earthquake Mode", "Timed. Nothing respawns. Good luck."),
+    ("credits", "Credits", "Meet the team behind SPLIT"),
 ]
 
 FADE_IN_FRAMES = 80

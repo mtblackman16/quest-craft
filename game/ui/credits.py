@@ -8,7 +8,7 @@ import pygame
 import math
 from game.engine.settings import (
     SCREEN_W, SCREEN_H, FPS,
-    CTRL_A, CTRL_Y, CTRL_PLUS,
+    CTRL_A, CTRL_B, CTRL_Y, CTRL_PLUS,
     AXIS_LX, STICK_DEADZONE,
     JELLO_GREEN, JELLO_GREEN_DIM, TORCH_AMBER, TORCH_GLOW, EMBER,
     WHITE, BLACK,
@@ -387,12 +387,16 @@ def run_credits(screen, clock, joystick=None):
                 if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
                     _run_post_credits(screen, clock, joystick)
                     return
+                if event.key == pygame.K_ESCAPE:
+                    return
                 if event.key == pygame.K_c:
                     interact_pressed = True
 
             if event.type == pygame.JOYBUTTONDOWN and joystick:
                 if event.button == CTRL_A or event.button == CTRL_PLUS:
                     _run_post_credits(screen, clock, joystick)
+                    return
+                if event.button == CTRL_B:
                     return
                 if event.button == CTRL_Y:
                     interact_pressed = True

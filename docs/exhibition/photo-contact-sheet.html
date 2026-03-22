@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPLIT -- Photos for Display Board</title>
+<style>
+  @page { size: portrait; margin: 0.4in; }
+  body {
+    margin: 0; padding: 0.4in;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: white; color: #333;
+  }
+  h1 { font-size: 14pt; margin: 0 0 5px 0; color: #1a1a2e; }
+  h2 { font-size: 11pt; margin: 15px 0 8px 0; color: #7de650; background: #1a1a2e; padding: 4px 10px; display: inline-block; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .photo-card {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    break-inside: avoid;
+  }
+  .photo-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .photo-card .label {
+    font-size: 8pt;
+    color: #666;
+    margin-top: 3px;
+    font-style: italic;
+  }
+  .cut-line {
+    border-top: 1px dashed #ccc;
+    margin: 10px 0;
+  }
+  .instructions {
+    font-size: 9pt;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  @media print {
+    .instructions { display: none; }
+  }
+</style>
+</head>
+<body>
+  <h1>SPLIT -- Display Board Photos</h1>
+  <p class="instructions">Print this page in color. Cut along dashed lines. Mount on tri-fold board.</p>
+
+  <h2>Team Photos</h2>
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-2-design-2026-03-08.jpg" alt="Session 2 Design Sprint">
+      <div class="label">Session 2: Design Sprint (Mar 8)</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-4-playtest-2026-03-15/team1.jpg" alt="Session 4 Playtest Team">
+      <div class="label">Session 4: Playtest Day (Mar 15)</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-2-controller-mapping-2026-03-08.jpg" alt="Controller Mapping">
+      <div class="label">Session 2: Controller Mapping</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-2-beastmode-break-2026-03-08.jpg" alt="Beast Mode Break">
+      <div class="label">Session 2: Recharge Break</div>
+    </div>
+  </div>
+
+  <div class="cut-line"></div>
+
+  <h2>Process: Bug Finding</h2>
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-4-playtest-2026-03-15/bug.jpg" alt="Bug Report">
+      <div class="label">Session 4: Finding Bugs</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/team-photos/session-4-playtest-2026-03-15/diff.jpg" alt="Code Diff">
+      <div class="label">Session 4: Reviewing Code Changes</div>
+    </div>
+  </div>
+
+  <div class="cut-line"></div>
+
+  <h2>Andrew's Original Artwork</h2>
+  <div class="grid-3">
+    <div class="photo-card">
+      <img src="../../assets/images/player/jello-cube-front.png" alt="Jello Cube Front">
+      <div class="label">Jello Cube (front view)</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/images/player/jello-cube-three-quarter.png" alt="Jello Cube 3/4">
+      <div class="label">Jello Cube (3/4 view)</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/images/enemies/sanitizer-warrior-front-view.png" alt="Sanitizer Warrior">
+      <div class="label">Sanitizer Warrior</div>
+    </div>
+  </div>
+
+  <div class="cut-line"></div>
+
+  <h2>Gameplay Screenshots</h2>
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor01-gameplay.png" alt="Floor 1">
+      <div class="label">Floor 1: Starting the Adventure</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor04-boss-fight.png" alt="Floor 4 Boss">
+      <div class="label">Floor 4: The Big Bottle Boss</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor06-gracie-boss.png" alt="Floor 6 Gracie">
+      <div class="label">Floor 6: Gracie Boss Fight</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor10-parkour.png" alt="Floor 10 Parkour">
+      <div class="label">Floor 10: Parkour Zone</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor15-final-boss.png" alt="Floor 15 Final Boss">
+      <div class="label">Floor 15: The Last Guard (Final Boss)</div>
+    </div>
+    <div class="photo-card">
+      <img src="../../assets/screenshots/exhibition/floor03-combat.png" alt="Floor 3 Combat">
+      <div class="label">Floor 3: Combat with Enemies</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -600,6 +600,14 @@ class Game:
                 result = run_title_screen(self.screen, self.clock, self.joystick)
             except Exception:
                 result = self._fallback_title()
+            if result == "credits":
+                # Show credits and loop back to title
+                try:
+                    from game.ui.credits import run_credits
+                    run_credits(self.screen, self.clock, self.joystick)
+                except Exception:
+                    pass
+                continue
             if result is not None:
                 break
             # Attract timeout — loop title screen again

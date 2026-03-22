@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPLIT -- Game Box Cover</title>
+<style>
+  @page { size: landscape; margin: 0; }
+  body {
+    margin: 0; padding: 0;
+    width: 11in; height: 8.5in;
+    background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 40%, #16213e 100%);
+    color: white;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+  /* Brick wall texture overlay */
+  body::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent, transparent 48px,
+        rgba(255,255,255,0.03) 48px, rgba(255,255,255,0.03) 50px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent, transparent 98px,
+        rgba(255,255,255,0.02) 98px, rgba(255,255,255,0.02) 100px
+      );
+    pointer-events: none;
+  }
+  /* Torch glow effects */
+  .glow-left, .glow-right {
+    position: absolute; top: 30%; width: 200px; height: 300px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    background: radial-gradient(circle, #f4a460, transparent);
+  }
+  .glow-left { left: 5%; }
+  .glow-right { right: 5%; }
+  .torch { position: absolute; top: 28%; font-size: 36pt; }
+  .torch-left { left: 8%; }
+  .torch-right { right: 8%; }
+  .character {
+    width: 280px; height: 280px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px rgba(125, 230, 80, 0.5));
+    image-rendering: auto;
+  }
+  h1 {
+    font-size: 100pt;
+    letter-spacing: 0.25em;
+    margin: 0;
+    color: #7de650;
+    text-shadow:
+      0 0 20px rgba(125, 230, 80, 0.6),
+      0 0 60px rgba(125, 230, 80, 0.3),
+      0 4px 0 #2a5f1a;
+    line-height: 1;
+  }
+  .subtitle {
+    font-size: 24pt;
+    color: #d4a456;
+    letter-spacing: 0.15em;
+    margin-top: 10px;
+    text-shadow: 0 0 15px rgba(212, 164, 86, 0.4);
+  }
+  .tagline {
+    font-size: 16pt;
+    color: #aaa;
+    margin-top: 30px;
+    letter-spacing: 0.1em;
+    font-style: italic;
+  }
+  .floor-indicator {
+    position: absolute;
+    bottom: 40px;
+    font-size: 11pt;
+    color: #555;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .team-credit {
+    position: absolute;
+    bottom: 15px;
+    font-size: 10pt;
+    color: #444;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="torch torch-left">&#x1F525;</div>
+  <div class="torch torch-right">&#x1F525;</div>
+
+  <img class="character" src="../../assets/images/player/jello-cube-three-quarter.png" alt="Jello Cube">
+
+  <h1>SPLIT</h1>
+  <p class="subtitle">A Jello Cube Adventure</p>
+  <p class="tagline">15 Floors. 5 Bosses. One way out.</p>
+
+  <p class="floor-indicator">Built by kids with AI</p>
+  <p class="team-credit">Ethan, Eins, Andrew & Nathan -- Quest Craft 2026</p>
+</body>
+</html>
