@@ -1101,18 +1101,14 @@ class Gracie(Boss):
     """Secret boss. Playful, fast, mimics player. 2 phases."""
 
     def __init__(self, x, y, arena_left=100, arena_right=1180):
-        super().__init__(x, y, w=90, h=110,
+        super().__init__(x, y, w=60, h=120,
                          health=GRACIE_HP,
                          boss_type=BossType.GRACIE)
         self.boss_name = "GRACIE"
         self.max_phases = 2
         self.phase_thresholds = [0.5]
-        self.color = (255, 180, 200)
+        self.color = (60, 180, 80)
         self.arena_bounds = (arena_left, arena_right)
-
-        # Photo portraits
-        self._portrait_happy = load_portrait('bosses/gracie-happy-face.jpg', 80)
-        self._portrait_battle = load_portrait('bosses/gracie-battle-face.jpg', 80)
 
         # Movement
         self.speed = 4.0
@@ -1350,121 +1346,148 @@ class Gracie(Boss):
         bx = int(self.x + ox)
         by = int(self.y + oy)
 
-        # Draw portrait in top-left corner during fight
-        portrait = self._portrait_battle if self.phase >= 2 else self._portrait_happy
-        if portrait:
-            surf.blit(portrait, (10, 10))
-
         # Phase color
         if self.phase >= 2:
             base_color = (
-                min(255, self.color[0] + 20),
-                max(0, self.color[1] - 60),
-                max(0, self.color[2] - 40),
+                max(0, self.color[0] - 20),
+                min(255, self.color[1] + 30),
+                max(0, self.color[2] - 20),
             )
         else:
             base_color = self.color
 
         color = (255, 255, 255) if self.hit_timer > 0 else base_color
+        outline = (30, 100, 40)
 
-        # Round body (scaled up for visibility)
         body_cx = bx + self.w // 2
-        body_cy = by + self.h // 2 + 4
-        body_rx = self.w // 2
-        body_ry = self.h // 2 - 4
-
-        # Bounce animation
         bounce = int(math.sin(self.frame_count * 0.15) * 3)
-        body_cy += bounce
 
-        pygame.draw.ellipse(surf, color,
-                            (body_cx - body_rx, body_cy - body_ry,
-                             body_rx * 2, body_ry * 2))
+        # ── Muscular humanoid body ──
 
-        # Outline
-        pygame.draw.ellipse(surf, (200, 120, 140),
-                            (body_cx - body_rx, body_cy - body_ry,
-                             body_rx * 2, body_ry * 2), 2)
+        # Legs (thick, planted)
+        leg_top = by + 76 + bounce
+        leg_h = 40
+        # Left leg
+        pygame.draw.rect(surf, color, (bx + 6, leg_top, 16, leg_h))
+        pygame.draw.rect(surf, outline, (bx + 6, leg_top, 16, leg_h), 2)
+        # Right leg
+        pygame.draw.rect(surf, color, (bx + self.w - 22, leg_top, 16, leg_h))
+        pygame.draw.rect(surf, outline, (bx + self.w - 22, leg_top, 16, leg_h), 2)
+        # Feet
+        pygame.draw.ellipse(surf, color, (bx + 2, leg_top + leg_h - 4, 22, 10))
+        pygame.draw.ellipse(surf, color, (bx + self.w - 24, leg_top + leg_h - 4, 22, 10))
 
-        # Legs (small stubs)
-        pygame.draw.ellipse(surf, color,
-                            (bx + 4, by + self.h - 10 + bounce, 10, 10))
-        pygame.draw.ellipse(surf, color,
-                            (bx + self.w - 14, by + self.h - 10 + bounce, 10, 10))
+        # Torso (tall trapezoid — broad shoulders, narrow waist)
+        torso_top = by + 24 + bounce
+        torso_pts = [
+            (body_cx - 22, torso_top),       # top-left (shoulders)
+            (body_cx + 22, torso_top),       # top-right
+            (body_cx + 14, torso_top + 54),  # bottom-right (waist)
+            (body_cx - 14, torso_top + 54),  # bottom-left
+        ]
+        pygame.draw.polygon(surf, color, torso_pts)
+        pygame.draw.polygon(surf, outline, torso_pts, 2)
 
-        # Arms (small stubs)
-        pygame.draw.ellipse(surf, color,
-                            (bx - 4, body_cy - 4, 10, 8))
-        pygame.draw.ellipse(surf, color,
-                            (bx + self.w - 6, body_cy - 4, 10, 8))
+        # Chest definition (V shape for muscularity)
+        chest_y = torso_top + 10
+        pygame.draw.line(surf, outline, (body_cx, chest_y),
+                         (body_cx - 12, chest_y + 18), 2)
+        pygame.draw.line(surf, outline, (body_cx, chest_y),
+                         (body_cx + 12, chest_y + 18), 2)
 
-        # Big eyes
-        eye_y = body_cy - 6
-        eye_lx = body_cx - 8
-        eye_rx = body_cx + 4
-        pygame.draw.ellipse(surf, WHITE, (eye_lx, eye_y, 10, 12))
-        pygame.draw.ellipse(surf, WHITE, (eye_rx, eye_y, 10, 12))
-        # Pupils
+        # Arms (thick, muscular)
+        arm_y = torso_top + 4
+        # Left arm
+        pygame.draw.rect(surf, color, (bx - 10, arm_y, 14, 36))
+        pygame.draw.rect(surf, outline, (bx - 10, arm_y, 14, 36), 2)
+        # Left fist
+        pygame.draw.circle(surf, color, (bx - 3, arm_y + 38), 8)
+        pygame.draw.circle(surf, outline, (bx - 3, arm_y + 38), 8, 2)
+        # Right arm
+        pygame.draw.rect(surf, color, (bx + self.w - 4, arm_y, 14, 36))
+        pygame.draw.rect(surf, outline, (bx + self.w - 4, arm_y, 14, 36), 2)
+        # Right fist
+        pygame.draw.circle(surf, color, (bx + self.w + 3, arm_y + 38), 8)
+        pygame.draw.circle(surf, outline, (bx + self.w + 3, arm_y + 38), 8, 2)
+
+        # Head
+        head_cx = body_cx
+        head_cy = by + 14 + bounce
+        pygame.draw.ellipse(surf, color, (head_cx - 14, head_cy - 14, 28, 28))
+        pygame.draw.ellipse(surf, outline, (head_cx - 14, head_cy - 14, 28, 28), 2)
+
+        # Eyes (narrow, menacing)
+        eye_y = head_cy - 3
+        eye_lx = head_cx - 9
+        eye_rx = head_cx + 3
+        pygame.draw.ellipse(surf, (200, 220, 200), (eye_lx, eye_y, 8, 5))
+        pygame.draw.ellipse(surf, (200, 220, 200), (eye_rx, eye_y, 8, 5))
+        # Pupils (red for menace)
         pupil_off = self.facing * 2
-        pygame.draw.circle(surf, (40, 40, 80),
-                           (eye_lx + 5 + pupil_off, eye_y + 6), 3)
-        pygame.draw.circle(surf, (40, 40, 80),
-                           (eye_rx + 5 + pupil_off, eye_y + 6), 3)
+        pygame.draw.circle(surf, (180, 30, 30),
+                           (eye_lx + 4 + pupil_off, eye_y + 3), 2)
+        pygame.draw.circle(surf, (180, 30, 30),
+                           (eye_rx + 4 + pupil_off, eye_y + 3), 2)
 
         # Mouth
-        mouth_y = body_cy + 6
+        mouth_y = head_cy + 5
         if self.phase == 1:
-            # Smile
-            pygame.draw.arc(surf, (180, 60, 80),
-                            (body_cx - 8, mouth_y - 4, 16, 10),
-                            3.14, 6.28, 2)
+            # Snarl
+            pygame.draw.line(surf, outline,
+                             (head_cx - 6, mouth_y), (head_cx + 6, mouth_y), 2)
+            # Fangs
+            pygame.draw.line(surf, WHITE,
+                             (head_cx - 4, mouth_y), (head_cx - 3, mouth_y + 3), 2)
+            pygame.draw.line(surf, WHITE,
+                             (head_cx + 4, mouth_y), (head_cx + 3, mouth_y + 3), 2)
         else:
-            # Angry frown
-            pygame.draw.arc(surf, (180, 60, 80),
-                            (body_cx - 8, mouth_y, 16, 10),
-                            0, 3.14, 2)
-            # Angry eyebrows
-            pygame.draw.line(surf, (180, 60, 80),
-                             (eye_lx, eye_y - 3),
-                             (eye_lx + 10, eye_y - 6), 2)
-            pygame.draw.line(surf, (180, 60, 80),
-                             (eye_rx + 10, eye_y - 3),
-                             (eye_rx, eye_y - 6), 2)
+            # Angry open mouth with fangs
+            pygame.draw.ellipse(surf, (40, 20, 20),
+                                (head_cx - 7, mouth_y - 2, 14, 8))
+            pygame.draw.line(surf, WHITE,
+                             (head_cx - 5, mouth_y - 1), (head_cx - 3, mouth_y + 4), 2)
+            pygame.draw.line(surf, WHITE,
+                             (head_cx + 5, mouth_y - 1), (head_cx + 3, mouth_y + 4), 2)
+            # Angry eyebrows (V shape)
+            pygame.draw.line(surf, outline,
+                             (eye_lx, eye_y - 1),
+                             (eye_lx + 8, eye_y - 4), 2)
+            pygame.draw.line(surf, outline,
+                             (eye_rx + 8, eye_y - 1),
+                             (eye_rx, eye_y - 4), 2)
 
-        # Phase 2: steam puffs
+        # Phase 2: green energy wisps
         if self.phase >= 2:
             for i in range(3):
                 t = self.frame_count * 0.05 + i * 2.0
                 sx = body_cx - 6 + i * 6 + int(math.sin(t) * 3)
                 sy = by - 4 - i * 4 + bounce
                 alpha = max(0, 120 - i * 40)
-                steam = pygame.Surface((8, 8), pygame.SRCALPHA)
-                pygame.draw.circle(steam, (255, 255, 255, alpha), (4, 4), 4)
-                surf.blit(steam, (sx, sy))
+                wisp = pygame.Surface((8, 8), pygame.SRCALPHA)
+                pygame.draw.circle(wisp, (100, 255, 120, alpha), (4, 4), 4)
+                surf.blit(wisp, (sx, sy))
 
         # Tantrum indicator
         if self.tantrum_active:
-            # Red glow
             tantrum_surf = pygame.Surface((self.w + 16, self.h + 16),
                                          pygame.SRCALPHA)
             pulse = int(80 + 40 * math.sin(self.frame_count * 0.3))
-            pygame.draw.ellipse(tantrum_surf, (255, 100, 100, pulse),
+            pygame.draw.ellipse(tantrum_surf, (100, 255, 100, pulse),
                                 (0, 0, self.w + 16, self.h + 16))
             surf.blit(tantrum_surf, (bx - 8, by - 8 + bounce))
 
         # Cannonball visual
         if self.cannonball_state == "jump":
-            # Tuck into ball
             pygame.draw.circle(surf, color,
-                               (body_cx, body_cy), self.w // 2 + 2)
+                               (body_cx, by + self.h // 2 + bounce),
+                               self.w // 2 + 2)
 
         # Tag sprint visual
         if self.tag_active:
-            # Speed lines
             for i in range(3):
                 lx = bx - self.facing * (10 + i * 8)
-                ly = body_cy - 4 + i * 4
-                pygame.draw.line(surf, (255, 255, 255, 120),
+                ly = by + self.h // 2 + bounce - 4 + i * 4
+                pygame.draw.line(surf, (100, 255, 100, 120),
                                  (lx, ly), (lx - self.facing * 12, ly), 2)
 
     def _draw_defeat(self, surf, camera_offset):
@@ -1481,19 +1504,24 @@ class Gracie(Boss):
         cx = bx + self.w // 2
         cy = by + self.h // 2 - int(bounce)
 
-        # Rotating body
+        # Rotating body (muscular silhouette)
         rot_surf = pygame.Surface((self.w + 4, self.h + 4), pygame.SRCALPHA)
-        pygame.draw.ellipse(rot_surf, self.color,
-                            (2, 2, self.w, self.h - 8))
-        # Smile
-        pygame.draw.arc(rot_surf, (180, 60, 80),
-                        (self.w // 2 - 8, self.h // 2 - 2, 16, 10),
-                        3.14, 6.28, 2)
-        # Eyes (happy)
-        pygame.draw.ellipse(rot_surf, WHITE,
-                            (self.w // 2 - 10, self.h // 2 - 10, 8, 10))
-        pygame.draw.ellipse(rot_surf, WHITE,
-                            (self.w // 2 + 2, self.h // 2 - 10, 8, 10))
+        # Torso
+        torso_pts = [
+            (self.w // 2 - 18 + 2, 20),
+            (self.w // 2 + 18 + 2, 20),
+            (self.w // 2 + 12 + 2, 74),
+            (self.w // 2 - 12 + 2, 74),
+        ]
+        pygame.draw.polygon(rot_surf, self.color, torso_pts)
+        # Head
+        pygame.draw.circle(rot_surf, self.color,
+                           (self.w // 2 + 2, 14), 12)
+        # Eyes (defeated)
+        pygame.draw.ellipse(rot_surf, (200, 220, 200),
+                            (self.w // 2 - 7, 10, 6, 4))
+        pygame.draw.ellipse(rot_surf, (200, 220, 200),
+                            (self.w // 2 + 3, 10, 6, 4))
 
         rotated = pygame.transform.rotate(rot_surf, math.degrees(angle))
         rot_rect = rotated.get_rect(center=(cx, cy))
