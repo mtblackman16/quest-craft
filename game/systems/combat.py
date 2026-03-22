@@ -160,7 +160,7 @@ class CombatSystem:
     def _enemy_projs_vs_player(self, player, enemy_projs, difficulty, active_pill=None):
         """Check enemy projectiles against the player."""
         events = []
-        if not hasattr(player, 'alive') or (hasattr(player, 'health') and player.health <= 0):
+        if not hasattr(player, 'health') or player.health <= 0:
             return events
 
         player_rect = player.get_rect()
@@ -193,7 +193,7 @@ class CombatSystem:
     def _hazards_vs_player(self, player, hazards, difficulty, active_pill=None):
         """Check ground hazards (trails, puddles) against the player."""
         events = []
-        if not hasattr(player, 'alive') or (hasattr(player, 'health') and player.health <= 0):
+        if not hasattr(player, 'health') or player.health <= 0:
             return events
 
         player_rect = player.get_rect()
