@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Meet the Team — Student Profiles</title>
+<style>
+  @page { margin: 0.4in; size: letter; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; padding: 0.25in; color: #1a1a2e; max-width: 7.5in; }
+  h1 { text-align: center; font-size: 22pt; color: #7de650; margin-bottom: 0.03in; }
+  .subtitle { text-align: center; font-size: 11pt; color: #888; margin-bottom: 0.06in; }
+  .inquiry { text-align: center; font-size: 10pt; color: #555; font-style: italic; margin-bottom: 0.25in; padding: 0.08in 0.15in; background: #f0fff0; border-radius: 6px; border: 1px solid #7de650; }
+  .inquiry strong { color: #7de650; }
+
+  .profiles { display: flex; flex-wrap: wrap; gap: 0.15in; justify-content: center; }
+  .profile {
+    width: 3.3in;
+    background: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+  .profile img {
+    width: 100%;
+    height: 2.8in;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+  .profile .info {
+    padding: 0.1in 0.15in 0.12in;
+  }
+  .profile .name {
+    font-size: 16pt;
+    font-weight: bold;
+    color: #7de650;
+    margin-bottom: 1px;
+  }
+  .profile .details {
+    font-size: 10pt;
+    color: #666;
+    line-height: 1.4;
+  }
+  .profile .role {
+    font-size: 10pt;
+    color: #d4a456;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .profile .quote {
+    font-size: 9pt;
+    font-style: italic;
+    color: #444;
+    margin-top: 0.04in;
+    padding-top: 0.04in;
+    border-top: 1px solid #ddd;
+    line-height: 1.3;
+  }
+
+  .team-photo {
+    margin-top: 0.2in;
+    text-align: center;
+  }
+  .team-photo img {
+    max-width: 100%;
+    max-height: 3.2in;
+    border-radius: 8px;
+    border: 2px solid #7de650;
+  }
+  .team-photo .caption {
+    font-size: 9pt;
+    color: #888;
+    font-style: italic;
+    margin-top: 0.04in;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 9pt;
+    color: #aaa;
+    margin-top: 0.15in;
+    padding-top: 0.06in;
+    border-top: 1px solid #eee;
+  }
+</style>
+</head>
+<body>
+  <h1>Meet the Team</h1>
+  <div class="subtitle">Springer Elementary School &nbsp;|&nbsp; LASD Illuminate Inquiry Exhibition 2026</div>
+  <div class="inquiry"><strong>Our Inquiry Question:</strong> &ldquo;What can kids create when they have AI as an engineering partner?&rdquo;</div>
+
+  <div class="profiles">
+    <div class="profile">
+      <img src="../../assets/team-photos/ethan-portrait-2026-03-22.jpg" alt="Ethan">
+      <div class="info">
+        <div class="name">Ethan</div>
+        <div class="details">Age 9 &nbsp;|&nbsp; 3rd Grade &nbsp;|&nbsp; Ms. Mora</div>
+        <div class="role">Co-Creator &amp; Game Designer</div>
+        <div class="quote">&ldquo;You need context. If you just say &lsquo;make a game&rsquo;, then it wouldn&rsquo;t know what game to make.&rdquo;</div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <img src="../../assets/team-photos/eins-portrait-2026-03-22.jpg" alt="Eins">
+      <div class="info">
+        <div class="name">Eins</div>
+        <div class="details">Age 12 &nbsp;|&nbsp; 6th Grade &nbsp;|&nbsp; Mrs. Jones</div>
+        <div class="role">Co-Creator &amp; Game Designer</div>
+        <div class="quote">&ldquo;Kids can design a game that can be extremely successful since kids play games themselves.&rdquo;</div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <img src="../../assets/team-photos/andrew-portrait-2026-03-22.jpg" alt="Andrew">
+      <div class="info">
+        <div class="name">Andrew</div>
+        <div class="details">Age 12 &nbsp;|&nbsp; 6th Grade &nbsp;|&nbsp; Mrs. Jones</div>
+        <div class="role">Artist &amp; Co-Creator</div>
+        <div class="quote">&ldquo;I should not worry so much about how the designs turn out, and just go with the flow.&rdquo;</div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <img src="../../assets/team-photos/nathan-portrait-2026-03-22.jpg" alt="Nathan">
+      <div class="info">
+        <div class="name">Nathan</div>
+        <div class="details">Age 9 &nbsp;|&nbsp; 3rd Grade &nbsp;|&nbsp; Ms. Mora</div>
+        <div class="role">Co-Creator &amp; Game Designer</div>
+        <div class="quote">&ldquo;Even if the Raspberry Pi breaks, you can use GitHub to still have the code.&rdquo;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-photo">
+    <img src="../../assets/team-photos/team-portrait-2026-03-22.jpg" alt="The Quest Craft team">
+    <div class="caption">The Quest Craft team &mdash; Session 5, March 22, 2026</div>
+  </div>
+
+  <div class="footer">
+    Quest Craft &nbsp;|&nbsp; Built with Claude (AI) as our engineering partner &nbsp;|&nbsp; Raspberry Pi 5 &nbsp;|&nbsp; Python + Pygame
+  </div>
+</body>
+</html>
