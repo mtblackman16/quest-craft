@@ -4,47 +4,44 @@
 <meta charset="utf-8">
 <title>Our Learning Journey</title>
 <style>
-  @page { size: 8.5in 11in; margin: 0.4in; }
+  @page { size: 8.5in 11in; margin: 0.3in; }
+  @media print { @page { margin: 0; } }
   body { font-family: 'Segoe UI', Arial, sans-serif; padding: 0.15in; color: #ffffff; background: #0f0f1f; }
-  h2 { text-align: center; font-size: 22pt; color: #7de650; margin-bottom: 0.06in; text-shadow: 0 0 12px rgba(125,230,80,0.2); }
-  .subtitle { text-align: center; font-size: 9pt; color: rgba(255,255,255,0.4); margin-bottom: 0.15in; font-style: italic; }
+  h2 { text-align: center; font-size: 20pt; color: #7de650; margin-bottom: 0.06in; text-shadow: 0 0 12px rgba(125,230,80,0.2); }
+  .inquiry { text-align: center; margin-bottom: 0.15in; padding: 0.1in; background: rgba(255,255,255,0.05); border: 1px solid rgba(125,230,80,0.3); border-radius: 10px; }
+  .inquiry .label { font-size: 8pt; color: #d4a456; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.04in; }
+  .inquiry .q { font-size: 14pt; font-weight: bold; color: #ffffff; }
 
-  .phase { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 0.12in; margin-bottom: 0.1in; border-left: 5px solid #ccc; }
+  .phase { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 0.1in; margin-bottom: 0.08in; border-left: 4px solid #ccc; }
   .phase.p1 { border-left-color: #7de650; }
   .phase.p2 { border-left-color: #4ea8de; }
   .phase.p3 { border-left-color: #d4a456; }
   .phase.p4 { border-left-color: #c44b6c; }
-
-  .phase .num { font-size: 8pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.03in; }
+  .phase .num { font-size: 7pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; }
   .phase.p1 .num { color: #7de650; }
   .phase.p2 .num { color: #4ea8de; }
   .phase.p3 .num { color: #d4a456; }
   .phase.p4 .num { color: #c44b6c; }
-
-  .phase .question { font-size: 12pt; font-weight: bold; color: #ffffff; margin-bottom: 0.03in; }
-  .phase .answer { font-size: 9pt; color: rgba(255,255,255,0.8); line-height: 1.4; }
+  .phase .question { font-size: 12pt; font-weight: bold; color: #ffffff; margin: 0.02in 0; }
+  .phase .answer { font-size: 9pt; color: rgba(255,255,255,0.8); line-height: 1.3; }
   .phase .answer strong { color: #ffffff; }
-  .phase .answer em { font-style: italic; color: rgba(255,255,255,0.6); }
-  .phase .evidence { font-size: 7pt; color: rgba(255,255,255,0.3); margin-top: 0.04in; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.03in; }
-
-  .quote { background: rgba(255,255,255,0.03); border-radius: 6px; padding: 0.06in 0.1in; margin: 0.06in 0 0; border-left: 3px solid #7de650; }
-  .quote .text { font-size: 9pt; font-style: italic; color: rgba(255,255,255,0.75); }
-  .quote .name { font-size: 8pt; color: #7de650; font-weight: bold; margin-top: 2px; }
+  .quote { background: rgba(255,255,255,0.03); border-radius: 6px; padding: 0.04in 0.08in; margin-top: 0.04in; border-left: 3px solid #7de650; }
+  .quote .text { font-size: 8pt; font-style: italic; color: rgba(255,255,255,0.7); }
+  .quote .name { font-size: 7pt; color: #7de650; font-weight: bold; }
 </style>
 </head>
 <body>
   <h2>Our Learning Journey</h2>
-  <p class="subtitle">"The story of how you got there - photos, sketches, notes, false starts and breakthroughs - helps others understand the richness of your learning journey."</p>
+
+  <div class="inquiry">
+    <div class="label">Our Inquiry Question</div>
+    <div class="q">What can kids create when they have AI as an engineering partner?</div>
+  </div>
 
   <div class="phase p1">
     <div class="num">Phase 1 - Investigate</div>
     <div class="question">What did we investigate and why?</div>
-    <div class="answer">
-      <strong>Our question:</strong> "What can kids create when they have professional tools and an AI engineering partner?"
-      <br><br>
-      We wanted to find out if four kids (ages 9-12) could design and build a <em>real</em> video game - not a tutorial or a template, but an original game with our own characters, levels, bosses, and story. We used Claude (an AI) as our engineer: we told it what to build, and it wrote the code.
-    </div>
-    <div class="evidence">Evidence: Game concept document, design PRDs, artist brief for Andrew</div>
+    <div class="answer">Can four kids (ages 9-12) design and build a real video game using AI as their engineering partner?</div>
     <div class="quote" style="border-left-color: #7de650;">
       <div class="text">"Kids can design a game that can be extremely successful since kids play games themselves and have great taste in games."</div>
       <div class="name">- Eins, 12</div>
@@ -54,14 +51,7 @@
   <div class="phase p2">
     <div class="num">Phase 2 - Discover</div>
     <div class="question">What did we learn?</div>
-    <div class="answer">
-      <strong>Game design is harder than coding.</strong> Coming up with good ideas was the easy part. Making them work <em>together</em> - balanced difficulty, controls that feel right, levels that teach without tutorials - took real thought and lots of testing.
-      <br><br>
-      <strong>Communication IS the skill.</strong> The AI can write any code, but only if you describe what you want clearly. Learning to say "the jump feels too floaty" instead of "it's broken" was the biggest skill we developed.
-      <br><br>
-      <strong>Iteration makes everything better.</strong> Nothing was right on the first try. We played, found problems, described them, watched them get fixed, and repeated - dozens of times. Each loop made the game better.
-    </div>
-    <div class="evidence">Evidence: Build Record sheets, bug lists, gameplay tuning logs, overnight AI test results</div>
+    <div class="answer"><strong>Game design is harder than coding.</strong> The AI can write any code, but only if you describe what you want clearly. Learning to say "the jump feels too floaty" instead of "it's broken" was the biggest skill we developed.</div>
     <div class="quote" style="border-left-color: #4ea8de;">
       <div class="text">"How quickly Claude could understand us and create a functioning game, even if it isn't perfect."</div>
       <div class="name">- Andrew, 12</div>
@@ -71,16 +61,9 @@
   <div class="phase p3">
     <div class="num">Phase 3 - Reflect</div>
     <div class="question">How did we learn it?</div>
-    <div class="answer">
-      We followed a 5-session process: <strong>Dream, Design, Build, Test, Ship.</strong>
-      <br><br>
-      In every session, we talked to the AI like a teammate. We used voice (Wispr Flow) to explain our ideas naturally. We <em>played</em> the game after every change and gave honest feedback. We rotated roles so everyone got to play, report bugs, and direct the AI.
-      <br><br>
-      The most powerful moment: watching our words change the code. One kid says "the ground pound should hit more enemies," Claude changes a number, we restart the game, and it's different. That feedback loop - speak, change, test - is how we learned everything.
-    </div>
-    <div class="evidence">Evidence: Learning reflections, process photos, session recordings</div>
+    <div class="answer">We followed 5 sessions: <strong>Dream, Design, Build, Test, Ship.</strong> We talked to AI like a teammate, played after every change, and gave honest feedback. Speak, change, test - that loop is how we learned everything.</div>
     <div class="quote" style="border-left-color: #d4a456;">
-      <div class="text">"You need context. If you just say 'make a game', then it wouldn't know what game to make or how to make it."</div>
+      <div class="text">"You need context. If you just say 'make a game', then it wouldn't know what game to make."</div>
       <div class="name">- Ethan, 9</div>
     </div>
   </div>
@@ -88,12 +71,7 @@
   <div class="phase p4">
     <div class="num">Phase 4 - Share</div>
     <div class="question">What are we sharing today?</div>
-    <div class="answer">
-      <strong>A real, playable game</strong> - 15 floors, 5 bosses, original sound and music, running on a Raspberry Pi with a Nintendo controller.
-      <br><br>
-      <strong>And the story of how we built it</strong> - 4 kids who had never made a game before, working with AI, learning that the hardest part isn't the technology. It's knowing what you want and finding the right words to ask for it.
-    </div>
-    <div class="evidence">Try the game!</div>
+    <div class="answer"><strong>A real, playable game</strong> - 15 floors, 5 bosses, running on a Raspberry Pi. And the story of how 4 kids built it with AI.</div>
     <div class="quote" style="border-left-color: #c44b6c;">
       <div class="text">"Being able to create the game and show it to the people at Illuminate."</div>
       <div class="name">- Nathan, 9</div>
