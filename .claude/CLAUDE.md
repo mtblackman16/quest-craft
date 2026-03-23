@@ -10,8 +10,8 @@ We are a team of young game designers building a real, playable video game on a 
 
 **Team Members:**
 - **Ethan** (9) — Co-creator & Game Designer
-- **Eins** (11) — Co-creator & Game Designer
-- **Andrew** (11) — Artist & Visual Designer
+- **Eins** (12) — Co-creator & Game Designer
+- **Andrew** (12) — Artist & Co-creator
 - **Nathan** (9) — Co-creator & Game Designer
 - **Mark** — Team Advisor (Ethan's dad)
 
