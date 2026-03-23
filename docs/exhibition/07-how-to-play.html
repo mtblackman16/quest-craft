@@ -4,47 +4,67 @@
 <meta charset="UTF-8">
 <title>How to Play - SPLIT</title>
 <style>
-  @media print {
-    @page { size: 11in 8.5in; margin: 0; }
-    body { margin: 0.3in; }
-  }
+  @page { size: 11in 8.5in; margin: 0; }
+  @media print { @page { margin: 0; } }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
+    margin: 0;
+    padding: 0.3in;
+    overflow: hidden;
     width: 11in;
     height: 8.5in;
-    padding: 0.3in;
     background: #0f0f1f;
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #ffffff;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
-  h1 {
+  /* ---- TOP SECTION ---- */
+  .top {
     text-align: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .top h1 {
     font-size: 22pt;
     color: #7de650;
-    margin-bottom: 2px;
     letter-spacing: 1px;
+    margin-bottom: 1px;
   }
 
-  .subtitle {
-    text-align: center;
+  .top .subtitle {
     font-size: 11pt;
     color: #d4a456;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
 
-  .content {
+  .objective-card {
+    background: rgba(125, 230, 80, 0.08);
+    border: 1px solid rgba(125, 230, 80, 0.25);
+    border-radius: 8px;
+    padding: 8px 24px;
+    display: inline-block;
+    max-width: 8.4in;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    color: #e0e0e0;
+  }
+
+  /* ---- MIDDLE SECTION ---- */
+  .middle {
     display: flex;
     gap: 20px;
-    height: calc(100% - 54px);
+    flex: 1;
+    min-height: 0;
   }
 
-  /* ---- LEFT: Controller Diagram ---- */
+  /* -- Left: Controller -- */
   .controller-side {
-    flex: 0 0 55%;
+    flex: 0 0 50%;
     position: relative;
   }
 
@@ -54,7 +74,6 @@
     height: 100%;
   }
 
-  /* Controller body */
   .ctrl {
     position: absolute;
     top: 50%;
@@ -75,7 +94,6 @@
     box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   }
 
-  /* Grips */
   .grip {
     position: absolute;
     bottom: -28px;
@@ -89,7 +107,6 @@
   .grip.left { left: 38px; }
   .grip.right { right: 38px; }
 
-  /* Triggers (ZL / ZR) */
   .trigger {
     position: absolute;
     top: -24px;
@@ -102,7 +119,6 @@
   .trigger.left { left: 36px; }
   .trigger.right { right: 36px; }
 
-  /* Bumpers (L / R) */
   .bumper {
     position: absolute;
     top: -8px;
@@ -115,7 +131,6 @@
   .bumper.left { left: 28px; }
   .bumper.right { right: 28px; }
 
-  /* Thumbsticks */
   .stick {
     position: absolute;
     width: 48px;
@@ -136,7 +151,6 @@
   .stick.left { top: 32px; left: 50px; }
   .stick.right { top: 90px; right: 64px; }
 
-  /* D-Pad */
   .dpad {
     position: absolute;
     top: 100px;
@@ -160,7 +174,6 @@
     border-radius: 3px;
   }
 
-  /* ABXY face buttons */
   .abxy {
     position: absolute;
     top: 28px;
@@ -187,7 +200,6 @@
   .face-btn.x { top: 22px; left: 0; }
   .face-btn.y { top: 0; left: 22px; }
 
-  /* Plus / Minus */
   .btn-plus, .btn-minus {
     position: absolute;
     top: 42px;
@@ -200,158 +212,114 @@
   .btn-plus { left: 178px; }
   .btn-minus { left: 130px; }
 
-  /* ---- Callout labels ---- */
-  .callout {
-    position: absolute;
-    white-space: nowrap;
-    line-height: 1.25;
-  }
-  .callout .action {
-    color: #7de650;
-    font-size: 9.5pt;
-    font-weight: 700;
-    display: block;
-  }
-  .callout .button {
-    color: #999;
-    font-size: 7.5pt;
-    display: block;
-  }
-
-  .line {
-    position: absolute;
-    background: rgba(125,230,80,0.35);
-  }
-
-  /* Callout positions (relative to controller-wrap) */
-
-  /* Move - left side, pointing to stick + dpad area */
-  .co-move { top: 160px; left: 6px; }
-  .ln-move { top: 168px; left: 90px; width: 48px; height: 1px; }
-
-  /* ZL - top left */
-  .co-zl { top: 34px; left: 6px; }
-  .ln-zl { top: 42px; left: 108px; width: 32px; height: 1px; }
-
-  /* ZR - top right */
-  .co-zr { top: 34px; right: 6px; text-align: right; }
-  .ln-zr { top: 42px; right: 106px; width: 32px; height: 1px; }
-
-  /* Y - Interact */
-  .co-y { top: 72px; right: 6px; text-align: right; }
-  .ln-y { top: 80px; right: 86px; width: 36px; height: 1px; }
-
-  /* B - Jelly Shot */
-  .co-b { top: 108px; right: 6px; text-align: right; }
-  .ln-b { top: 116px; right: 80px; width: 42px; height: 1px; }
-
-  /* A - Jump */
-  .co-a { top: 148px; right: 6px; text-align: right; }
-  .ln-a { top: 142px; right: 94px; width: 28px; height: 1px; }
-  .ln-a-v { top: 142px; right: 94px; width: 1px; height: 14px; }
-
-  /* X - Eat/Heal */
-  .co-x { top: 108px; left: 210px; text-align: right; }
-  .ln-x { top: 116px; left: 248px; width: 1px; height: 0; }
-
-  /* Ground Pound - bottom right */
-  .co-gp { bottom: 24px; right: 6px; text-align: right; }
-  .ln-gp { bottom: 52px; right: 100px; width: 1px; height: 18px; }
-
-  /* Pause - center */
-  .co-pause { top: 104px; left: 50%; margin-left: 12px; }
-  .ln-pause { top: 100px; left: 50%; margin-left: 8px; width: 1px; height: 12px; }
-  .ln-pause-h { top: 100px; left: 50%; margin-left: -2px; width: 10px; height: 1px; }
-
-  /* ---- RIGHT: Tips panel ---- */
-  .tips-side {
+  /* -- Right: Controls Table -- */
+  .controls-side {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 14px;
   }
 
-  .tips-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(125,230,80,0.3);
+  .controls-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(125, 230, 80, 0.2);
     border-radius: 10px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     flex: 1;
-  }
-
-  .tips-card h2 {
-    color: #7de650;
-    font-size: 15pt;
-    margin-bottom: 14px;
-  }
-
-  .tips-card ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .tips-card ul li {
-    position: relative;
-    padding-left: 18px;
-    margin-bottom: 14px;
-    font-size: 10.5pt;
-    line-height: 1.5;
-    color: #e0e0e0;
-  }
-
-  .tips-card ul li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 6px;
-    width: 8px;
-    height: 8px;
-    background: #7de650;
-    border-radius: 50%;
-    opacity: 0.7;
-  }
-
-  /* Quick reference grid */
-  .ref-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(125,230,80,0.3);
-    border-radius: 10px;
-    padding: 12px 20px;
-  }
-
-  .ref-card h2 {
-    color: #d4a456;
-    font-size: 11pt;
-    margin-bottom: 8px;
-  }
-
-  .ref-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px 20px;
-    font-size: 9pt;
-  }
-
-  .ref-row {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
   }
 
-  .ref-btn { color: #7de650; font-weight: 600; }
-  .ref-act { color: #ccc; }
+  .controls-card h2 {
+    color: #d4a456;
+    font-size: 13pt;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .controls-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    justify-content: space-evenly;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 6px;
+  }
+
+  .control-row:nth-child(odd) {
+    background: rgba(125, 230, 80, 0.06);
+  }
+
+  .control-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .control-btn {
+    color: #7de650;
+    font-weight: 700;
+    font-size: 10pt;
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  .control-action {
+    color: #e0e0e0;
+    font-size: 10pt;
+  }
+
+  .control-note {
+    color: #d4a456;
+    font-size: 8.5pt;
+    font-style: italic;
+    margin-left: 4px;
+  }
+
+  /* ---- BOTTOM SECTION ---- */
+  .bottom {
+    flex-shrink: 0;
+    margin-top: 10px;
+  }
+
+  .tips-bar {
+    display: flex;
+    gap: 12px;
+  }
+
+  .tip-item {
+    flex: 1;
+    background: rgba(212, 164, 86, 0.1);
+    border: 1px solid rgba(212, 164, 86, 0.3);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 9pt;
+    color: #d4a456;
+    font-weight: 600;
+  }
 </style>
 </head>
 <body>
 
-<h1>How to Play</h1>
-<p class="subtitle">Nintendo Switch Pro Controller</p>
+<!-- TOP -->
+<div class="top">
+  <h1>How to Play</h1>
+  <p class="subtitle">Nintendo Switch Pro Controller</p>
+  <div class="objective-card">
+    You're a jello cube trapped in a dark castle. Fight enemies with your own body, craft health, dodge attacks, and escape floor by floor to the rooftop. 15 floors. 5 bosses. 1 life.
+  </div>
+</div>
 
-<div class="content">
+<!-- MIDDLE -->
+<div class="middle">
 
   <!-- LEFT: Controller Diagram -->
   <div class="controller-side">
     <div class="controller-wrap">
-
       <div class="ctrl">
         <div class="ctrl-body"></div>
         <div class="grip left"></div>
@@ -375,81 +343,64 @@
         <div class="btn-plus"></div>
         <div class="btn-minus"></div>
       </div>
-
-      <!-- Callouts -->
-      <div class="line ln-move"></div>
-      <div class="callout co-move">
-        <span class="action">Move</span>
-        <span class="button">Left Stick / D-Pad</span>
-      </div>
-
-      <div class="line ln-zl"></div>
-      <div class="callout co-zl">
-        <span class="action">Split / Combine</span>
-        <span class="button">ZL</span>
-      </div>
-
-      <div class="line ln-zr"></div>
-      <div class="callout co-zr">
-        <span class="action">Perfect Dodge</span>
-        <span class="button">ZR</span>
-      </div>
-
-      <div class="line ln-y"></div>
-      <div class="callout co-y">
-        <span class="action">Interact</span>
-        <span class="button">Y Button</span>
-      </div>
-
-      <div class="line ln-b"></div>
-      <div class="callout co-b">
-        <span class="action">Jelly Shot</span>
-        <span class="button">B Button</span>
-      </div>
-
-      <div class="line ln-a"></div>
-      <div class="line ln-a-v"></div>
-      <div class="callout co-a">
-        <span class="action">Jump</span>
-        <span class="button">A Button</span>
-      </div>
-
-      <div class="callout co-x">
-        <span class="action">Eat / Heal</span>
-        <span class="button">X Button</span>
-      </div>
-
-      <div class="line ln-gp"></div>
-      <div class="callout co-gp">
-        <span class="action">Ground Pound</span>
-        <span class="button">Right Stick Down</span>
-      </div>
-
-      <div class="line ln-pause"></div>
-      <div class="line ln-pause-h"></div>
-      <div class="callout co-pause">
-        <span class="action">Pause</span>
-        <span class="button">+ Button</span>
-      </div>
-
     </div>
   </div>
 
-  <!-- RIGHT: Tips + Quick Reference -->
-  <div class="tips-side">
-    <div class="tips-card">
-      <h2>Tips</h2>
-      <ul>
-        <li>Your health IS your ammo - every shot costs jello mass</li>
-        <li>Find jello powder + water + cooking pots to craft heals</li>
-        <li>Ground pound is your strongest attack</li>
-        <li>Look for hidden doors and secrets</li>
-        <li>If you die, you start over - be careful!</li>
-      </ul>
+  <!-- RIGHT: Controls Table -->
+  <div class="controls-side">
+    <div class="controls-card">
+      <h2>Controls</h2>
+      <div class="controls-list">
+        <div class="control-row">
+          <span class="control-btn">Left Stick / D-Pad</span>
+          <span class="control-action">Move</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">A</span>
+          <span class="control-action">Jump</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">B</span>
+          <span class="control-action">Jelly Shot<span class="control-note">(costs health!)</span></span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">X</span>
+          <span class="control-action">Eat / Heal</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">Y</span>
+          <span class="control-action">Interact</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">Stick Down</span>
+          <span class="control-action">Ground Pound</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">ZL</span>
+          <span class="control-action">Split / Combine</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">ZR</span>
+          <span class="control-action">Perfect Dodge</span>
+        </div>
+        <div class="control-row">
+          <span class="control-btn">+</span>
+          <span class="control-action">Pause</span>
+        </div>
+      </div>
     </div>
-
   </div>
 
+</div>
+
+<!-- BOTTOM -->
+<div class="bottom">
+  <div class="tips-bar">
+    <div class="tip-item">Your health IS your ammo</div>
+    <div class="tip-item">Ground pound = strongest attack</div>
+    <div class="tip-item">Look for hidden doors</div>
+    <div class="tip-item">You die, you restart</div>
+  </div>
 </div>
 
 </body>
