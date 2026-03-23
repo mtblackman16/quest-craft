@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Display Board Layout Guide</title>
+<style>
+  @page { margin: 0.3in; size: letter landscape; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; padding: 0.2in; color: #1a1a2e; font-size: 10pt; }
+  h1 { text-align: center; font-size: 16pt; color: #7de650; margin-bottom: 0.02in; }
+  .note { text-align: center; font-size: 9pt; color: #999; margin-bottom: 0.15in; }
+
+  .board {
+    display: flex;
+    gap: 0.08in;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 0.08in;
+    background: #f9f9f9;
+    min-height: 4.5in;
+  }
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.06in;
+  }
+  .panel-left, .panel-right {
+    width: 25%;
+  }
+  .panel-center {
+    width: 50%;
+    border-left: 2px dashed #ccc;
+    border-right: 2px dashed #ccc;
+    padding: 0 0.08in;
+  }
+  .fold-label {
+    text-align: center;
+    font-size: 7pt;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.03in;
+  }
+
+  .slot {
+    flex: 1;
+    border: 1.5px solid #ddd;
+    border-radius: 4px;
+    padding: 0.06in;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 1in;
+  }
+  .slot .file { font-size: 8pt; font-weight: bold; color: #7de650; }
+  .slot .title { font-size: 10pt; font-weight: bold; color: #1a1a2e; margin: 2px 0; }
+  .slot .orient { font-size: 7pt; color: #888; text-transform: uppercase; }
+  .slot .desc { font-size: 8pt; color: #666; margin-top: 2px; line-height: 1.3; }
+  .slot .phase { font-size: 7pt; color: #fff; padding: 1px 4px; border-radius: 2px; margin-top: 2px; display: inline-block; }
+  .slot .phase.p1 { background: #7de650; }
+  .slot .phase.p2 { background: #4ea8de; }
+  .slot .phase.p3 { background: #d4a456; }
+  .slot .phase.p4 { background: #c44b6c; }
+
+  .extras { margin-top: 0.12in; }
+  .extras h2 { font-size: 11pt; color: #d4a456; margin-bottom: 0.04in; }
+  .extras-grid { display: flex; gap: 0.08in; flex-wrap: wrap; }
+  .extra {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.04in 0.08in;
+    font-size: 8pt;
+  }
+  .extra .where { color: #888; }
+  .extra .what { font-weight: bold; color: #333; }
+</style>
+</head>
+<body>
+  <h1>SPLIT Exhibition Display Board &mdash; Layout Guide</h1>
+  <div class="note">Print this page landscape. Tape to the inside of the board lid for reference during setup.</div>
+
+  <div class="board">
+    <!-- LEFT PANEL -->
+    <div class="panel panel-left">
+      <div class="fold-label">&larr; Left Panel (portrait)</div>
+      <div class="slot">
+        <div class="file">student-profiles.html</div>
+        <div class="title">Meet the Team</div>
+        <div class="orient">Portrait</div>
+        <div class="desc">4 kid portraits, names, grades,<br>Springer school, roles, quotes,<br>+ team portrait at bottom</div>
+        <div class="phase p1">Investigate</div>
+      </div>
+      <div class="slot">
+        <div class="file">03-our-process.html</div>
+        <div class="title">How We Built It</div>
+        <div class="orient">Portrait</div>
+        <div class="desc">5-step process: Dream &rarr; Ship<br>Tools list, By the Numbers<br>(~13K lines, 15 floors, 5 bosses)</div>
+        <div class="phase p1">Investigate</div>
+      </div>
+    </div>
+
+    <!-- CENTER PANEL -->
+    <div class="panel panel-center">
+      <div class="fold-label">Center Panel (landscape)</div>
+      <div class="slot">
+        <div class="file">01-title-card.html</div>
+        <div class="title">SPLIT</div>
+        <div class="orient">Landscape</div>
+        <div class="desc">Game title + tagline<br>&ldquo;You're a jello cube. You're trapped.&rdquo;</div>
+      </div>
+      <div class="slot">
+        <div class="file">04-the-game.html</div>
+        <div class="title">The Game + Playing Photo</div>
+        <div class="orient">Landscape</div>
+        <div class="desc">Story, powers, team-playing photo<br>(Pi + LG monitor + JBL speaker)<br>&ldquo;The game in one word: Survival.&rdquo;</div>
+        <div class="phase p4">Share</div>
+      </div>
+      <div class="slot">
+        <div class="file">07-how-to-play.html</div>
+        <div class="title">How to Play</div>
+        <div class="orient">Landscape</div>
+        <div class="desc">Controller diagram + controls table<br>Tips for new players<br>Right above the actual game!</div>
+        <div class="phase p4">Share</div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel panel-right">
+      <div class="fold-label">Right Panel (portrait) &rarr;</div>
+      <div class="slot">
+        <div class="file">06-reflections.html</div>
+        <div class="title">What We Learned</div>
+        <div class="orient">Portrait</div>
+        <div class="desc">4 categories &times; 4 kids:<br>Surprised, Hardest, Proud, Advice<br>All in their own words</div>
+        <div class="phase p2">Discover</div>
+      </div>
+      <div class="slot">
+        <div class="file">10-learning-journey.html</div>
+        <div class="title">Our Learning Journey</div>
+        <div class="orient">Portrait</div>
+        <div class="desc">4 Illuminate phases with<br>kid quotes inside each phase<br>Direct evidence for evaluators</div>
+        <div class="phase p3">Reflect</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="extras">
+    <h2>Additional Materials</h2>
+    <div class="extras-grid">
+      <div class="extra"><span class="what">demo-cheat-sheet.html</span> <span class="where">&rarr; Tape to BACK of board</span></div>
+      <div class="extra"><span class="what">reflection-{eins,andrew,ethan,nathan}.html</span> <span class="where">&rarr; Table, for visitors to pick up</span></div>
+      <div class="extra"><span class="what">team-quotes-board.html</span> <span class="where">&rarr; Cut apart, scatter on board edges or table</span></div>
+      <div class="extra"><span class="what">02-inquiry-question.html</span> <span class="where">&rarr; Table or tucked into board top</span></div>
+      <div class="extra"><span class="what">game-box-cover.html</span> <span class="where">&rarr; Table next to the Pi</span></div>
+    </div>
+  </div>
+</body>
+</html>
