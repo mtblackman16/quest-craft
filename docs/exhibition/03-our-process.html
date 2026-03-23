@@ -111,8 +111,8 @@
   }
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.12in;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.08in;
     flex: 1;
   }
   .stat-block {
@@ -123,20 +123,26 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0.1in;
+    padding: 0.06in;
   }
   .stat-block .stat-num {
-    font-size: 30pt;
+    font-size: 22pt;
     font-weight: bold;
     color: #7de650;
     line-height: 1.15;
     text-shadow: 0 0 10px rgba(125,230,80,0.2);
   }
+  .stat-block .stat-num.small { font-size: 14pt; }
   .stat-block .stat-label {
-    font-size: 10pt;
+    font-size: 8pt;
     color: rgba(255,255,255,0.8);
     text-align: center;
-    margin-top: 0.03in;
+    margin-top: 0.02in;
+  }
+  .stat-block .stat-sub {
+    font-size: 7pt;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
   }
 </style>
 </head>
@@ -213,12 +219,39 @@
         <div class="stat-label">Enemy Types</div>
       </div>
       <div class="stat-block">
-        <div class="stat-num">5</div>
-        <div class="stat-label">Sessions</div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">Coding Sessions</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">15 hrs</div>
+        <div class="stat-label">Kids' Time</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">20 hrs</div>
+        <div class="stat-label">AI Time</div>
       </div>
       <div class="stat-block">
         <div class="stat-num">4+1</div>
         <div class="stat-label">Kids + AI</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num small">268M</div>
+        <div class="stat-label">Tokens In</div>
+        <div class="stat-sub">Claude Opus 4.6</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num small">1.98M</div>
+        <div class="stat-label">Tokens Out</div>
+        <div class="stat-sub">+ Sub-Agents</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Sessions</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">$248</div>
+        <div class="stat-label">Total AI Cost</div>
+        <div class="stat-sub">Claude Opus 4.6</div>
       </div>
     </div>
   </div>
