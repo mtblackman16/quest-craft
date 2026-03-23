@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Craft - Andrew's Original Artwork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: #2d2d2d;
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 30px 24px;
+    font-size: 15px;
+    background: #fff;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    text-align: center;
+    padding: 80px 20px 60px;
+    page-break-after: always;
+  }
+
+  .cover .program {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #a89e8a;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .cover h1 {
+    font-family: 'Cinzel Decorative', Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #e8a838;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .cover .artist {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  .cover .subtitle {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 40px;
+  }
+
+  .cover .intro {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: #444;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.7;
+    text-align: left;
+  }
+
+  .cover .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e8a838, transparent);
+    margin: 30px auto;
+    max-width: 200px;
+  }
+
+  /* ── Section Headings ── */
+  h2 {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #e8a838;
+    text-align: center;
+    margin: 50px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before, h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  h2::before { background: linear-gradient(to right, transparent, #e8a838); }
+  h2::after { background: linear-gradient(to left, transparent, #e8a838); }
+
+  /* ── Artwork Cards ── */
+  .artwork {
+    margin: 24px 0 40px;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  .artwork img {
+    max-width: 100%;
+    max-height: 420px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fafafa;
+    padding: 12px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .artwork .caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 12px;
+  }
+
+  .artwork .description {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── Two-up grid for related pieces ── */
+  .artwork-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0 40px;
+    page-break-inside: avoid;
+  }
+
+  .artwork-pair .artwork {
+    margin: 0;
+  }
+
+  .artwork-pair img {
+    max-height: 320px;
+  }
+
+  /* ── Connection callout ── */
+  .connection {
+    background: #fef9ee;
+    border: 1px solid #f0e0b8;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 30px 0;
+    page-break-inside: avoid;
+  }
+
+  .connection strong {
+    color: #92680e;
+  }
+
+  .connection p {
+    font-size: 14px;
+    color: #5a4a2a;
+    line-height: 1.6;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 50px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { padding: 0; max-width: 100%; }
+    .cover { padding: 60px 20px 40px; }
+    .artwork img { max-height: 380px; padding: 8px; }
+    .artwork-pair img { max-height: 280px; }
+    h2 { margin-top: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     COVER
+     ═══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="program">Quest Craft</div>
+  <h1>Original Artwork</h1>
+  <div class="artist">by Andrew (12)</div>
+  <div class="subtitle">LASD Illuminate 2026</div>
+
+  <div class="divider"></div>
+
+  <div class="intro">
+    Every character, enemy, and item in SPLIT started as Andrew's original digital artwork. During Session 2, Andrew designed the full visual identity of the game: the jello cube hero, the Sanitizer Warrior enemies, the hand sanitizer and jelly powder items, and the defeated enemy states. These drawings became the reference material that guided the game's pixel art, animations, and visual style across all 15 floors.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE HERO
+     ═══════════════════════════════════════════ -->
+<h2>The Hero</h2>
+
+<div class="artwork">
+  <img src="../../assets/images/andrew-originals/image0.png" alt="Jello Cube hero and Jelly Powder bag">
+  <div class="caption">Jello Cube &mdash; The Player Character</div>
+  <div class="description">Two views of the jello cube hero (front and three-quarter perspective) alongside the Jelly Powder bag, the in-game collectible that powers up the player. Andrew designed the cube to look translucent and wobbly, capturing the feel the team wanted from the very first brainstorm.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE ITEMS
+     ═══════════════════════════════════════════ -->
+<h2>Items</h2>
+
+<div class="artwork">
+  <img src="../../assets/images/andrew-originals/image1.png" alt="Hand Sanitizer item, front and back views">
+  <div class="caption">Hand Sanitizer &mdash; Enemy Weapon / Collectible Item</div>
+  <div class="description">Front and back views of the hand sanitizer bottle. The front label reads "Germ B Gone" with a no-germs symbol. The back has a full ingredients panel. This became both the weapon carried by Sanitizer Warriors and a dropped item players can collect.</div>
+</div>
+
+<div class="artwork">
+  <img src="../../assets/images/andrew-originals/image4.png" alt="Dropped items in a purple puddle">
+  <div class="caption">Dropped Items &mdash; Defeated Enemy Loot</div>
+  <div class="description">When a Sanitizer Warrior is defeated, it drops its equipment in a puddle of spilled sanitizer. Andrew designed the fallen hand sanitizer bottle and jelly powder bag sitting in the purple pool, which became the in-game item drop animation.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE ENEMY
+     ═══════════════════════════════════════════ -->
+<h2>The Sanitizer Warrior</h2>
+
+<div class="connection">
+  <p><strong>Design note:</strong> Andrew created the Sanitizer Warrior as the game's primary enemy. It's a purple-skinned soldier wearing brown pants and a spiked metal helmet, carrying a hose-connected spray weapon fed by a hand sanitizer tank on its back. The kids chose this enemy because it's the natural opposite of a jello cube: sanitizer destroys germs, and jello is squishy and vulnerable.</p>
+</div>
+
+<div class="artwork-pair">
+  <div class="artwork">
+    <img src="../../assets/images/andrew-originals/image2.png" alt="Sanitizer Warrior front view">
+    <div class="caption">Front View</div>
+    <div class="description">Standing pose, spray weapon raised, tank visible on back</div>
+  </div>
+  <div class="artwork">
+    <img src="../../assets/images/andrew-originals/image3.png" alt="Sanitizer Warrior front view, variant">
+    <div class="caption">Front View (Variant)</div>
+    <div class="description">Alternate angle showing the hose connection and helmet detail</div>
+  </div>
+</div>
+
+<div class="artwork-pair">
+  <div class="artwork">
+    <img src="../../assets/images/andrew-originals/image6.png" alt="Sanitizer Warrior action pose">
+    <div class="caption">Action Pose</div>
+    <div class="description">Mid-attack with spray weapon extended, showing the full silhouette used for in-game animations</div>
+  </div>
+  <div class="artwork">
+    <img src="../../assets/images/andrew-originals/image5.png" alt="Sanitizer Warrior defeated">
+    <div class="caption">Defeated</div>
+    <div class="description">Collapsed on the ground with equipment scattered, used as the basis for the enemy death animation</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FROM DRAWING TO GAME
+     ═══════════════════════════════════════════ -->
+<h2>From Drawing to Game</h2>
+
+<div class="connection">
+  <p><strong>How it worked:</strong> Andrew drew all of these during Session 2 (Design). The team uploaded his artwork into the project's asset folder, and Claude used them as reference to generate the pixel art sprites, idle animations, attack patterns, and death sequences for the final game. Every enemy encounter across 15 floors traces back to these seven drawings.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<div class="footer">
+  Quest Craft &nbsp;|&nbsp; Built by Ethan (9), Eins (12), Nathan (9) &amp; Andrew (12) &nbsp;|&nbsp; AI-Assisted Game Development &nbsp;|&nbsp; LASD Illuminate 2026
+</div>
+
+</body>
+</html>
