@@ -98,7 +98,8 @@ class CombatSystem:
             for enemy in enemies:
                 if not enemy.alive:
                     continue
-                if proj_rect.colliderect(enemy.get_rect()):
+                enemy_hr = enemy.get_hit_rect() if hasattr(enemy, 'get_hit_rect') else enemy.get_rect()
+                if proj_rect.colliderect(enemy_hr):
                     hit_something = True
 
                     # Warriors have armor — jelly shots only deal 2 damage
@@ -163,7 +164,7 @@ class CombatSystem:
         if not hasattr(player, 'health') or player.health <= 0:
             return events
 
-        player_rect = player.get_rect()
+        player_rect = player.get_hit_rect() if hasattr(player, 'get_hit_rect') else player.get_rect()
         dmg_mult = DIFFICULTY_SETTINGS[difficulty]['damage_multiplier']
         # Ice pill: 50% incoming damage reduction
         if active_pill == 'ice':
@@ -302,7 +303,7 @@ class CombatSystem:
         if not hasattr(player, 'health') or player.health <= 0:
             return events
 
-        player_rect = player.get_rect()
+        player_rect = player.get_hit_rect() if hasattr(player, 'get_hit_rect') else player.get_rect()
         dmg_mult = DIFFICULTY_SETTINGS[difficulty]['damage_multiplier']
         if active_pill == 'ice':
             dmg_mult *= 0.5
@@ -310,7 +311,8 @@ class CombatSystem:
         for enemy in enemies:
             if not enemy.alive:
                 continue
-            if player_rect.colliderect(enemy.get_rect()):
+            enemy_hr = enemy.get_hit_rect() if hasattr(enemy, 'get_hit_rect') else enemy.get_rect()
+            if player_rect.colliderect(enemy_hr):
                 scaled = max(1, int(ENEMY_CONTACT_DAMAGE * dmg_mult))
                 actual = player.take_damage(scaled, difficulty)
                 if actual > 0:

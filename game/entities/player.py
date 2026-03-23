@@ -582,6 +582,10 @@ class JelloCube:
             self.h = target_w  # keep square
 
     def get_rect(self):
+        return pygame.Rect(int(self.x), int(self.y), self.w, self.h)
+
+    def get_hit_rect(self):
+        """Smaller hitbox for combat -- 20% inset from visual body."""
         inset_x = int(self.w * 0.1)
         inset_y = int(self.h * 0.1)
         return pygame.Rect(int(self.x) + inset_x, int(self.y) + inset_y,

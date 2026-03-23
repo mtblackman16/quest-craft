@@ -353,6 +353,10 @@ class Enemy:
                          (int(self.x + ox), int(self.y + oy), self.w, self.h))
 
     def get_rect(self):
+        return pygame.Rect(int(self.x), int(self.y), self.w, self.h)
+
+    def get_hit_rect(self):
+        """Smaller hitbox for combat -- 15% inset from visual body."""
         inset_x = int(self.w * 0.075)
         inset_y = int(self.h * 0.075)
         return pygame.Rect(int(self.x) + inset_x, int(self.y) + inset_y,
