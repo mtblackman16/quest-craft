@@ -214,17 +214,8 @@ class MovingPlatform(Platform):
         hl = pygame.Rect(int(sx), int(sy), self.w, min(2, self.h))
         pygame.draw.rect(surf, accent, hl)
 
-        # Moving indicators — small animated dots sliding across the top
-        dot_color = (min(accent[0] + 40, 255),
-                     min(accent[1] + 40, 255),
-                     min(accent[2] + 40, 255))
-        dot_count = max(2, self.w // 30)
-        phase = (self._anim_tick * 0.05) % 1.0
-        for i in range(dot_count):
-            frac = ((i / dot_count) + phase) % 1.0
-            dot_x = int(sx + 4 + frac * (self.w - 8))
-            dot_y = int(sy + self.h // 2)
-            pygame.draw.circle(surf, dot_color, (dot_x, dot_y), 2)
+        # Subtle border to distinguish from static platforms
+        pygame.draw.rect(surf, accent, body, 1)
 
 
 # ──────────────────────────────────────────────
