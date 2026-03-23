@@ -182,7 +182,7 @@
 
 **Eins:** "Before this project, I thought AI does all the work. Now I know you have to direct it carefully." [Phase 3]
 
-**Andrew:** "Before this project, I thought you need to know how to code to make a game. Now I know you need to know what you want and how to prompt AI to do it for you." [Phase 3]
+**Andrew:** "Before this project, I thought you need to know how to code to make a game. Now I know you need to know what you want and how to prompt AI to do it with you." [Phase 3]
 
 **Ethan:** "Before this project, I thought making games requires coding skills. Now I know you need ideas and clear communication." [Phase 3]
 
