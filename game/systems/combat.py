@@ -38,7 +38,7 @@ class CombatSystem:
         if self.event_bus:
             self.event_bus.emit(event, **kwargs)
 
-    def check_hits(self, player, enemies, projectiles, difficulty=Difficulty.NORMAL):
+    def check_hits(self, player, enemies, projectiles, difficulty=Difficulty.NORMAL, platforms=None):
         """Main per-frame collision check.
 
         Args:
@@ -64,7 +64,7 @@ class CombatSystem:
         events += self._player_vs_enemies(player, player_projs, enemies, active_pill)
 
         # ── 2. Enemy projectiles → player ──
-        events += self._enemy_projs_vs_player(player, enemy_projs, difficulty, active_pill)
+        events += self._enemy_projs_vs_player(player, enemy_projs, difficulty, active_pill, platforms)
 
         # ── 3. Hazards → player ──
         events += self._hazards_vs_player(player, hazards, difficulty, active_pill)
@@ -157,7 +157,7 @@ class CombatSystem:
 
         return events
 
-    def _enemy_projs_vs_player(self, player, enemy_projs, difficulty, active_pill=None):
+    def _enemy_projs_vs_player(self, player, enemy_projs, difficulty, active_pill=None, platforms=None):
         """Check enemy projectiles against the player."""
         events = []
         if not hasattr(player, 'health') or player.health <= 0:
@@ -173,6 +173,21 @@ class CombatSystem:
             if not proj.alive:
                 continue
             if player_rect.colliderect(proj.get_rect()):
+                # Check if a platform blocks the projectile's path to the player
+                if platforms:
+                    proj_cx = proj.x
+                    proj_cy = proj.y
+                    player_cx = player.x + player.w / 2
+                    player_cy = player.y + player.h / 2
+                    blocked = False
+                    for plat in platforms:
+                        pr = plat.get_rect() if hasattr(plat, 'get_rect') else pygame.Rect(0, 0, 0, 0)
+                        if pr.clipline(proj_cx, proj_cy, player_cx, player_cy):
+                            blocked = True
+                            break
+                    if blocked:
+                        proj.alive = False
+                        continue
                 raw_damage = proj.damage
                 scaled_damage = max(1, int(raw_damage * dmg_mult))
                 actual = player.take_damage(scaled_damage, difficulty)

@@ -153,6 +153,9 @@ class JelloCube:
         # Freeze (MamaSloth Mom Look)
         self.freeze_timer = 0
 
+        # Cooking (pauses enemies while at cooking pot)
+        self.is_cooking = False
+
         # Sprite (loaded lazily on first draw)
         self._sprite = None
         self._sprite_flipped = None
@@ -579,7 +582,10 @@ class JelloCube:
             self.h = target_w  # keep square
 
     def get_rect(self):
-        return pygame.Rect(int(self.x), int(self.y), self.w, self.h)
+        inset_x = int(self.w * 0.1)
+        inset_y = int(self.h * 0.1)
+        return pygame.Rect(int(self.x) + inset_x, int(self.y) + inset_y,
+                           self.w - inset_x * 2, self.h - inset_y * 2)
 
     def get_center(self):
         return (self.x + self.w / 2, self.y + self.h / 2)

@@ -281,6 +281,7 @@ class Game:
                         best_plat_y = pr.top
             if best_plat_y is not None:
                 enemy.y = best_plat_y - enemy.h
+                enemy.ground_y = best_plat_y
                 # Also snap patrol points to same Y
                 if enemy.patrol_path:
                     enemy.patrol_path = [(px, best_plat_y - enemy.h)
@@ -778,7 +779,7 @@ class Game:
 
             # ── Update enemies + collect their projectiles ──
             # Skip enemy updates during slow-mo (dodge effect)
-            skip_enemies = (time_scale < 0.5)
+            skip_enemies = (time_scale < 0.5) or getattr(self.player, 'is_cooking', False)
             from game.entities.enemies import SmallSanitizerBottle, SanitizerWarrior, JellyArcher
             for enemy in self.enemies[:]:
                 if not enemy.alive:
@@ -931,6 +932,8 @@ class Game:
                         plat.stand_on()
 
             # ── Update interactables ──
+            from game.world.interactables import POT_COOKING
+            self.player.is_cooking = False
             for obj in self.interactables:
                 if hasattr(obj, 'update'):
                     obj.update(1)
@@ -939,6 +942,13 @@ class Game:
                     from game.world.interactables import CHEST_OPEN
                     if obj.state == CHEST_OPEN:
                         obj.grant_loot(self.player)
+                # Flag player as cooking when near an active cooking pot
+                if (getattr(obj, 'interactable_type', None) == 'cooking_pot'
+                        and getattr(obj, 'state', None) == POT_COOKING):
+                    dx = self.player.x - obj.x
+                    dy = self.player.y - obj.y
+                    if abs(dx) < 80 and abs(dy) < 80:
+                        self.player.is_cooking = True
 
             # ── Combat system ──
             if self.combat:
@@ -948,7 +958,8 @@ class Game:
                     'hazards': self.hazards,
                 }
                 events = self.combat.check_hits(
-                    self.player, self.enemies, combat_projectiles, self.difficulty
+                    self.player, self.enemies, combat_projectiles, self.difficulty,
+                    platforms=self.platforms
                 )
                 for evt_data in events:
                     event_type = evt_data.get('event', GameEvent.ENEMY_HIT)
@@ -1310,7 +1321,7 @@ class Game:
         self.player.has_water = cp['has_water']
         self.player.vx = 0
         self.player.vy = 0
-        self.player.invuln_timer = 60  # brief invuln after respawn
+        self.player.invuln_timer = 120  # brief invuln after respawn
         self.player_projectiles.clear()
         self.enemy_projectiles.clear()
         self.hazards.clear()

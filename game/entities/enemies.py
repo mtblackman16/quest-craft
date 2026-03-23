@@ -262,6 +262,7 @@ class Enemy:
 
         # Ground snap: set by game loop to place enemies on platforms
         self._snapped_to_ground = False
+        self.ground_y = None
 
     def update(self, player):
         """Run the state machine. Subclasses override specific states."""
@@ -320,6 +321,8 @@ class Enemy:
         dy = player.y - self.y
         dist = max(1.0, math.hypot(dx, dy))
         self.x += (dx / dist) * self.patrol_speed * 1.5
+        if self.ground_y is not None:
+            self.y = self.ground_y - self.h
         self.facing = 1 if dx > 0 else -1
 
     def _do_attack(self, player):
@@ -350,7 +353,10 @@ class Enemy:
                          (int(self.x + ox), int(self.y + oy), self.w, self.h))
 
     def get_rect(self):
-        return pygame.Rect(int(self.x), int(self.y), self.w, self.h)
+        inset_x = int(self.w * 0.075)
+        inset_y = int(self.h * 0.075)
+        return pygame.Rect(int(self.x) + inset_x, int(self.y) + inset_y,
+                           self.w - inset_x * 2, self.h - inset_y * 2)
 
 
 # ── SmallSanitizerBottle ──

@@ -298,7 +298,7 @@ FONT_DAMAGE = 26
 # ── Difficulty Scaling ──
 DIFFICULTY_SETTINGS = {
     Difficulty.EASY: {
-        'damage_multiplier': 1.0,
+        'damage_multiplier': 0.6,
         'checkpoint': True,
         'crumble_respawn': True,
         'timed': False,
