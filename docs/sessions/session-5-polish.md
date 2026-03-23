@@ -1,4 +1,4 @@
-> **OBSOLETE** — This guide has been replaced by `session-5-showcase.md` which focuses on Illuminate exhibition prep: display board assembly, deep reflections, and demo rehearsal.
+> **OBSOLETE** — This guide has been replaced by `session-5-showcase.md` which focuses on Inquiry Exhibition prep: display board assembly, deep reflections, and demo rehearsal.
 
 # Session 5: POLISH & SHOWCASE — The Final Push (ARCHIVED)
 

@@ -2,7 +2,7 @@
 
 ## You're Building a Real Video Game
 
-Not a tutorial. Not a demo. A **real game** that people will play at the **LASD Illuminate Exhibition on March 15**.
+Not a tutorial. Not a demo. A **real game** that people will play at the **Inquiry Exhibition Exhibition on March 15**.
 
 And here's the cool part: **you don't need to know how to code.** You have an AI partner named Claude who turns your ideas into a working game. You're the game designers. Claude is your engineer.
 

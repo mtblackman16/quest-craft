@@ -69,7 +69,7 @@ Claude built the entire game between sessions:
 
 ## Session 4: PLAYTEST (March 14 or 15) — UPCOMING
 
-**Goal:** Kids play the real game, find bugs, watch Claude fix them, gather Illuminate evidence.
+**Goal:** Kids play the real game, find bugs, watch Claude fix them, gather exhibition evidence.
 
 **Guide:** `docs/sessions/session-4-playtest.md`
 
@@ -143,9 +143,9 @@ Claude built the entire game between sessions:
 
 ---
 
-## Illuminate Evidence Summary
+## Exhibition Evidence Summary
 
-| Phase | What Illuminate Asks | What We Have |
+| Phase | What the exhibition Asks | What We Have |
 |-------|---------------------|--------------|
 | **Phase 1:** Investigate | Inquiry question + plan | Inquiry question, PRDs, design docs |
 | **Phase 2:** Discover | Evidence of learning process | Build Records from Session 4, bug lists, process photos, "By the Numbers" |

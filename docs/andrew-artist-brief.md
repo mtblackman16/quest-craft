@@ -150,7 +150,7 @@ This is what we need from you, Andrew. Design the title screen for Split.
 - **Session 4 (Build):** Claude builds the game code, you help with art assets.
 - **Session 5 (Polish):** Final art, bug fixes, exhibition prep.
 
-**Exhibition: March 15, 2026 — LASD Illuminate Inquiry Exhibition**
+**Exhibition: March 15, 2026 — Inquiry Exhibition**
 
 ---
 

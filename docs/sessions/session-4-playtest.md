@@ -1,6 +1,6 @@
 # Session 4: PLAYTEST — The Bug Hunt + Evidence Gathering
 
-**Goal:** Kids play the real game, find every bug, watch Claude fix them in real time, AND gather Illuminate evidence (Build Records, photos, reflections).
+**Goal:** Kids play the real game, find every bug, watch Claude fix them in real time, AND gather exhibition evidence (Build Records, photos, reflections).
 
 **Time:** ~2.5 hours
 
@@ -82,9 +82,9 @@ claude
 
 Have Claude ready and waiting. The kids will talk to Claude through Wispr Flow to report bugs. You'll help translate when needed.
 
-### 6. Prepare Illuminate Materials
+### 6. Prepare Exhibition Materials
 
-- **Print 4 blank Experiment/Build Record sheets** (one per kid) — from the Illuminate PDF or create a simple one:
+- **Print 4 blank Experiment/Build Record sheets** (one per kid) — from the exhibition PDF or create a simple one:
   - Date | Goal | "What I tried..." | "What happened..." | "Changes I made or next steps..."
 - **Have camera/phone charged and ready** — you need 10+ process photos today
 - **Paper + markers** for the Logger role
@@ -298,7 +298,7 @@ Count up all the bugs on the Logger's sheet. Celebrate the number.
 
 #### 📝 Reflections — Illuminate Phase 3 (15 min)
 
-This is the deep reflection that Illuminate needs. Each kid answers these questions (via Wispr Flow, Mark types, or they write on paper):
+This is the deep reflection that the exhibition needs. Each kid answers these questions (via Wispr Flow, Mark types, or they write on paper):
 
 1. **"What surprised you about today?"**
    - Prompt if needed: "Was anything different from what you expected?"
@@ -512,7 +512,7 @@ Yes, we're fixing bugs. But the ACTUAL lesson is:
 
 Every kid should have at least one moment where they say something to Claude, the code changes, they re-launch the game, and their fix is RIGHT THERE. That's the magic moment. That's what we're exhibiting. Protect that moment — make sure every kid gets it, not just the loudest one.
 
-### The Illuminate Evidence Goal
+### The Exhibition Evidence Goal
 
 The Build Records and reflections aren't busywork — they're documentation of the learning process. Illuminate judges want to see:
 - **Iteration** — we tried, it didn't work, we changed it, we tried again

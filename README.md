@@ -4,7 +4,7 @@ A video game designed and built by kids — on a Raspberry Pi 5.
 
 ## About
 
-This game is being created by a team of young game designers (ages 9-11) for the **LASD Illuminate Inquiry Exhibition** on **March 15, 2026**.
+This game is being created by a team of young game designers (ages 9-11) for the **Inquiry Exhibition** on **March 15, 2026**.
 
 The kids are the creative directors — they design every aspect of the game, from characters and story to gameplay mechanics and art direction. They use AI tools to help with engineering, while they drive all creative decisions through voice-first collaboration.
 

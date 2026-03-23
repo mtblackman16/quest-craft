@@ -122,7 +122,7 @@ dark castle stone, flickering torchlight, and the jello cube protagonist.
 Every color can be justified by something IN the game. This eliminates the
 "generic AI purple" problem entirely.
 
-For the "Illuminate Connection" callout (school/exhibition info), keep a
+For the "Exhibition Connection" callout (school/exhibition info), keep a
 distinct warm parchment tone (`#f0e4cc` background with `#5a4a2e` text)
 so it reads as a different voice -- the educator/program voice -- rather
 than the adventure voice.
@@ -377,7 +377,7 @@ as a game UI bullet point.
 4. **Body text** is Source Sans 3, 15px on mobile, cream-on-dark. It is
    comfortable to read but intentionally secondary to the structural elements.
 
-5. **The Illuminate box** is visually distinct (light background) so parents
+5. **The Exhibition box** is visually distinct (light background) so parents
    can identify the "school connection" at a glance, but it does not dominate.
 
 ---
@@ -399,7 +399,7 @@ as a game UI bullet point.
 | Body / list text | Source Sans 3 | 15px | 400 | 1.6 |
 | Skill card name | Source Sans 3 | 14px | 600 | 1.3 |
 | Skill card detail | Source Sans 3 | 13px | 400 | 1.5 |
-| Illuminate box | Source Sans 3 | 13px | 400 | 1.5 |
+| Exhibition box | Source Sans 3 | 13px | 400 | 1.5 |
 | Footer | Source Sans 3 | 11px | 400 | 1.4 |
 
 ### Touch Targets
@@ -565,7 +565,7 @@ ensures every card is readable on the narrowest phones.
 }
 ```
 
-### Illuminate Callout (Parchment Style)
+### Exhibition Callout (Parchment Style)
 ```css
 .illuminate {
   background: #f0e4cc;
@@ -642,7 +642,7 @@ issues on mobile, remove it. It is purely optional.
 - The `#9a8e7a` dim text on `#1a1a2e` has a contrast ratio of approximately
   4.1:1 -- passes AA for text 18px and above. For smaller caption text,
   consider lightening to `#a89e8a` (~5:1).
-- The Illuminate box uses dark text on a light background -- standard
+- The Exhibition box uses dark text on a light background -- standard
   readability.
 - Decorative elements (`::before`, `::after`, ornamental characters) should
   use `aria-hidden` or be placed via CSS content (which is inherently
@@ -685,7 +685,7 @@ The TEMPLATE.html placeholder structure maps to the new design as follows:
 | Game box (title + desc) | Featured showcase with pixel font title + italic blurb |
 | `[ACCOMPLISHMENT_N]` | Diamond-bulleted quest list items |
 | `[SKILL_N_NAME/DETAIL]` | Left-bordered stacked skill cards |
-| `[HOW_THIS_SESSION_MAPS]` | Parchment-style Illuminate callout |
+| `[HOW_THIS_SESSION_MAPS]` | Parchment-style Exhibition callout |
 | `[VIDEO_DESCRIPTION]` | Video CTA block |
 | `[MEMORABLE_QUOTE]` | Decorative centered quote with large quote marks |
 | `[NEXT_SESSION_PREVIEW]` | Footer seal section |

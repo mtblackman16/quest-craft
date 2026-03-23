@@ -1,6 +1,6 @@
 # Split -- Comprehensive Validation & QA Strategy
 
-> **Target:** LASD Illuminate Inquiry Exhibition, March 15, 2026
+> **Target:** Inquiry Exhibition, March 15, 2026
 > **Platform:** Raspberry Pi 5 (8GB RAM, VideoCore VII GPU), Python 3.13, Pygame 2.6.1
 > **Input:** Nintendo Switch Pro Controller (Bluetooth, hid_nintendo driver, SDL2 2.32.4)
 > **Requirement:** Zero crashes, zero stutter, 4+ hours continuous operation

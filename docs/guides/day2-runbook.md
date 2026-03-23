@@ -115,7 +115,7 @@ bluetoothctl connect 60:1A:C7:B7:72:9F
 
 ### 2. Photo-to-Sprite Workshop (20 min) — THE NEW CAPABILITY
 
-> **Illuminate moment!** This is where physical art becomes digital game assets via AI. Document this for the exhibition.
+> **Exhibition moment!** This is where physical art becomes digital game assets via AI. Document this for the exhibition.
 
 **Walk the kids through this step by step:**
 
@@ -271,7 +271,7 @@ bluetoothctl connect 60:1A:C7:B7:72:9F
 
 1. **Andrew is new** — make him feel important from minute one. He's the artist. Defer to him on visuals.
 2. **Feedback first** — let the boys voice what they loved and what they'd change before diving into design.
-3. **Photo workflow is an Illuminate story** — document the journey from paper drawing to game sprite.
+3. **Photo workflow is an exhibition story** — document the journey from paper drawing to game sprite.
 4. **Controllers can wait** — if pairing is a headache, use keyboard. Controllers are fully needed by Session 3, not today.
 5. **Don't rush the design** — it's better to do 4 topics really well than 7 topics superficially. The remaining topics can be covered at the start of Session 3.
 6. **Everything is exhibition material** — the drawings, the controller diagrams, the design conversations. Save it all.

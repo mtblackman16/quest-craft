@@ -1,4 +1,4 @@
-> **OBSOLETE** — This guide was written before the game was built. Claude built the full game between Sessions 2 and 4. See `session-4-playtest.md` for the actual Session 4 guide (playtesting + Illuminate evidence gathering).
+> **OBSOLETE** — This guide was written before the game was built. Claude built the full game between Sessions 2 and 4. See `session-4-playtest.md` for the actual Session 4 guide (playtesting + exhibition evidence gathering).
 
 # Session 4: BUILD — The Sprint (ARCHIVED)
 

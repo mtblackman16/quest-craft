@@ -1,8 +1,8 @@
-# Exhibition Checklist — LASD Illuminate
+# Exhibition Checklist — Inquiry Exhibition
 
 **Date:** March 27, 2026 (4:00–7:00 PM, setup 3:30 PM)
 
-**What:** Showcase your game AND the story of how you learned to build it (Illuminate Inquiry Exhibition).
+**What:** Showcase your game AND the story of how you learned to build it (Inquiry Exhibition).
 
 > "The focus is sharing not only what you discovered or made, but HOW you learned."
 
@@ -45,7 +45,7 @@
 - [ ] **07 — How to Play** (`docs/exhibition/07-how-to-play.html`)
 - [ ] **08 — Controller Diagram** (`docs/exhibition/08-controller-diagram.html`)
 - [ ] **09 — Supply List** (internal — don't display)
-- [ ] **10 — Learning Journey** (`docs/exhibition/10-learning-journey.html`) — Illuminate phases
+- [ ] **10 — Learning Journey** (`docs/exhibition/10-learning-journey.html`) — inquiry phases
 
 ### Kid-Generated Artifacts (Display These)
 - [ ] Completed Experiment/Build Record sheets from Session 4 (1 per kid)
@@ -79,9 +79,9 @@
 
 ---
 
-## Illuminate Evidence Checklist
+## Exhibition Evidence Checklist
 
-The exhibition expects evidence across all 4 Illuminate phases:
+The exhibition expects evidence across all 4 inquiry phases:
 
 ### Phase 1: What did we investigate and why?
 - [ ] Inquiry question displayed (02-inquiry-question.html)
@@ -95,7 +95,7 @@ The exhibition expects evidence across all 4 Illuminate phases:
 ### Phase 3: How did we learn it?
 - [ ] Learning Story reflections from Session 5 (PMI, Bridge, or Freeze Frame)
 - [ ] Deeper reflection quotes in 06-reflections.html
-- [ ] 10-learning-journey.html connecting our process to Illuminate phases
+- [ ] 10-learning-journey.html connecting our process to inquiry phases
 
 ### Phase 4: Exhibition of Learning
 - [ ] Live playable game demo on Pi

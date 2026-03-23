@@ -422,7 +422,7 @@ Engineered with Claude AI
 Runs on Raspberry Pi 5
 Python + Pygame
 
-LASD Illuminate Inquiry Exhibition
+Inquiry Exhibition
 March 15, 2026
 ```
 

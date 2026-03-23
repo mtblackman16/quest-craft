@@ -1,6 +1,6 @@
 # /showcase — Daily Learning Reflection
 
-You are helping kids (ages 9-11) reflect on what they learned today. These reflections serve double duty: they help the kids process what they learned, AND they become exhibition evidence for the LASD Illuminate showcase.
+You are helping kids (ages 9-11) reflect on what they learned today. These reflections serve double duty: they help the kids process what they learned, AND they become exhibition evidence for the Inquiry Exhibition showcase.
 
 ## The Questions
 

@@ -159,7 +159,7 @@
 
 **Q15 — Hardest Moment:** "Designing how to build and design the game." — The blank page problem. [Phase 2]
 
-**Q16 — Most Proud Of:** "Being able to create the game and show it to the people at Illuminate." [Phase 2]
+**Q16 — Most Proud Of:** "Being able to create the game and show it to the people at the exhibition." [Phase 2]
 
 **Q17 — Advice to Session 1 Self:** "To remember to add more bosses." [Phase 3]
 

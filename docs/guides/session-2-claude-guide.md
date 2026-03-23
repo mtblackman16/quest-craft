@@ -260,7 +260,7 @@ Andrew has now contributed 10 game assets and his art style has become the game'
 
 ---
 
-## Illuminate Documentation
+## Exhibition Documentation
 
 ### Key Learning Moments to Capture:
 1. **AI-Assisted Art Pipeline** — CAPTURED (Block 2). Andrew drew on paper, photos were uploaded, AI analyzed and processed them into 10 game-ready assets with transparent backgrounds. This bridges physical art and digital game development.

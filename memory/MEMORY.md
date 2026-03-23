@@ -8,13 +8,13 @@
 
 | Name | Age | Grade | Teacher | School | Role | Portrait |
 |------|-----|-------|---------|--------|------|----------|
-| Ethan | 9 | 3rd | Ms. Mora | Springer | Co-creator & Game Designer | ethan-portrait-2026-03-22.jpg |
-| Eins | 12 | 6th | Mrs. Jones | Springer | Co-creator & Game Designer | eins-portrait-2026-03-22.jpg |
-| Andrew | 12 | 6th | Mrs. Jones | Springer | Artist & Co-creator | andrew-portrait-2026-03-22.jpg |
-| Nathan | 9 | 3rd | Ms. Mora | Springer | Co-creator & Game Designer | nathan-portrait-2026-03-22.jpg |
+| Ethan | 9 | 3rd |  |  | Co-creator & Game Designer | ethan-portrait-2026-03-22.jpg |
+| Eins | 12 | 6th |  |  | Co-creator & Game Designer | eins-portrait-2026-03-22.jpg |
+| Andrew | 12 | 6th |  |  | Artist & Co-creator | andrew-portrait-2026-03-22.jpg |
+| Nathan | 9 | 3rd |  |  | Co-creator & Game Designer | nathan-portrait-2026-03-22.jpg |
 | Mark | — | — | — | — | Team Advisor | — |
 
-**Exhibition:** LASD Illuminate Inquiry Exhibition — March 27, 2026
+**Exhibition:** Inquiry Exhibition — March 27, 2026
 
 ---
 

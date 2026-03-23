@@ -1,6 +1,6 @@
 # Session 5: SHOWCASE — Display Board + Reflections + Demo Rehearsal
 
-**Goal:** Assemble the physical display board, capture deep Illuminate reflections, practice the exhibition demo. This is the LAST session before March 27.
+**Goal:** Assemble the physical display board, capture deep exhibition reflections, practice the exhibition demo. This is the LAST session before March 27.
 
 **Time:** ~2 hours
 
@@ -109,7 +109,7 @@ git commit -m "Session 5: Final polish before exhibition"
 
 **Mark says:**
 
-> "Time to build your exhibition booth! This board tells visitors the story of your game AND how you made it. You're not just showing a game — you're showing what you LEARNED. That's what Illuminate is about."
+> "Time to build your exhibition booth! This board tells visitors the story of your game AND how you made it. You're not just showing a game — you're showing what you LEARNED. That's what the exhibition is about."
 
 #### Layout Guide
 
@@ -342,11 +342,11 @@ By the end of Session 5:
 
 ### The Balance
 
-Session 5 is half tech (game polish) and half arts & crafts (display board). Don't let the tech half eat the crafts half. The display board IS the Illuminate deliverable — it's what judges evaluate. Set a hard time limit on bug fixes and move to the board.
+Session 5 is half tech (game polish) and half arts & crafts (display board). Don't let the tech half eat the crafts half. The display board IS the exhibition deliverable — it's what judges evaluate. Set a hard time limit on bug fixes and move to the board.
 
-### The Real Illuminate Goal
+### The Real Exhibition Goal
 
-Illuminate wants to see evidence of learning, not just a finished product. The board should answer:
+The exhibition wants to see evidence of learning, not just a finished product. The board should answer:
 - **What did they investigate?** → "Can kids build a real game with AI?"
 - **What did they learn?** → Reflections, quotes, Build Records
 - **How did they learn it?** → Process photos, Build Records showing iteration, the learning journey page
