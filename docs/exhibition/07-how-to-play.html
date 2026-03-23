@@ -1,407 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>How to Play - SPLIT</title>
+<meta charset="utf-8">
+<title>Controller Setup - SPLIT</title>
 <style>
   @page { size: 11in 8.5in; margin: 0; }
   @media print { @page { margin: 0; } }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
+  html, body {
     margin: 0;
-    padding: 0.3in;
-    overflow: hidden;
     width: 11in;
     height: 8.5in;
+    overflow: hidden;
     background: #0f0f1f;
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #ffffff;
+  }
+  .page {
+    width: 11in;
+    height: 8.5in;
+    padding: 0.25in 0.3in;
     display: flex;
     flex-direction: column;
   }
-
-  /* ---- TOP SECTION ---- */
-  .top {
+  h1 {
     text-align: center;
-    margin-bottom: 10px;
-    flex-shrink: 0;
-  }
-
-  .top h1 {
-    font-size: 22pt;
+    font-size: 26pt;
     color: #7de650;
-    letter-spacing: 1px;
-    margin-bottom: 1px;
+    text-shadow: 0 0 12px rgba(125,230,80,0.2);
   }
-
-  .top .subtitle {
-    font-size: 11pt;
+  .subtitle {
+    text-align: center;
+    font-size: 12pt;
     color: #d4a456;
-    margin-bottom: 8px;
+    margin-bottom: 0.15in;
   }
-
-  .objective-card {
-    background: rgba(125, 230, 80, 0.08);
-    border: 1px solid rgba(125, 230, 80, 0.25);
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    flex: 1;
+  }
+  .cell {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
     border-radius: 8px;
-    padding: 8px 24px;
-    display: inline-block;
-    max-width: 8.4in;
-    font-size: 10.5pt;
-    line-height: 1.45;
-    color: #e0e0e0;
+    border: 1px solid rgba(125,230,80,0.2);
   }
-
-  /* ---- MIDDLE SECTION ---- */
-  .middle {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  /* -- Left: Controller -- */
-  .controller-side {
-    flex: 0 0 50%;
-    position: relative;
-  }
-
-  .controller-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  .ctrl {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 320px;
-    height: 190px;
-  }
-
-  .ctrl-body {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: #2a2a3a;
-    border: 2px solid #444;
-    border-radius: 70px 70px 110px 110px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-  }
-
-  .grip {
-    position: absolute;
-    bottom: -28px;
-    width: 64px;
-    height: 80px;
-    background: #2a2a3a;
-    border: 2px solid #444;
-    border-top: none;
-    border-radius: 0 0 28px 28px;
-  }
-  .grip.left { left: 38px; }
-  .grip.right { right: 38px; }
-
-  .trigger {
-    position: absolute;
-    top: -24px;
-    width: 64px;
-    height: 16px;
-    background: #353548;
-    border: 2px solid #444;
-    border-radius: 8px 8px 0 0;
-  }
-  .trigger.left { left: 36px; }
-  .trigger.right { right: 36px; }
-
-  .bumper {
-    position: absolute;
-    top: -8px;
-    width: 80px;
-    height: 16px;
-    background: #353548;
-    border: 2px solid #444;
-    border-radius: 8px 8px 0 0;
-  }
-  .bumper.left { left: 28px; }
-  .bumper.right { right: 28px; }
-
-  .stick {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    background: #1e1e2e;
-    border: 2px solid #555;
-    border-radius: 50%;
-  }
-  .stick::after {
-    content: '';
-    position: absolute;
-    top: 8px; left: 8px;
-    width: 32px; height: 32px;
-    background: #252538;
-    border: 1px solid #666;
-    border-radius: 50%;
-  }
-  .stick.left { top: 32px; left: 50px; }
-  .stick.right { top: 90px; right: 64px; }
-
-  .dpad {
-    position: absolute;
-    top: 100px;
-    left: 56px;
-    width: 40px;
-    height: 40px;
-  }
-  .dpad-h, .dpad-v {
-    position: absolute;
-    background: #1e1e2e;
-    border: 1px solid #555;
-  }
-  .dpad-h {
-    top: 12px; left: 0;
-    width: 40px; height: 16px;
-    border-radius: 3px;
-  }
-  .dpad-v {
-    top: 0; left: 12px;
-    width: 16px; height: 40px;
-    border-radius: 3px;
-  }
-
-  .abxy {
-    position: absolute;
-    top: 28px;
-    right: 50px;
-    width: 64px;
-    height: 64px;
-  }
-  .face-btn {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #1e1e2e;
-    border: 2px solid #555;
-    border-radius: 50%;
-    font-size: 8px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-  }
-  .face-btn.a { bottom: 0; left: 22px; }
-  .face-btn.b { top: 22px; right: 0; }
-  .face-btn.x { top: 22px; left: 0; }
-  .face-btn.y { top: 0; left: 22px; }
-
-  .btn-plus, .btn-minus {
-    position: absolute;
-    top: 42px;
-    width: 12px;
-    height: 12px;
-    background: #1e1e2e;
-    border: 1px solid #555;
-    border-radius: 2px;
-  }
-  .btn-plus { left: 178px; }
-  .btn-minus { left: 130px; }
-
-  /* -- Right: Controls Table -- */
-  .controls-side {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .controls-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(125, 230, 80, 0.2);
-    border-radius: 10px;
-    padding: 14px 18px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .controls-card h2 {
-    color: #d4a456;
-    font-size: 13pt;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
-  }
-
-  .controls-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    flex: 1;
-    justify-content: space-evenly;
-  }
-
-  .control-row {
-    display: flex;
-    align-items: center;
-    padding: 7px 12px;
-    border-radius: 6px;
-  }
-
-  .control-row:nth-child(odd) {
-    background: rgba(125, 230, 80, 0.06);
-  }
-
-  .control-row:nth-child(even) {
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  .control-btn {
+  .cell:nth-child(odd) { background: rgba(125,230,80,0.06); }
+  .cell:nth-child(even) { background: rgba(255,255,255,0.03); }
+  .btn {
     color: #7de650;
     font-weight: 700;
-    font-size: 10pt;
-    width: 140px;
+    font-size: 16pt;
+    width: 2in;
     flex-shrink: 0;
   }
-
-  .control-action {
-    color: #e0e0e0;
-    font-size: 10pt;
-  }
-
-  .control-note {
-    color: #d4a456;
-    font-size: 8.5pt;
-    font-style: italic;
-    margin-left: 4px;
-  }
-
-  /* ---- BOTTOM SECTION ---- */
-  .bottom {
-    flex-shrink: 0;
-    margin-top: 10px;
-  }
-
-  .tips-bar {
-    display: flex;
-    gap: 12px;
-  }
-
-  .tip-item {
-    flex: 1;
-    background: rgba(212, 164, 86, 0.1);
-    border: 1px solid rgba(212, 164, 86, 0.3);
-    border-radius: 6px;
-    padding: 6px 12px;
-    text-align: center;
-    font-size: 9pt;
-    color: #d4a456;
-    font-weight: 600;
-  }
+  .act { color: #e0e0e0; font-size: 14pt; }
+  .note { color: #d4a456; font-size: 10pt; font-style: italic; margin-left: 6px; }
 </style>
 </head>
 <body>
-
-<!-- TOP -->
-<div class="top">
-  <h1>How to Play</h1>
+<div class="page">
+  <h1>Controller Setup</h1>
   <p class="subtitle">Nintendo Switch Pro Controller</p>
-  <div class="objective-card">
-    You're a jello cube trapped in a dark castle. Fight enemies with your own body, craft health, dodge attacks, and escape floor by floor to the rooftop. 15 floors. 5 bosses. 1 life.
+  <div class="grid">
+    <div class="cell"><span class="btn">Left Stick</span><span class="act">Move</span></div>
+    <div class="cell"><span class="btn">A</span><span class="act">Jump</span></div>
+    <div class="cell"><span class="btn">B</span><span class="act">Jelly Shot<span class="note">(costs health!)</span></span></div>
+    <div class="cell"><span class="btn">X</span><span class="act">Eat / Heal</span></div>
+    <div class="cell"><span class="btn">Y</span><span class="act">Interact</span></div>
+    <div class="cell"><span class="btn">Stick Down</span><span class="act">Ground Pound</span></div>
+    <div class="cell"><span class="btn">ZL</span><span class="act">Split / Combine</span></div>
+    <div class="cell"><span class="btn">ZR</span><span class="act">Perfect Dodge</span></div>
   </div>
 </div>
-
-<!-- MIDDLE -->
-<div class="middle">
-
-  <!-- LEFT: Controller Diagram -->
-  <div class="controller-side">
-    <div class="controller-wrap">
-      <div class="ctrl">
-        <div class="ctrl-body"></div>
-        <div class="grip left"></div>
-        <div class="grip right"></div>
-        <div class="trigger left"></div>
-        <div class="trigger right"></div>
-        <div class="bumper left"></div>
-        <div class="bumper right"></div>
-        <div class="stick left"></div>
-        <div class="stick right"></div>
-        <div class="dpad">
-          <div class="dpad-h"></div>
-          <div class="dpad-v"></div>
-        </div>
-        <div class="abxy">
-          <div class="face-btn a">A</div>
-          <div class="face-btn b">B</div>
-          <div class="face-btn x">X</div>
-          <div class="face-btn y">Y</div>
-        </div>
-        <div class="btn-plus"></div>
-        <div class="btn-minus"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RIGHT: Controls Table -->
-  <div class="controls-side">
-    <div class="controls-card">
-      <h2>Controls</h2>
-      <div class="controls-list">
-        <div class="control-row">
-          <span class="control-btn">Left Stick / D-Pad</span>
-          <span class="control-action">Move</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">A</span>
-          <span class="control-action">Jump</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">B</span>
-          <span class="control-action">Jelly Shot<span class="control-note">(costs health!)</span></span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">X</span>
-          <span class="control-action">Eat / Heal</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">Y</span>
-          <span class="control-action">Interact</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">Stick Down</span>
-          <span class="control-action">Ground Pound</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">ZL</span>
-          <span class="control-action">Split / Combine</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">ZR</span>
-          <span class="control-action">Perfect Dodge</span>
-        </div>
-        <div class="control-row">
-          <span class="control-btn">+</span>
-          <span class="control-action">Pause</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- BOTTOM -->
-<div class="bottom">
-  <div class="tips-bar">
-    <div class="tip-item">Your health IS your ammo</div>
-    <div class="tip-item">Ground pound = strongest attack</div>
-    <div class="tip-item">Look for hidden doors</div>
-    <div class="tip-item">You die, you restart</div>
-  </div>
-</div>
-
 </body>
 </html>
