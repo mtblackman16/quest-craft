@@ -176,10 +176,19 @@
 5. **Bug-fixing matters** — Andrew and Ethan both emphasized that a broken game is worse than an unfinished one
 6. **Kids as designers** — Eins's insight that kids have great game taste because they ARE the audience
 
-## Before/After Quotes (to be captured in ACT 4)
-*(Q21 — "Before this project I thought ___. Now I know ___." — pending)*
+## Before/After Quotes (ACT 4)
+
+**Q21 — "Before this project I thought ___. Now I know ___."**
+
+**Eins:** "Before this project, I thought AI does all the work. Now I know you have to direct it carefully." [Phase 3]
+
+**Andrew:** "Before this project, I thought you need to know how to code to make a game. Now I know you need to know what you want and how to prompt AI to do it for you." [Phase 3]
+
+**Ethan:** "Before this project, I thought making games requires coding skills. Now I know you need ideas and clear communication." [Phase 3]
+
+**Nathan:** "Before this project, I thought making games requires coding skills. Now I know kids can do it with AI." [Phase 3]
 
 ---
 
-## ACT 4: Demo Rehearsal
-*(Pending — role assignments and practice run still to come)*
+## ACT 4: Before/After + Demo Rehearsal
+Before/After quotes captured above. Role assignments and final practice TBD for exhibition day.
