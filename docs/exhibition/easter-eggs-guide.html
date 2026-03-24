@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Easter Eggs Guide - SPLIT</title>
+<style>
+  @page { size: letter; margin: 0; }
+  @media print { @page { margin: 0; } }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: #0f0f1f;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #ffffff;
+  }
+
+  /* --- PAGE 1: The 8 Secrets --- */
+  .page {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.3in 0.35in;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: avoid; }
+
+  h1 {
+    text-align: center;
+    font-size: 28pt;
+    color: #7de650;
+    text-shadow: 0 0 12px rgba(125,230,80,0.2);
+    margin-bottom: 0.02in;
+  }
+  .counter {
+    text-align: center;
+    font-size: 13pt;
+    color: #d4a456;
+    margin-bottom: 0.2in;
+  }
+
+  .secret {
+    display: flex;
+    align-items: stretch;
+    border-radius: 8px;
+    border: 1px solid rgba(125,230,80,0.2);
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .secret:nth-child(odd) { background: rgba(125,230,80,0.06); }
+  .secret:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+  .secret-num {
+    width: 0.45in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20pt;
+    font-weight: 700;
+    color: #7de650;
+    flex-shrink: 0;
+    border-right: 1px solid rgba(125,230,80,0.15);
+  }
+  .secret-body {
+    padding: 0.08in 0.15in;
+    flex: 1;
+  }
+  .secret-name {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #7de650;
+    margin-bottom: 0.02in;
+  }
+  .secret-how {
+    font-size: 10pt;
+    color: #d4a456;
+    font-style: italic;
+    margin-bottom: 0.02in;
+  }
+  .secret-what {
+    font-size: 10pt;
+    color: #e0e0e0;
+    line-height: 1.35;
+  }
+
+  /* --- PAGE 2: Hints + Claude Dialogue --- */
+  h2 {
+    font-size: 18pt;
+    color: #7de650;
+    text-shadow: 0 0 8px rgba(125,230,80,0.15);
+    margin-bottom: 0.12in;
+    text-align: center;
+  }
+
+  .hint-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 0.25in;
+  }
+  .hint {
+    display: flex;
+    align-items: center;
+    padding: 0.07in 0.12in;
+    border-radius: 8px;
+    border: 1px solid rgba(125,230,80,0.2);
+  }
+  .hint:nth-child(odd) { background: rgba(125,230,80,0.06); }
+  .hint:nth-child(even) { background: rgba(255,255,255,0.03); }
+  .hint-icon {
+    font-size: 18pt;
+    width: 0.4in;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .hint-text {
+    flex: 1;
+  }
+  .hint-name {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #d4a456;
+  }
+  .hint-desc {
+    font-size: 9pt;
+    color: #c0c0c0;
+  }
+
+  .dialogue-box {
+    background: rgba(125,230,80,0.06);
+    border: 1px solid rgba(125,230,80,0.25);
+    border-radius: 10px;
+    padding: 0.15in 0.2in;
+    margin-bottom: 0.2in;
+  }
+  .dialogue-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #d4a456;
+    margin-bottom: 0.08in;
+  }
+  .dialogue-line {
+    font-size: 10pt;
+    color: #e0e0e0;
+    padding: 0.03in 0;
+    padding-left: 0.15in;
+    border-left: 2px solid rgba(125,230,80,0.3);
+    margin-bottom: 0.04in;
+    line-height: 1.35;
+  }
+  .dialogue-line .tap {
+    color: #7de650;
+    font-weight: 700;
+    font-size: 9pt;
+  }
+  .dialogue-line .speech {
+    color: #ffffff;
+    font-style: italic;
+  }
+
+  .glitch-box {
+    background: rgba(196,75,108,0.1);
+    border: 1px solid rgba(196,75,108,0.3);
+    border-radius: 10px;
+    padding: 0.12in 0.2in;
+    margin-bottom: 0.2in;
+  }
+  .glitch-box .dialogue-title { color: #c44b6c; }
+  .glitch-line {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 10pt;
+    color: #c44b6c;
+    padding: 0.02in 0;
+  }
+
+  .footer {
+    margin-top: auto;
+    text-align: center;
+    font-size: 9pt;
+    color: #555;
+    padding-top: 0.1in;
+    border-top: 1px solid rgba(125,230,80,0.1);
+  }
+  .footer span { color: #7de650; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: The 8 Secrets -->
+<div class="page">
+  <h1>Secret Easter Eggs</h1>
+  <div class="counter">Can you find all 8?</div>
+
+  <div class="secret">
+    <div class="secret-num">1</div>
+    <div class="secret-body">
+      <div class="secret-name">The Architect's Room</div>
+      <div class="secret-how">Ground-pound the cracked tile in your starting cell (Floor 1)</div>
+      <div class="secret-what">Hidden room with 4 colored jello cubes named ETHAN, EINS, ANDREW, and NATHAN, plus a wall-mounted key</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">2</div>
+    <div class="secret-body">
+      <div class="secret-name">Konami Jello</div>
+      <div class="secret-how">Enter the Konami Code on the title screen</div>
+      <div class="secret-what">Jello explodes, reforms, and a "Secrets: 1/?" counter appears on screen</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">3</div>
+    <div class="secret-body">
+      <div class="secret-name">Andrew's Gallery</div>
+      <div class="secret-how">Follow the purple-tinted torches on Floor 7</div>
+      <div class="secret-what">A hidden corridor with Andrew's original artwork displayed as framed paintings on castle walls</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">4</div>
+    <div class="secret-body">
+      <div class="secret-name">Fourth-Wall Fracture</div>
+      <div class="secret-how">Die exactly 4 times</div>
+      <div class="secret-what">The screen "glitches" and reboots with static and color separation, then golden jello powder appears in your starting cell</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">5</div>
+    <div class="secret-body">
+      <div class="secret-name">Claude the Shopkeeper</div>
+      <div class="secret-how">Find the hidden barrel on Floor 3 and interact with it 5 times</div>
+      <div class="secret-what">The barrel starts talking and eventually reveals: "My name is Claude. Yes, THAT Claude."</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">6</div>
+    <div class="secret-body">
+      <div class="secret-name">Jello Graveyard</div>
+      <div class="secret-how">Miss a lot of jello shots (automatic)</div>
+      <div class="secret-what">Missed shots leave permanent green splats on the walls. Get 50+ and they haunt you at the end</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">7</div>
+    <div class="secret-body">
+      <div class="secret-name">The Idle Dance</div>
+      <div class="secret-how">Stand completely still for 30 seconds</div>
+      <div class="secret-what">Your jello cube breaks into a dance with floating music notes while cooking pots bubble in rhythm</div>
+    </div>
+  </div>
+
+  <div class="secret">
+    <div class="secret-num">8</div>
+    <div class="secret-body">
+      <div class="secret-name">Exhibition Day Mode</div>
+      <div class="secret-how">Play on exhibition day (March 27, 2026)</div>
+      <div class="secret-what">Golden border around the screen, first enemy drops an "Exhibited" trophy that appears inside your jello body</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>SPLIT</span> - 8 secrets hidden by Ethan, Eins, Andrew, and Nathan
+  </div>
+</div>
+
+<!-- PAGE 2: Hint System + Special Moments -->
+<div class="page">
+  <h2>How to Spot a Secret</h2>
+
+  <div class="hint-grid">
+    <div class="hint">
+      <div class="hint-icon">🌿</div>
+      <div class="hint-text">
+        <div class="hint-name">Reactive Vines</div>
+        <div class="hint-desc">Grow from the wall and retract when you get close. Hidden passage behind.</div>
+      </div>
+    </div>
+    <div class="hint">
+      <div class="hint-icon">🔥</div>
+      <div class="hint-text">
+        <div class="hint-name">Fast-Flicker Torch</div>
+        <div class="hint-desc">Torch flickers faster than normal. Draft from a hidden opening nearby.</div>
+      </div>
+    </div>
+    <div class="hint">
+      <div class="hint-icon">💚</div>
+      <div class="hint-text">
+        <div class="hint-name">Green-Flame Torch</div>
+        <div class="hint-desc">Rare green fire. Matches your jello color -- left here for YOU.</div>
+      </div>
+    </div>
+    <div class="hint">
+      <div class="hint-icon">💀</div>
+      <div class="hint-text">
+        <div class="hint-name">Extinguished Torch</div>
+        <div class="hint-desc">Empty bracket, no flame. Danger ahead -- lots of enemies.</div>
+      </div>
+    </div>
+    <div class="hint">
+      <div class="hint-icon">〰️</div>
+      <div class="hint-text">
+        <div class="hint-name">Jello Wobble</div>
+        <div class="hint-desc">You wobble more than usual. Something hidden is nearby to interact with.</div>
+      </div>
+    </div>
+    <div class="hint">
+      <div class="hint-icon">🔊</div>
+      <div class="hint-text">
+        <div class="hint-name">Sound Shift</div>
+        <div class="hint-desc">Subtle low hum. You're within 3 tiles of a hidden room.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialogue-box">
+    <div class="dialogue-title">Claude the Shopkeeper -- Full Dialogue</div>
+    <div class="dialogue-line"><span class="tap">Tap 1:</span> <span class="speech">"..."</span></div>
+    <div class="dialogue-line"><span class="tap">Tap 2:</span> <span class="speech">"..."</span></div>
+    <div class="dialogue-line"><span class="tap">Tap 3:</span> <span class="speech">"You're persistent."</span></div>
+    <div class="dialogue-line"><span class="tap">Tap 4:</span> <span class="speech">"Fine. I'll talk."</span></div>
+    <div class="dialogue-line"><span class="tap">Tap 5:</span> <span class="speech">"My name is Claude. Yes, THAT Claude."</span></div>
+  </div>
+
+  <div class="glitch-box">
+    <div class="dialogue-title">Fourth-Wall Fracture -- What You See</div>
+    <div class="glitch-line">Screen tears with red/blue color separation</div>
+    <div class="glitch-line">Static rectangles flash across the display</div>
+    <div class="glitch-line">Screen displaces and shakes</div>
+    <div class="glitch-line">Text appears: REBOOTING...</div>
+    <div class="glitch-line">Golden jello powder materializes in your starting cell</div>
+  </div>
+
+  <div class="dialogue-box">
+    <div class="dialogue-title">Konami Code (enter on title screen)</div>
+    <div class="dialogue-line" style="font-family: 'Consolas', monospace; font-size: 12pt; color: #7de650; text-align: center; border: none; padding-left: 0;">
+      UP  UP  DOWN  DOWN  LEFT  RIGHT  LEFT  RIGHT  B  A
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>SPLIT</span> - Built with Claude Code by Ethan, Eins, Andrew, and Nathan
+  </div>
+</div>
+
+</body>
+</html>
