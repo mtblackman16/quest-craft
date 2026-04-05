@@ -56,7 +56,7 @@ class Game:
         if test_mode:
             self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         else:
-            self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.FULLSCREEN | pygame.DOUBLEBUF)
+            self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.SCALED)
         pygame.display.set_caption("SPLIT")
         self.clock = pygame.time.Clock()
 
