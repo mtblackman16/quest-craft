@@ -9,7 +9,7 @@ import math
 from game.engine.settings import (
     SCREEN_W, SCREEN_H, FPS,
     CTRL_A, CTRL_B, CTRL_Y, CTRL_PLUS,
-    AXIS_LX, STICK_DEADZONE,
+    AXIS_LX, AXIS_LY, STICK_DEADZONE,
     JELLO_GREEN, JELLO_GREEN_DIM, TORCH_AMBER, TORCH_GLOW, EMBER,
     WHITE, BLACK,
     FONT_TITLE, FONT_SUBTITLE, FONT_PROMPT, FONT_SMALL, FONT_NARRATOR,
@@ -391,14 +391,11 @@ def run_credits(screen, clock, joystick=None):
                     return
                 if event.key == pygame.K_c:
                     interact_pressed = True
-
             if event.type == pygame.JOYBUTTONDOWN and joystick:
-                if event.button == CTRL_A or event.button == CTRL_PLUS:
+                if event.button == CTRL_PLUS:
                     _run_post_credits(screen, clock, joystick)
                     return
-                if event.button == CTRL_B:
-                    return
-                if event.button == CTRL_Y:
+                if event.button == CTRL_A or event.button == CTRL_Y:
                     interact_pressed = True
 
         # ── Continuous input (held keys / stick) ──
@@ -409,11 +406,20 @@ def run_credits(screen, clock, joystick=None):
             move_dir += 1
 
         if joystick:
-            lx = joystick.get_axis(AXIS_LX)
-            if lx < -STICK_DEADZONE:
-                move_dir = -1
-            elif lx > STICK_DEADZONE:
-                move_dir = 1
+            try:
+                lx = joystick.get_axis(AXIS_LX)
+                if lx < -STICK_DEADZONE:
+                    move_dir = -1
+                elif lx > STICK_DEADZONE:
+                    move_dir = 1
+                # D-pad movement
+                hat = joystick.get_hat(0)
+                if hat[0] == -1:
+                    move_dir = -1
+                elif hat[0] == 1:
+                    move_dir = 1
+            except Exception:
+                pass
 
         # ── Update player position ──
         if not exiting:
